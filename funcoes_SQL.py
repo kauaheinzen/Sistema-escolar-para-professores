@@ -80,3 +80,47 @@ def cadastrar_professores(nome, idade, email, usuario, senha, materia, turmas):
     finally:
         cursor.close()
         conn.close()
+
+
+def cadastrar_alunos(nome, idade, email, turma, nome_responsavel, telefone_responvel):
+    '''Cadastra novos alunos'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        sql = 'INSERT INTO alunos (nome_alunos, idade_aluno, email_aluno, fk_id_turma, nome_responsavel, telefone_responsavel) VALUES (%s, %s, %s, %s, %s, %s)'
+        valores = (nome, idade, email, turma, nome_responsavel, telefone_responvel)
+
+        cursor.execute(sql, valores)
+        conn.commit()
+        print(f"{cursor.rowcount()} aluno(s) cadastrado(s).")
+
+    except Error as e:
+        print(f"Ocorreu um erro {e}. Cadastro cancelado.")
+        conn.rollback()
+    
+    finally:
+        cursor.close()
+        conn.close()
+
+
+def registrar_avaliacao(data, aluno, nome_avaliacao, nota):
+    '''Registra avaliações'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        sql = 'INSERT INTO avaliacoes (data_avaliacao, fk_id_alunos, nome_avaliacao, nota) VALUES (%s, %s, %s, %s)'
+        valores = (data, aluno, nome_avaliacao, nota)
+
+        cursor.execute(sql, valores)
+        conn.commit()
+        print("Avaliação registrada")
+
+    except Error as e:
+        print(f"Ocorreu um erro {e}. Registro da avaliação cancelado.")
+        conn.rollback()
+    
+    finally:
+        cursor.close()
+        conn.close()
