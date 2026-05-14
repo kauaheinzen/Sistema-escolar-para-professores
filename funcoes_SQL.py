@@ -82,14 +82,14 @@ def cadastrar_professores(nome, idade, email, usuario, senha, materia, turmas):
         conn.close()
 
 
-def cadastrar_alunos(nome, idade, email, turma, nome_responsavel, telefone_responvel):
+def cadastrar_alunos(nome, idade, email, turma, nome_responsavel = '', email_responvel = ''):
     '''Cadastra novos alunos'''
     conn = conectar()
     cursor = conn.cursor()
 
     try:
-        sql = 'INSERT INTO alunos (nome_alunos, idade_aluno, email_aluno, fk_id_turma, nome_responsavel, telefone_responsavel) VALUES (%s, %s, %s, %s, %s, %s)'
-        valores = (nome, idade, email, turma, nome_responsavel, telefone_responvel)
+        sql = 'INSERT INTO alunos (nome_alunos, idade_aluno, email_aluno, fk_id_turma, nome_responsavel,email_responsavel) VALUES (%s, %s, %s, %s, %s, %s)'
+        valores = (nome, idade, email, turma, nome_responsavel, email_responvel)
 
         cursor.execute(sql, valores)
         conn.commit()
@@ -119,6 +119,50 @@ def registrar_avaliacao(data, aluno, nome_avaliacao, nota):
 
     except Error as e:
         print(f"Ocorreu um erro {e}. Registro da avaliação cancelado.")
+        conn.rollback()
+    
+    finally:
+        cursor.close()
+        conn.close()
+
+    
+def atualizar_turma(id, nome, materias):
+    '''atualiza o ano da turma, ex: do 1° pro 2° ano e muda matérias'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        sql = 'UPDATE turmas SET nome_turma = %s, fk_id_materias = %s WHERE id_turma = %s'
+        valores = (nome, materias, id)
+
+        cursor.execute(sql, valores)
+        conn.commit()
+        print(f"{cursor.rowcount()} turma(s) atualizada(s).")
+
+    except Error as e:
+        print(f"Ocorreu um erro {e}. Atualização cancelada.")
+        conn.rollback()
+    
+    finally:
+        cursor.close()
+        conn.close()
+
+
+def atualizar_professor(id, item_alterar, alteracao):
+    '''atualiza o cadastro de um professor'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        sql = 'UPDATE professores SET %s = %s WHERE id_professor = %s'
+        valores = (item_alterar, alteracao, id)
+
+        cursor.execute(sql, valores)
+        conn.commit()
+        print(f"{cursor.rowcount()} cadastro(s) de professor(es) alterado(s).")
+
+    except Error as e:
+        print(f"Ocorreu um erro {e}. Alteração cancelada.")
         conn.rollback()
     
     finally:
