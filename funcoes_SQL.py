@@ -1,6 +1,8 @@
 import mysql.connector
 from mysql.connector import Error
 
+# faça com que o def (criar_admin_iniciar) execute ao iniciar o programa
+
 def conectar():
     '''Faz a conexão entre o Python e o MySQL'''
     try:
@@ -14,6 +16,25 @@ def conectar():
     except Error as e:
         print(f"Erro ao conectar ao MySQL: {e}")
         return None
+
+
+def criar_admin_iniciar():
+    '''verifica se existe algum admin, caso não exista, cria um automaticamente'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql_verificacao = 'SELECT EXISTS (SELECT 1 FROM admin_database)'
+    cursor.execute(sql_verificacao,)
+    resultado = bool(cursor.fetchone[0])
+
+    if not resultado:
+        sql = 'INSERT INTO admin_database (nome_usuario, senha) VALUES (%s, %s)'
+        valores = ('admin.escola', '123')
+        cursor.execute(sql, valores)
+        
+        conn.commit()
+    cursor.close()
+    conn.close()
 
 
 def cadastrar_materias(nome_materia):
@@ -125,28 +146,6 @@ def registrar_avaliacao(data, aluno, nome_avaliacao, nota):
         cursor.close()
         conn.close()
 
-    
-def atualizar_turma(id, nome, materias):
-    '''atualiza o ano da turma, ex: do 1° pro 2° ano e muda matérias'''
-    conn = conectar()
-    cursor = conn.cursor()
-
-    try:
-        sql = 'UPDATE turmas SET nome_turma = %s, fk_id_materias = %s WHERE id_turma = %s'
-        valores = (nome, materias, id)
-
-        cursor.execute(sql, valores)
-        conn.commit()
-        print(f"{cursor.rowcount()} turma(s) atualizada(s).")
-
-    except Error as e:
-        print(f"Ocorreu um erro {e}. Atualização cancelada.")
-        conn.rollback()
-    
-    finally:
-        cursor.close()
-        conn.close()
-
 
 def atualizar_professor(id, item_alterar, alteracao):
     '''atualiza o cadastro de um professor'''
@@ -159,7 +158,51 @@ def atualizar_professor(id, item_alterar, alteracao):
 
         cursor.execute(sql, valores)
         conn.commit()
-        print(f"{cursor.rowcount()} cadastro(s) de professor(es) alterado(s).")
+        print(f"{cursor.rowcount()} cadastro(s) alterado(s).")
+
+    except Error as e:
+        print(f"Ocorreu um erro {e}. Alteração cancelada.")
+        conn.rollback()
+    
+    finally:
+        cursor.close()
+        conn.close()
+
+
+def atualizar_aluno(id, item_alterar, alteracao):
+    '''atualiza o cadastro de um aluno ou para mudar sua turma'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        sql = 'UPDATE alunos SET %s = %s WHERE id_aluno = %s'
+        valores = (item_alterar, alteracao, id)
+
+        cursor.execute(sql, valores)
+        conn.commit()
+        print(f"{cursor.rowcount()} cadastro(s) alterado(s).")
+
+    except Error as e:
+        print(f"Ocorreu um erro {e}. Alteração cancelada.")
+        conn.rollback()
+    
+    finally:
+        cursor.close()
+        conn.close()
+
+
+def atualizar_avaliacao(id, item_alterar, alteracao):
+    '''atualiza alguma avaliação, como aluno que fez ou nota'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        sql = 'UPDATE avaliacoes SET %s = %s WHERE id_avaliacao = %s'
+        valores = (item_alterar, alteracao, id)
+
+        cursor.execute(sql, valores)
+        conn.commit()
+        print(f"{cursor.rowcount()} avaliações(s) alterado(s).")
 
     except Error as e:
         print(f"Ocorreu um erro {e}. Alteração cancelada.")
