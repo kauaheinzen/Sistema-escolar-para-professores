@@ -64,7 +64,7 @@ def validar_adm(nome, senha):
     
     except Error as e:
         cursor.close()
-        conn.close()
+        conn.close()    
         return (False, f"Ocorreu um erro {e}. Login cancelado")
     
 def validar_professor(nome, senha):

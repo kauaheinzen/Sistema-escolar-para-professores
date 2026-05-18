@@ -214,19 +214,102 @@ def atualizar_avaliacao(id, item_alterar, alteracao):
 
 
 def desativar_reativar_materia(id, acao):
-    '''desativa uma matéria'''
+    '''desativa ou reativa uma matéria'''
     conn = conectar()
     cursor = conn.cursor()
 
     if acao == 0:
-        sql = 'UPDATE materias SET ativo = %s WHERE id_materia = %s'
         valores = (0, id)
-        cursor.execute(sql, valores)
 
     else:
-        sql = 'UPDATE materias SET ativo = %s WHERE id_materia = %s'
         valores = (1, id)
-        cursor.execute(sql, valores)
+        
+    sql = 'UPDATE materias SET ativo = %s WHERE id_materia = %s'
+    cursor.execute(sql, valores)
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
+def desativar_reativar_turma_e_alunos(id, acao):
+    '''desativa ou reativa uma turma e todos os seus alunos'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = 'UPDATE turmas SET ativo = %s WHERE id_turma = %s'
+    cursor.execute(sql, valores)
+    valores = (acao, id)
+
+    sql_ver_alunos = 'SELECT id_aluno WHERE id_turma = %s'
+    valor = (id,)
+    cursor.execute(sql_ver_alunos, valor)
+    alunos = cursor.fetchall()
+
+    for aluno in alunos:
+        sql_aluno = 'UPDATE alunos SET ativo = %s WHERE id_aluno = %s'
+        valores = (acao, aluno)
+        cursor.execute(sql_aluno, valores)
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
+def desativar_reativar_professor(id, acao):
+    '''desativa ou reativa um professor'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+        
+    sql = 'UPDATE professores SET ativo = %s WHERE id_professor = %s'
+    valores = (acao, id)
+    cursor.execute(sql, valores)
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
+def desativar_reativar_aluno(id, acao):
+    '''desativa ou reativa um aluno'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+        
+    sql = 'UPDATE alunos SET ativo = %s WHERE id_aluno = %s'
+    valores = (acao, id)
+    cursor.execute(sql, valores)
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
+def desativar_reativar_avaliacao(id, acao):
+    '''desativa ou reativa uma avaliação'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+        
+    sql = 'UPDATE avaliacoes SET ativo = %s WHERE id_avaliacao = %s'
+    valores = (acao, id)
+    cursor.execute(sql, valores)
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
+def vincular_turma_materia(turma, materia):
+    '''vincula uma turma em uma matéria'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+        
+    sql = 'INSERT INTO turma_materias (fk_id_turma, fk_id_materia) VALUES (%s, %s)'
+    valores = (turma, materia)
+    cursor.execute(sql, valores)
     
     conn.commit()
     cursor.close()
