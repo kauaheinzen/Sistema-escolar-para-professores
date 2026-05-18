@@ -211,3 +211,23 @@ def atualizar_avaliacao(id, item_alterar, alteracao):
     finally:
         cursor.close()
         conn.close()
+
+
+def desativar_reativar_materia(id, acao):
+    '''desativa uma matéria'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    if acao == 0:
+        sql = 'UPDATE materias SET ativo = %s WHERE id_materia = %s'
+        valores = (0, id)
+        cursor.execute(sql, valores)
+
+    else:
+        sql = 'UPDATE materias SET ativo = %s WHERE id_materia = %s'
+        valores = (1, id)
+        cursor.execute(sql, valores)
+    
+    conn.commit()
+    cursor.close()
+    conn.close()

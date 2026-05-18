@@ -53,10 +53,18 @@ def validar_adm(nome, senha):
                 senha_admin = cursor.fetchone()
 
                 if senha == senha_admin[0]:
+                    cursor.close()
+                    conn.close()
+
                     return True
+                
+        cursor.close()
+        conn.close()
         return (False, "Acesso negado")
     
     except Error as e:
+        cursor.close()
+        conn.close()
         return (False, f"Ocorreu um erro {e}. Login cancelado")
     
 def validar_professor(nome, senha):
@@ -77,8 +85,16 @@ def validar_professor(nome, senha):
                 senha_admin = cursor.fetchone()
 
                 if senha == senha_admin[0]:
+                    cursor.close()
+                    conn.close()
+
                     return True
+                
+        cursor.close()
+        conn.close()
         return (False, "Acesso negado")
     
     except Error as e:
+        cursor.close()
+        conn.close()
         return (False, f"Ocorreu um erro {e}. Login cancelado")
