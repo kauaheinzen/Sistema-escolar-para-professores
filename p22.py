@@ -44,7 +44,7 @@ def menu_principal():
     ctk.CTkButton(frame_principal,text="Atualizar Aluno",width=300,height=50,command=tela_atualizar).pack(pady=10)
     ctk.CTkButton(frame_principal,text="Remover Aluno",width=300,height=50,fg_color="red",command=tela_deletar).pack(pady=10)
     ctk.CTkButton(frame_principal,text="Buscar Aluno",width=300,height=50,command=tela_buscar).pack(pady=10)
-
+    ctk.CTkButton(frame_principal,text="←",width=50,height=30,command=tela_login).place(x=50, y=50)
 def tela_cadastrar():
     limpar_frame()
     ctk.CTkLabel(frame_principal,text="CADASTRAR ALUNO",font=("Arial",30,"bold")).pack(pady=20)
@@ -53,7 +53,6 @@ def tela_cadastrar():
     entrar_idade=ctk.CTkEntry(frame_principal,placeholder_text="Idade",width=300); entrar_idade.pack(pady=10)
     entrar_turma=ctk.CTkEntry(frame_principal,placeholder_text="Turma",width=300); entrar_turma.pack(pady=10)
     entrar_notas=ctk.CTkEntry(frame_principal,placeholder_text="Notas Ex: 7,8,10",width=300); entrar_notas.pack(pady=10)
-    
     def salvar():
         nome, idade, turma, notas = entrar_nome.get(), entrar_idade.get(), entrar_turma.get(), entrar_notas.get()
         if nome=="" or idade=="" or turma=="": return messagebox.showerror("Erro","Preencha todos os campos!")
