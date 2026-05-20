@@ -98,3 +98,15 @@ def validar_professor(nome, senha):
         cursor.close()
         conn.close()
         return (False, f"Ocorreu um erro {e}. Login cancelado")
+    
+def validar_usuario(nome, senha):
+    admin = validar_adm(nome, senha)
+
+    if admin:
+        return (True, "admin")
+    professor = validar_professor(nome, senha)
+
+    if professor:
+        return (True, "professor")
+    
+    return False
