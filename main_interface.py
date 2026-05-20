@@ -43,8 +43,6 @@ def verificar_situacao(media):
     return "Aprovado" if media>=7 else ("Recuperação" if media>=5 else "Reprovado")
 
 def menu_principal():
-    global botao_alterar
-
     limpar_frame()
     ctk.CTkLabel(frame_principal,text="SISTEMA ESCOLAR",font=("Arial",35,"bold")).pack(pady=40)
     ctk.CTkButton(frame_principal,text="Cadastrar Aluno",width=300,height=50,command=tela_cadastrar).pack(pady=10)
