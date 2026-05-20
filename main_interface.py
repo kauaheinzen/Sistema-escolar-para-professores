@@ -1,5 +1,7 @@
 import customtkinter as ctk
 from tkinter import messagebox
+from funcoes_SQL import *
+from validacoes import *
 
 
 ctk.set_appearance_mode("dark")
