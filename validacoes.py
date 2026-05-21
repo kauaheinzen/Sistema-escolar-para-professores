@@ -100,6 +100,7 @@ def validar_professor(nome, senha):
         return (False, f"Ocorreu um erro {e}. Login cancelado")
     
 def validar_usuario(nome, senha):
+    '''valida o login'''
     admin = validar_adm(nome, senha)
 
     if admin:

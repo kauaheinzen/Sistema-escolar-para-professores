@@ -32,20 +32,20 @@ def verificar_situacao(media):
     return "Aprovado" if media>=7 else ("Recuperação" if media>=5 else "Reprovado")
 
 
-def menu_principal():
+def menu_principal_admin():
     limpar_frame()
     ctk.CTkLabel(frame_principal,text="SISTEMA ESCOLAR",font=("Arial",35,"bold")).pack(pady=40)
-    ctk.CTkButton(frame_principal,text="Cadastrar Aluno",width=300,height=50,command=tela_cadastrar).pack(pady=10)
-    ctk.CTkButton(frame_principal,text="Listar Alunos",width=300,height=50,command=tela_listar).pack(pady=10)
-    ctk.CTkButton(frame_principal,text="Atualizar Aluno",width=300,height=50,command=tela_atualizar).pack(pady=10)
-    ctk.CTkButton(frame_principal,text="Remover Aluno",width=300,height=50,fg_color="red",command=tela_deletar).pack(pady=10)
-    ctk.CTkButton(frame_principal,text="Buscar Aluno",width=300,height=50,command=tela_buscar).pack(pady=10)
+    ctk.CTkButton(frame_principal,text="Cadastrar Aluno",width=300,height=50,command=tela_cadastrar_aluno).pack(pady=10)
+    ctk.CTkButton(frame_principal,text="Listar Alunos",width=300,height=50,command=tela_listar_alunos).pack(pady=10)
+    ctk.CTkButton(frame_principal,text="Atualizar Aluno",width=300,height=50,command=tela_atualizar_aluno).pack(pady=10)
+    ctk.CTkButton(frame_principal,text="Desativar/Reativar Aluno",width=300,height=50,fg_color="red",command=tela_desativar_aluno).pack(pady=10)
+    ctk.CTkButton(frame_principal,text="Buscar Aluno",width=300,height=50,command=tela_buscar_aluno).pack(pady=10)
     ctk.CTkButton(frame_principal,text="←",width=50,height=30,command=tela_login).place(x=50, y=50)
     botao_alterar = ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1800,y=50)
     
 
 
-def tela_cadastrar():
+def tela_cadastrar_aluno():
     limpar_frame()
     ctk.CTkLabel(frame_principal,text="CADASTRAR ALUNO",font=("Arial",30,"bold")).pack(pady=20)
     entrar_nome=ctk.CTkEntry(frame_principal,placeholder_text="Nome",width=300); entrar_nome.pack(pady=10)
@@ -58,7 +58,7 @@ def tela_cadastrar():
     ctk.CTkButton(frame_principal,text="Cadastrar",width=250,command=...).pack(pady=20)
     ctk.CTkButton(frame_principal,text="Voltar",width=250,command=menu_principal).pack()
 
-def tela_listar():
+def tela_listar_alunos():
     limpar_frame()
     ctk.CTkLabel(frame_principal,text="LISTA DE ALUNOS",font=("Arial",30,"bold")).pack(pady=20)
     textbox=ctk.CTkTextbox(frame_principal,width=700,height=350); textbox.pack(pady=20)
@@ -69,7 +69,7 @@ def tela_listar():
 
     ctk.CTkButton(frame_principal,text="Voltar",width=250,command=menu_principal).pack(pady=10)
 
-def tela_atualizar():
+def tela_atualizar_aluno():
     limpar_frame()
     ctk.CTkLabel(frame_principal,text="ATUALIZAR ALUNO",font=("Arial",30,"bold")).pack(pady=20)
     botao_alterar = ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1800,y=50)
@@ -89,7 +89,7 @@ def tela_atualizar():
     ctk.CTkButton(frame_principal,text="Atualizar Aluno",width=250,command=...).pack(pady=20)
     ctk.CTkButton(frame_principal,text="Voltar",width=250,command=menu_principal).pack()
 
-def tela_deletar():
+def tela_desativar_aluno():
     limpar_frame()
     ctk.CTkLabel(frame_principal,text="REMOVER ALUNO",font=("Arial",30,"bold")).pack(pady=20)
     botao_alterar = ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1800,y=50)
@@ -100,7 +100,7 @@ def tela_deletar():
     ctk.CTkButton(frame_principal,text="Remover Aluno",width=250,fg_color="red",command=...).pack(pady=20)
     ctk.CTkButton(frame_principal,text="Voltar",width=250,command=menu_principal).pack()
 
-def tela_buscar():
+def tela_buscar_aluno():
     limpar_frame()
     ctk.CTkLabel(frame_principal,text="BUSCAR ALUNO",font=("Arial",30,"bold")).pack(pady=20)
     botao_alterar = ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1800,y=50)
@@ -151,9 +151,15 @@ def tela_login():
     
     
     def fazer_login():
-        cursor.execute("SELECT * FROM usuarios WHERE usuario=%s AND senha=%s",(entrar_usuario.get(),entrar_senha.get()))
-        if cursor.fetchone(): limpar_frame, tela_login(), ctk.CTkLabel(frame_principal,text="Login realizado com sucesso",width=500,font=("Arial",35,"bold")).pack(pady=40); app.after(1000, menu_principal)
-        else: limpar_frame, tela_login(), ctk.CTkLabel(frame_principal,text="Erro, Usuário ou senha incorretos!",width=500,font=("Arial",35,"bold")).pack(pady=40);
+        usuario = validar_usuario(entrar_usuario.get(),entrar_senha.get())
+        if usuario: 
+            limpar_frame()
+            tela_login()
+            ctk.CTkLabel(frame_principal,text="Login realizado com sucesso",width=500,font=("Arial",35,"bold")).pack(pady=40); app.after(1000, menu_principal_admin)
+        else:
+            limpar_frame()
+            tela_login()
+            ctk.CTkLabel(frame_principal,text="Erro, Usuário ou senha incorretos!",width=500,font=("Arial",35,"bold")).pack(pady=40);
 
     ctk.CTkButton(frame_principal,text="Entrar",width=250,command=fazer_login).pack(pady=20)
 
