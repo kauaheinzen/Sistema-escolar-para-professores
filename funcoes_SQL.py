@@ -25,7 +25,7 @@ def criar_admin_iniciar():
 
     sql_verificacao = 'SELECT EXISTS (SELECT 1 FROM admin_database)'
     cursor.execute(sql_verificacao,)
-    resultado = bool(cursor.fetchone[0])
+    resultado = bool(cursor.fetchone()[0])
 
     if not resultado:
         sql = 'INSERT INTO admin_database (nome_usuario, senha) VALUES (%s, %s)'
@@ -114,11 +114,12 @@ def cadastrar_alunos(nome, idade, email, turma, nome_responsavel = '', email_res
 
         cursor.execute(sql, valores)
         conn.commit()
-        print(f"{cursor.rowcount()} aluno(s) cadastrado(s).")
 
     except Error as e:
-        print(f"Ocorreu um erro {e}. Cadastro cancelado.")
         conn.rollback()
+        cursor.close()
+        conn.close()
+        return(f"Ocorreu um erro {e}. Cadastro cancelado.")
     
     finally:
         cursor.close()
