@@ -315,3 +315,18 @@ def vincular_turma_materia(turma, materia):
     conn.commit()
     cursor.close()
     conn.close()
+
+
+def ler_turmas():
+    '''mostra todos as turmas'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = 'SELECT id_turma, nome_turma FROM turmas'
+    cursor.execute(sql,)
+    
+    turmas = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return turmas
