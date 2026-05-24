@@ -12,7 +12,7 @@ app.title("Sistema Escolar")
 
 frame_principal = ctk.CTkFrame(app)
 frame_principal.pack(fill="both", expand=True)
-
+frame_principal.grid_columnconfigure((0,1,2), weight=1)
 
 def mudar_tema():
     if ctk.get_appearance_mode() == "Dark":
@@ -32,14 +32,14 @@ def verificar_situacao(media):
 
 def menu_principal():
     limpar_frame()
-    ctk.CTkLabel(frame_principal,text="SISTEMA ESCOLAR",font=("Arial",35,"bold")).pack(pady=40)
-    ctk.CTkButton(frame_principal,text="Cadastrar Aluno",width=300,height=50,command=tela_cadastrar).pack(pady=10)
-    ctk.CTkButton(frame_principal,text="Listar Alunos",width=300,height=50,command=tela_listar).pack(pady=10)
-    ctk.CTkButton(frame_principal,text="Atualizar Aluno",width=300,height=50,command=tela_atualizar).pack(pady=10)
-    ctk.CTkButton(frame_principal,text="Remover Aluno",width=300,height=50,fg_color="red",command=tela_deletar).pack(pady=10)
-    ctk.CTkButton(frame_principal,text="Buscar Aluno",width=300,height=50,command=tela_buscar).pack(pady=10)
-    ctk.CTkButton(frame_principal,text="←",width=50,height=30,command=tela_login).place(x=50, y=50)
-    botao_alterar = ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1800,y=50)
+ctk.CTkLabel(frame_principal, text="SISTEMA ESCOLAR", font=("Arial",35,"bold")).grid(row=0, column=1, pady=40)
+ctk.CTkButton(frame_principal, text="Cadastrar Aluno", width=300, height=50, command=tela_cadastrar).grid(row=1, column=1, pady=10)
+ctk.CTkButton(frame_principal, text="Listar Alunos", width=300, height=50, command=tela_listar).grid(row=2, column=1, pady=10)
+ctk.CTkButton(frame_principal, text="Atualizar Aluno", width=300, height=50, command=tela_atualizar).grid(row=3, column=1, pady=10)
+ctk.CTkButton(frame_principal, text="Remover Aluno", width=300, height=50, fg_color="red", command=tela_deletar).grid(row=4, column=1, pady=10)
+ctk.CTkButton(frame_principal, text="Buscar Aluno", width=300, height=50, command=tela_buscar).grid(row=5, column=1, pady=10)
+ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=tela_login).grid(row=0, column=0, padx=20, sticky="nw")
+ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=2, padx=20, sticky="ne")
     
 
 
