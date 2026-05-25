@@ -59,6 +59,7 @@ def tela_cadastrar_aluno(id):
         limpar_frame()
         turma_aplicada = 0
         turmas = ler_turmas()
+        ctk.CTkLabel(frame_principal,text="SELECIONE A TURMA DO ALUNO",font=("Arial",50,"bold")).place(x=700, y=40)
 
         if not turmas:
             ctk.CTkLabel(frame_principal,text="NÃO HÁ TURMAS CADASTRADAS",font=("Arial",30,"bold")).grid(); app.after(1000, menu_principal_admin)
@@ -74,21 +75,28 @@ def tela_cadastrar_aluno(id):
                     botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=250, command=mudar_id(turma[0]))
 
 
+        ctk.CTkButton(frame_principal,text="←",width=50,height=30,command=menu_principal_admin).place(x=50, y=50)
+        botao_alterar = ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1800, y=50)
+
+
+    tela_turmas()
+
     limpar_frame()
     ctk.CTkLabel(frame_principal,text="CADASTRAR ALUNO",font=("Arial",30,"bold")).pack(pady=20)
     entrar_nome=ctk.CTkEntry(frame_principal,placeholder_text="Nome do aluno",width=300); entrar_nome.pack(pady=10)
     entrar_idade=ctk.CTkEntry(frame_principal,placeholder_text="Idade",width=300); entrar_idade.pack(pady=10)
-    entrar_turma=ctk.CTkEntry(frame_principal,placeholder_text="Turma",width=300); entrar_turma.pack(pady=10)
     entrar_email=ctk.CTkEntry(frame_principal,placeholder_text="E-mail do aluno",width=300); entrar_email.pack(pady=10)
     entrar_nome_resp=ctk.CTkEntry(frame_principal,placeholder_text="Nome do responsável",width=300); entrar_nome_resp.pack(pady=10)
     entrar_email_resp=ctk.CTkEntry(frame_principal,placeholder_text="E-mail do responsável",width=300); entrar_email_resp.pack(pady=10)
     botao_alterar = ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1800,y=50)
 
     def cadastra_aluno():
-        ...
+        cadastro = cadastrar_alunos(entrar_nome.get(), entrar_idade.get(), entrar_email.get(), turma_aplicada, entrar_nome_resp.get(), entrar_email_resp.get())
+        if not cadastro:
+            ...
 
     ctk.CTkButton(frame_principal,text="Cadastrar",width=250,command=...).pack(pady=20)
-    ctk.CTkButton(frame_principal,text="Voltar",width=250,command=menu_principal_admin).pack()
+    ctk.CTkButton(frame_principal,text="←",width=250,command=tela_cadastrar_aluno).pack()
 
 def tela_listar_alunos():
     limpar_frame()
@@ -96,8 +104,8 @@ def tela_listar_alunos():
     textbox=ctk.CTkTextbox(frame_principal,width=700,height=350); textbox.pack(pady=20)
     botao_alterar = ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1800,y=50)
 
-    for a in cursor.fetchall():
-        textbox.insert("end",f"\nID:{a[0]}\nNome:{a[1]}\nIdade:{a[2]}\nTurma:{a[3]}\nNotas:{a[4]}\nMédia:{a[5]:.2f}\nSituação:{a[6]}\n----------------\n")
+    # for a in cursor.fetchall():
+    #     textbox.insert("end",f"\nID:{a[0]}\nNome:{a[1]}\nIdade:{a[2]}\nTurma:{a[3]}\nNotas:{a[4]}\nMédia:{a[5]:.2f}\nSituação:{a[6]}\n----------------\n")
 
     ctk.CTkButton(frame_principal,text="Voltar",width=250,command=menu_principal_admin).pack(pady=10)
 
@@ -140,14 +148,14 @@ def tela_buscar_aluno():
     entrar_busca=ctk.CTkEntry(frame_principal,placeholder_text="Digite o nome",width=300); entrar_busca.pack(pady=10)
     textbox=ctk.CTkTextbox(frame_principal,width=700,height=300); textbox.pack(pady=20)
 
-    def buscar():
-        textbox.delete("0.0","end")
-        cursor.execute("SELECT * FROM alunos WHERE nome LIKE %s",('%'+entrar_busca.get()+'%',))
-        for a in cursor.fetchall():
-            textbox.insert("end",f"\nID:{a[0]}\nNome:{a[1]}\nIdade:{a[2]}\nTurma:{a[3]}\nNotas:{a[4]}\nMédia:{a[5]}\nSituação:{a[6]}\n")
+    # def buscar():
+    #     textbox.delete("0.0","end")
+    #     cursor.execute("SELECT * FROM alunos WHERE nome LIKE %s",('%'+entrar_busca.get()+'%',))
+    #     for a in cursor.fetchall():
+    #         textbox.insert("end",f"\nID:{a[0]}\nNome:{a[1]}\nIdade:{a[2]}\nTurma:{a[3]}\nNotas:{a[4]}\nMédia:{a[5]}\nSituação:{a[6]}\n")
 
-    ctk.CTkButton(frame_principal,text="Buscar",width=250,command=buscar).pack(pady=10)
-    ctk.CTkButton(frame_principal,text="Voltar",width=250,command=menu_principal_admin).pack()
+    # ctk.CTkButton(frame_principal,text="Buscar",width=250,command=buscar).pack(pady=10)
+    # ctk.CTkButton(frame_principal,text="Voltar",width=250,command=menu_principal_admin).pack()
 
 def tela_login():
     limpar_frame()
