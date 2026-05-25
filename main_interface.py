@@ -15,7 +15,7 @@ app.title("Sistema Escolar")
 
 frame_principal = ctk.CTkFrame(app)
 frame_principal.pack(fill="both", expand=True)
-
+frame_principal.grid_columnconfigure((0,1,2), weight=1)
 
 def mudar_tema():
     if ctk.get_appearance_mode() == "Dark":
@@ -35,18 +35,14 @@ def verificar_situacao(media):
 
 def menu_principal_admin():
     limpar_frame()
-    app.grid_columnconfigure(0, weight=1)
-    app.grid_columnconfigure(1, weight=1)
-
-    ctk.CTkLabel(frame_principal,text="SISTEMA ESCOLAR",font=("Arial",50,"bold")).place(x=750, y=40)
-    ctk.CTkButton(frame_principal,text="Cadastrar Aluno",width=300,height=50,command=tela_cadastrar_aluno).grid(row=200, column=100, pady=50, stick='ew')
-    ctk.CTkButton(frame_principal,text="Listar Alunos",width=300,height=50,command=tela_listar_alunos).grid(row=400, column=100, pady=50, stick='ew')
-    ctk.CTkButton(frame_principal,text="Atualizar Aluno",width=300,height=50,command=tela_atualizar_aluno).grid(row=600, column=100, pady=50, stick='ew')
-    ctk.CTkButton(frame_principal,text="Desativar/Reativar Aluno",width=300,height=50,fg_color="red",command=tela_desativar_aluno).grid(row=800, column=100, pady=50, stick='ew')
-    ctk.CTkButton(frame_principal,text="Buscar Aluno",width=300,height=50,command=tela_buscar_aluno).grid(row=1500, column=100, pady=50, stick='ew')
-    ctk.CTkButton(frame_principal,text="←",width=50,height=30,command=tela_login).place(x=50, y=50)
-    botao_alterar = ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1800, y=50)
-    
+    ctk.CTkLabel(frame_principal, text="SISTEMA ESCOLAR", font=("Arial",35,"bold")).grid(row=0, column=1, pady=40)
+    ctk.CTkButton(frame_principal, text="Cadastrar Aluno", width=300, height=50, command=tela_cadastrar_aluno).grid(row=1, column=1, pady=10)
+    ctk.CTkButton(frame_principal, text="Listar Alunos", width=300, height=50, command=tela_listar_alunos).grid(row=2, column=1, pady=10)
+    ctk.CTkButton(frame_principal, text="Atualizar Aluno", width=300, height=50, command=tela_atualizar_aluno).grid(row=3, column=1, pady=10)
+    ctk.CTkButton(frame_principal, text="Desativar/Ativar Alunos", width=300, height=50, fg_color="red", command=tela_desativar_aluno).grid(row=4, column=1, pady=10)
+    ctk.CTkButton(frame_principal, text="Buscar Aluno", width=300, height=50, command=tela_buscar_aluno).grid(row=5, column=1, pady=10)
+    ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=tela_login).grid(row=0, column=0, padx=20, sticky="nw")
+    ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=2, padx=20, sticky="ne")
 
 
 def tela_cadastrar_aluno(id):
