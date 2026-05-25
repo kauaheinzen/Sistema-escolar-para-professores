@@ -45,8 +45,8 @@ def menu_principal_admin():
     ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=2, padx=20, sticky="ne")
 
 
-def tela_cadastrar_aluno(id):
-    def mudar_id():
+def tela_cadastrar_aluno():
+    def mudar_id(id):
         turma_aplicada = id
 
 
@@ -55,10 +55,11 @@ def tela_cadastrar_aluno(id):
         limpar_frame()
         turma_aplicada = 0
         turmas = ler_turmas()
-        ctk.CTkLabel(frame_principal,text="SELECIONE A TURMA DO ALUNO",font=("Arial",50,"bold")).place(x=700, y=40)
+        ctk.CTkLabel(frame_principal,text="SELECIONE A TURMA DO ALUNO",width=250, font=("Arial",50,"bold")).pack(pady=20)
 
         if not turmas:
-            ctk.CTkLabel(frame_principal,text="NÃO HÁ TURMAS CADASTRADAS",font=("Arial",30,"bold")).grid(); app.after(1000, menu_principal_admin)
+            ctk.CTkLabel(frame_principal,text="NÃO HÁ TURMAS CADASTRADAS",width=250, font=("Arial",30,"bold")).pack(pady=100); app.after(3000, menu_principal_admin)
+
         else:
             for turma in turmas:
                 if turma[0] < 6:
@@ -70,8 +71,8 @@ def tela_cadastrar_aluno(id):
                 else:
                     botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=250, command=mudar_id(turma[0]))
 
+        ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=tela_login).place(x=50, y=50)
 
-        ctk.CTkButton(frame_principal,text="←",width=50,height=30,command=menu_principal_admin).place(x=50, y=50)
         botao_alterar = ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1800, y=50)
 
 
@@ -92,7 +93,7 @@ def tela_cadastrar_aluno(id):
             ...
 
     ctk.CTkButton(frame_principal,text="Cadastrar",width=250,command=...).pack(pady=20)
-    ctk.CTkButton(frame_principal,text="←",width=250,command=tela_cadastrar_aluno).pack()
+    ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=tela_login).grid(row=0, column=0, padx=20, sticky="nw")
 
 def tela_listar_alunos():
     limpar_frame()
