@@ -48,13 +48,35 @@ def menu_principal_admin():
 
 def tela_cadastrar_aluno():
     def mudar_id(id):
+        global turma_aplicada
         turma_aplicada = id
+
+    def cadastro_aluno():
+        limpar_frame()
+        global entrar_nome; global entrar_idade; global entrar_email; global entrar_nome_resp; global entrar_email_resp
+        ctk.CTkLabel(frame_principal,text="CADASTRAR ALUNO",font=("Arial",30,"bold")).grid(row=0, column=1, pady=40)
+        entrar_nome=ctk.CTkEntry(frame_principal,placeholder_text="Nome do aluno",width=300, height=30); entrar_nome.grid(row=1, column=1, pady=10)
+        entrar_idade=ctk.CTkEntry(frame_principal,placeholder_text="Idade",width=300, height=30); entrar_idade.grid(row=2, column=1, pady=10)
+        entrar_email=ctk.CTkEntry(frame_principal,placeholder_text="E-mail do aluno",width=300, height=30); entrar_email.grid(row=3, column=1, pady=10)
+        entrar_nome_resp=ctk.CTkEntry(frame_principal,placeholder_text="Nome do responsável",width=300, height=30); entrar_nome_resp.grid(row=4, column=1, pady=10)
+        entrar_email_resp=ctk.CTkEntry(frame_principal,placeholder_text="E-mail do responsável",width=300, height=30); entrar_email_resp.grid(row=5, column=1, pady=10)
+        # ctk.CTkButton(frame_principal,text="Cadastrar",width=250, height=50,command=...).grid(row=7, column=1, pady=10)
+        ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=tela_login).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
+        ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
+
+
+    def cadastra_aluno():
+        cadastro = cadastrar_alunos(entrar_nome.get(), entrar_idade.get(), entrar_email.get(), turma_aplicada, entrar_nome_resp.get(), entrar_email_resp.get())
+        if not cadastro:
+            ...
+
+    def executar_cadastro(id):
+        mudar_id(id)
+        cadastro_aluno()
 
 
     def tela_turmas():
-        global turma_aplicada
         limpar_frame()
-        turma_aplicada = 0
         turmas = ler_turmas()
         ctk.CTkLabel(frame_principal,text="SELECIONE A TURMA DO ALUNO",width=300, font=("Arial",50,"bold")).grid(row=0, column=1, pady=40)
 
@@ -68,7 +90,7 @@ def tela_cadastrar_aluno():
         else:
             for turma in turmas:
                 if turma[0] < 6:
-                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=250, height=30, font=("Arial", 15), command=mudar_id(turma[0])).grid(row=turma[0], column=1, padx=100, pady=50, stick=...)
+                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=250, height=40, font=("Arial", 25), command=executar_cadastro).grid(row=turma[0], column=0, padx=100, pady=50, stick="nw")
                 elif turma[0] < 11:
                     botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=250, command=mudar_id(turma[0]))
                 elif turma[0] < 16:
@@ -76,31 +98,13 @@ def tela_cadastrar_aluno():
                 else:
                     botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=250, command=mudar_id(turma[0]))
 
-        ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=menu_principal_admin).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
 
-        botao_alterar = ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
+        ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=tela_login).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
+        ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
 
 
     tela_turmas()
-
-    def cadastro_aluno():
-        limpar_frame()
-        global entrar_nome; global entrar_idade; global entrar_email; global entrar_nome_resp; global entrar_email_resp
-        ctk.CTkLabel(frame_principal,text="CADASTRAR ALUNO",font=("Arial",30,"bold")).grid(row=0, column=1, pady=40)
-        entrar_nome=ctk.CTkEntry(frame_principal,placeholder_text="Nome do aluno",width=300, height=30); entrar_nome.grid(row=1, column=1, pady=10)
-        entrar_idade=ctk.CTkEntry(frame_principal,placeholder_text="Idade",width=300, height=30); entrar_idade.grid(row=2, column=1, pady=10)
-        entrar_email=ctk.CTkEntry(frame_principal,placeholder_text="E-mail do aluno",width=300, height=30); entrar_email.grid(row=3, column=1, pady=10)
-        entrar_nome_resp=ctk.CTkEntry(frame_principal,placeholder_text="Nome do responsável",width=300, height=30); entrar_nome_resp.grid(row=4, column=1, pady=10)
-        entrar_email_resp=ctk.CTkEntry(frame_principal,placeholder_text="E-mail do responsável",width=300, height=30); entrar_email_resp.grid(row=5, column=1, pady=10)
-        botao_alterar = ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
-        ctk.CTkButton(frame_principal,text="Cadastrar",width=250, height=50,command=...).grid(row=7, column=1, pady=10)
-        ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=tela_login).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
-
-    def cadastra_aluno():
-        cadastro = cadastrar_alunos(entrar_nome.get(), entrar_idade.get(), entrar_email.get(), turma_aplicada, entrar_nome_resp.get(), entrar_email_resp.get())
-        if not cadastro:
-            ...
-
+        
 
 def tela_listar_alunos():
     limpar_frame()
