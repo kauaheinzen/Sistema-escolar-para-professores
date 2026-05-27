@@ -51,6 +51,17 @@ def tela_cadastrar_aluno():
         global turma_aplicada
         turma_aplicada = id
 
+    def cadastra_aluno():
+        cadastro = cadastrar_alunos(entrar_nome.get(), entrar_idade.get(), entrar_email.get(), turma_aplicada, entrar_nome_resp.get(), entrar_email_resp.get())
+        if not cadastro:
+            ctk.CTkLabel(frame_principal, text="ALUNO CADASTRADO", font=("Arial",30,"bold")).grid(row=0, column=1, pady=30)
+        else:
+            ctk.CTkLabel(frame_principal, text=cadastro, font=("Arial",30,"bold")).grid(row=0, column=1, pady=30)
+        
+        app.after(1500, menu_principal_admin)
+
+
+
     def cadastro_aluno():
         limpar_frame()
         global entrar_nome; global entrar_idade; global entrar_email; global entrar_nome_resp; global entrar_email_resp
@@ -60,18 +71,13 @@ def tela_cadastrar_aluno():
         entrar_email=ctk.CTkEntry(frame_principal,placeholder_text="E-mail do aluno",width=300, height=30); entrar_email.grid(row=3, column=1, pady=10)
         entrar_nome_resp=ctk.CTkEntry(frame_principal,placeholder_text="Nome do responsável",width=300, height=30); entrar_nome_resp.grid(row=4, column=1, pady=10)
         entrar_email_resp=ctk.CTkEntry(frame_principal,placeholder_text="E-mail do responsável",width=300, height=30); entrar_email_resp.grid(row=5, column=1, pady=10)
-        # ctk.CTkButton(frame_principal,text="Cadastrar",width=250, height=50,command=...).grid(row=7, column=1, pady=10)
+        ctk.CTkButton(frame_principal,text="Cadastrar",width=250, height=50,command=...).grid(row=7, column=1, pady=10)
         ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=tela_login).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
         ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
 
 
-    def cadastra_aluno():
-        cadastro = cadastrar_alunos(entrar_nome.get(), entrar_idade.get(), entrar_email.get(), turma_aplicada, entrar_nome_resp.get(), entrar_email_resp.get())
-        if not cadastro:
-            ...
-
-    def executar_cadastro(id):
-        mudar_id(id)
+    def executar_cadastro():
+        mudar_id(turma[0])
         cadastro_aluno()
 
 
@@ -88,15 +94,16 @@ def tela_cadastrar_aluno():
             app.after(0, menu_principal_admin)
 
         else:
+            global turma
             for turma in turmas:
                 if turma[0] < 6:
-                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=250, height=40, font=("Arial", 25), command=executar_cadastro).grid(row=turma[0], column=0, padx=100, pady=50, stick="nw")
+                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=executar_cadastro).grid(row=turma[0], column=0, padx=100, pady=50, stick="nw")
                 elif turma[0] < 11:
-                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=250, command=mudar_id(turma[0]))
+                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=executar_cadastro).grid(row=turma[0] - 5, column=1, pady=50)
                 elif turma[0] < 16:
-                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=250, command=mudar_id(turma[0]))
+                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=executar_cadastro).grid(row=turma[0] - 10, column=2, padx=100, pady=50, stick="ne")
                 else:
-                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=250, command=mudar_id(turma[0]))
+                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=executar_cadastro).grid(row=turma[0] - 15, column=3, padx=100, pady=50, stick="ne")
 
 
         ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=tela_login).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
