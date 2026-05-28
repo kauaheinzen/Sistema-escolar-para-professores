@@ -333,11 +333,11 @@ def ler_turmas():
 
 
 def ler_materias():
-    '''mostra todos as matérias'''
+    '''mostra todas as matérias'''
     conn = conectar()
     cursor = conn.cursor()
 
-    sql = 'SELECT id_materia, nome_materia FROM turmas'
+    sql = 'SELECT id_materia, nome_materia FROM materias'
     cursor.execute(sql,)
     
     materias = cursor.fetchall()
@@ -345,3 +345,18 @@ def ler_materias():
     cursor.close()
     conn.close()
     return materias
+
+
+def ler_alunos():
+    '''mostra todos os alunos'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = 'SELECT * FROM alunos'
+    cursor.execute(sql,)
+    
+    alunos = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return alunos
