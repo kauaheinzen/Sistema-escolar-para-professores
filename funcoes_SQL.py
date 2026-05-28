@@ -330,3 +330,18 @@ def ler_turmas():
     cursor.close()
     conn.close()
     return turmas
+
+
+def ler_materias():
+    '''mostra todos as matérias'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = 'SELECT id_materia, nome_materia FROM turmas'
+    cursor.execute(sql,)
+    
+    materias = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return materias
