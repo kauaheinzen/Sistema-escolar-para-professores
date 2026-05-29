@@ -181,11 +181,12 @@ def atualizar_aluno(id, item_alterar, alteracao):
 
         cursor.execute(sql, valores)
         conn.commit()
-        print(f"{cursor.rowcount()} cadastro(s) alterado(s).")
 
     except Error as e:
-        print(f"Ocorreu um erro {e}. Alteração cancelada.")
         conn.rollback()
+        cursor.close()
+        conn.close()
+        return (True, f"Ocorreu um erro {e}. Atualização cancelada.")
     
     finally:
         cursor.close()
