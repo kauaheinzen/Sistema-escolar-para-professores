@@ -267,24 +267,23 @@ def tela_atualizar_aluno():
 
 def tela_desativar_aluno():
     limpar_frame()
-    ctk.CTkLabel(frame_principal,text="REMOVER ALUNO",font=("Arial",30,"bold")).pack(pady=20)
-    ctk.CTkButton(frame_principal,text="←",width=250,command=menu_principal_admin).place(x=50, y=50)
-    ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1800, y=50)
+    ctk.CTkLabel(frame_principal,text="REMOVER ALUNO",font=("Arial",30,"bold")).grid(row=0,column=0,columnspan=3,pady=20)
+    ctk.CTkButton(frame_principal,text="←",width=250,command=menu_principal_admin).grid(row=0,column=0,sticky="w",padx=20)
+    ctk.CTkButton(frame_principal,text="☀️",width=50,command=mudar_tema).grid(row=0,column=2,sticky="e",padx=20)
 
-    entrar_id=ctk.CTkEntry(frame_principal,placeholder_text="ID do aluno",width=300); entrar_id.pack(pady=20)
+    entrar_id=ctk.CTkEntry(frame_principal,placeholder_text="ID do aluno",width=300); entrar_id.grid(row=1,column=0,columnspan=3,pady=20)
 
+    ctk.CTkButton(frame_principal,text="Remover Aluno",width=250,fg_color="red",command=...).grid(row=2,column=0,columnspan=3,pady=20)
 
-    ctk.CTkButton(frame_principal,text="Remover Aluno",width=250,fg_color="red",command=...).pack(pady=20)
 
 def tela_buscar_aluno():
     limpar_frame()
-    ctk.CTkLabel(frame_principal,text="BUSCAR ALUNO",font=("Arial",30,"bold")).pack(pady=20)
-    ctk.CTkButton(frame_principal,text="←",width=250,command=menu_principal_admin).place(x=50, y=50)
-    botao_alterar = ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1800,y=50)
+    ctk.CTkLabel(frame_principal,text="BUSCAR ALUNO",font=("Arial",30,"bold")).grid(row=0,column=0,columnspan=3,pady=20)
+    ctk.CTkButton(frame_principal,text="←",width=250,command=menu_principal_admin).grid(row=0,column=0,sticky="w",padx=20)
+    ctk.CTkButton(frame_principal,text="☀️",width=50,command=mudar_tema).grid(row=0,column=2,sticky="e",padx=20)
 
-    entrar_busca=ctk.CTkEntry(frame_principal,placeholder_text="Digite o nome",width=300); entrar_busca.pack(pady=10)
-    textbox=ctk.CTkTextbox(frame_principal,width=700,height=300); textbox.pack(pady=20)
-
+    entrar_busca=ctk.CTkEntry(frame_principal,placeholder_text="Digite o nome",width=300); entrar_busca.grid(row=1,column=0,columnspan=3,pady=10)
+    textbox=ctk.CTkTextbox(frame_principal,width=700,height=300); textbox.grid(row=2,column=0,columnspan=3,pady=20)
     # def buscar():
     #     textbox.delete("0.0","end")
     #     cursor.execute("SELECT * FROM alunos WHERE nome LIKE %s",('%'+entrar_busca.get()+'%',))
