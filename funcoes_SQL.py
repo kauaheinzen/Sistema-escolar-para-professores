@@ -361,3 +361,18 @@ def ler_alunos():
     cursor.close()
     conn.close()
     return alunos
+
+
+def buscar_alunos(nome):
+    '''busca todos alunos'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = "SELECT * FROM alunos WHERE nome_aluno LIKE %s"
+    cursor.execute(sql, ('%'+nome+'%',))
+    
+    alunos = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return alunos

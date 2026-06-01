@@ -126,11 +126,12 @@ def tela_listar_alunos():
 
     else:
         for aluno in alunos:
-            textbox.insert(f"MATRÍCULA: {aluno[0]} | NOME: {aluno[1]} | IDADE: {aluno[2]} | EMAIL: {aluno[3]} | TURMA: {aluno[4]} | RESPONSÁVEL: {aluno[5]} | EMAIL DO RESPONSÁVEL: {aluno[6]}")
+            textbox.insert("end", f"MATRÍCULA: {aluno[0]} | NOME: {aluno[1]} | IDADE: {aluno[2]} | EMAIL: {aluno[3]} | TURMA: {aluno[4]} | RESPONSÁVEL: {aluno[5]} | EMAIL DO RESPONSÁVEL: {aluno[6]}")
 
 
 def tela_atualizar_aluno():
     limpar_frame()
+    opcao_troca()
 
 
     def executar_atualizacao():
@@ -189,6 +190,8 @@ def tela_atualizar_aluno():
         ctk.CTkButton(frame_principal, text="Mudar e-mail do Responsável", width=350, height=40, font=("Arial", 25), command=lambda: muda_opcao("e-mail do responsável")).grid(row=4, column=2, padx=100, pady=15, stick="nw")
 
 
+    global entrar_item
+    global entrar_id
     ctk.CTkLabel(frame_principal,text="ATUALIZAR ALUNO",font=("Arial",45,"bold")).grid(row=0, column=0, columnspan=3, pady=(40, 20), sticky="n")
     ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=tela_login).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
     ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
@@ -199,14 +202,14 @@ def tela_atualizar_aluno():
 
     def atualizar():
         if id_turma != 0:
-            atualizar_aluno(entrar_id.get(), "fk_id_turma", id_turma)
+            atualizar_aluno(entrar_id, "fk_id_turma", id_turma)
             ctk.CTkLabel(frame_principal,text="Cadastro Atualizado", width=250, font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
         else:
             match item:
                 case "nome":
-                    valida=validar_nome(entrar_item.get())
+                    valida=validar_nome(entrar_item)
                     if valida:
-                        atualiza=atualizar_aluno(entrar_id.get(), "nome_aluno", entrar_item.get())
+                        atualiza=atualizar_aluno(entrar_id, "nome_aluno", entrar_item)
                         if atualiza:
                             ctk.CTkLabel(frame_principal,text=valida[1], width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
                         else:
@@ -216,9 +219,9 @@ def tela_atualizar_aluno():
 
 
                 case "idade":
-                    valida=validar_idade(entrar_item.get())
+                    valida=validar_idade(entrar_item)
                     if valida:
-                        atualiza=atualizar_aluno(entrar_id.get(), "idade_aluno", entrar_item.get())
+                        atualiza=atualizar_aluno(entrar_id, "idade_aluno", entrar_item)
                         if atualiza:
                             ctk.CTkLabel(frame_principal,text=valida[1], width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
                         else:
@@ -228,7 +231,7 @@ def tela_atualizar_aluno():
 
 
                 case "e-mail":
-                    atualiza=atualizar_aluno(entrar_id.get(), "email_aluno", entrar_item.get())
+                    atualiza=atualizar_aluno(entrar_id, "email_aluno", entrar_item)
                     if atualiza:
                         ctk.CTkLabel(frame_principal,text=valida[1], width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
                     else:
@@ -236,9 +239,9 @@ def tela_atualizar_aluno():
 
 
                 case "nome do responsável":
-                    valida=validar_nome(entrar_item.get())
+                    valida=validar_nome(entrar_item)
                     if valida:
-                        atualiza=atualizar_aluno(entrar_id.get(), "nome_responsavel", entrar_item.get())
+                        atualiza=atualizar_aluno(entrar_id, "nome_responsavel", entrar_item)
                         if atualiza:
                             ctk.CTkLabel(frame_principal,text=valida[1], width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
                         else:
@@ -248,7 +251,7 @@ def tela_atualizar_aluno():
 
                 
                 case "e-mail do responsável":
-                    atualiza=atualizar_aluno(entrar_id.get(), "email_responsavel", entrar_item.get())
+                    atualiza=atualizar_aluno(entrar_id, "email_responsavel", entrar_item)
                     if atualiza:
                         ctk.CTkLabel(frame_principal,text=valida[1], width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
                     else:
@@ -271,10 +274,10 @@ def tela_desativar_aluno():
     ctk.CTkButton(frame_principal,text="←",width=250,command=menu_principal_admin).place(x=50, y=50)
     ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1800, y=50)
 
-    entrar_id=ctk.CTkEntry(frame_principal,placeholder_text="ID do aluno",width=300); entrar_id.pack(pady=20)
+    entrar_id_desativar=ctk.CTkEntry(frame_principal,placeholder_text="ID do aluno",width=300); entrar_id_desativar.pack(pady=20)
 
 
-    ctk.CTkButton(frame_principal,text="Remover Aluno",width=250,fg_color="red",command=...).pack(pady=20)
+    ctk.CTkButton(frame_principal,text="Remover Aluno",width=250,fg_color="red",command=lambda: desativar_reativar_aluno(entrar_id_desativar)).pack(pady=20)
 
 def tela_buscar_aluno():
     limpar_frame()
@@ -291,7 +294,7 @@ def tela_buscar_aluno():
     #     for a in cursor.fetchall():a[2]}\nTurma:{a[3]}\nNotas:{a[4]}\nMédia:{a[5]}\nSituação:{a[6]}\n")
 
     #         textbox.insert("end",f"\nMATRÍCULA:{a[0]}\nNome:{a[1]}\nIdade:{
-    # ctk.CTkButton(frame_principal,text="Buscar",width=250,command=buscar).pack(pady=10)
+    ctk.CTkButton(frame_principal,text="Buscar",width=250,command=lambda: ).pack(pady=10)
 
 
 def tela_login():
