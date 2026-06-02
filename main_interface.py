@@ -135,7 +135,7 @@ def tela_atualizar_aluno():
 
     def executar_atualizacao():
         global id_turma
-        id_turma=0
+        id_turma = 0
         id_turma = (turma[0])
         atualizar()
 
@@ -145,15 +145,18 @@ def tela_atualizar_aluno():
         global entrar_item
 
         item = opcao
-        if item:
+
+        if not item:
+            None
+        else:
             entrar_item=ctk.CTkEntry(frame_principal,placeholder_text=f"Novo(a) {item}",width=300)
 
-        try:
-            entrar_item.destroy()
-        except:
-            None
+            try:
+                entrar_item.destroy()
+            except:
+                None
 
-        entrar_item.grid(row=5, column=1, pady=10)
+            entrar_item.grid(row=5, column=1, pady=10)
 
     def tela_muda_turma():
         limpar_frame()
@@ -304,7 +307,13 @@ def tela_buscar_aluno():
         global alunos
         alunos = buscar_alunos(entrar_busca.get())
 
-        textbox.insert("end", f"MATRÍCULA: {alunos[0]} | NOME: {alunos[1]} | IDADE: {alunos[2]} | EMAIL: {alunos[3]} | TURMA: {alunos[4]} | RESPONSÁVEL: {alunos[5]} | EMAIL DO RESPONSÁVEL: {alunos[6]}")
+        if not alunos:
+            ctk.CTkLabel(frame_principal,text="NÃO HÁ ALUNOS CADASTRADOS",width=250, text_color="red", font=("Arial",45,"bold")).place(x=600, y=700) 
+            app.after(1500, menu_principal_admin)
+
+        else:
+            for aluno in alunos:
+                textbox.insert("end", f"MATRÍCULA: {aluno[0]} | NOME: {aluno[1]} | IDADE: {aluno[2]} | EMAIL: {aluno[3]} | TURMA: {aluno[4]} | RESPONSÁVEL: {aluno[5]} | EMAIL DO RESPONSÁVEL: {aluno[6]}")
 
     ctk.CTkButton(frame_principal,text="Buscar",width=250,command=buscar).pack(pady=10)
 
