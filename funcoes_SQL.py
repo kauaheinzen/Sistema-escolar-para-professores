@@ -369,7 +369,7 @@ def buscar_alunos(nome):
     cursor = conn.cursor()
 
     sql = "SELECT * FROM alunos WHERE nome_aluno LIKE %s"
-    cursor.execute(sql, ('%'+nome+'%',))
+    cursor.execute(sql, nome)
     
     alunos = cursor.fetchall()
 
