@@ -286,6 +286,7 @@ def desativar_reativar_aluno(id, acao):
     conn.commit()
     cursor.close()
     conn.close()
+    
 
 
 def desativar_reativar_avaliacao(id, acao):
