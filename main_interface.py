@@ -361,6 +361,8 @@ def tela_login():
     botao_mostrar = ctk.CTkButton(frame_senha, text="👁", width=50, command=exibir_senha)
     botao_mostrar.pack(side="left")
     
+    entrar_usuario.bind("<Return>", lambda event: fazer_login())
+    entrar_senha.bind("<Return>", lambda event: fazer_login())
         
     
     
@@ -378,7 +380,7 @@ def tela_login():
                 tela_login()
                 ctk.CTkLabel(frame_principal,text="Login realizado com sucesso",width=250,font=("Arial",35,"bold")).pack(pady=40); app.after(1000, menu_principal_admin)
 
-    ctk.CTkButton(frame_principal,text="Entrar",width=450,command=fazer_login).pack(pady=20)
+    btn_login = ctk.CTkButton(frame_principal,text="Entrar",width=450,command=fazer_login).pack(pady=20)
 
     
 
