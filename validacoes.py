@@ -43,29 +43,31 @@ def validar_adm(nome, senha):
     try:
         sql_usuario = 'SELECT nome_usuario FROM admin_database'
         cursor.execute(sql_usuario,)
-        nomes = cursor.fetchall()
+        nomes_adm = cursor.fetchall()
 
-        for n in nomes:
-            if n == nome:
-                sql_senha = 'SELECT senha FROM admin_database WHERE nome_usuario = %s'
-                valor = (n,)
-                cursor.execute(sql_senha, valor)
-                senha_admin = cursor.fetchone()
+        for nomes in nomes_adm:
+            for n in nomes:
+                if n == nome:
+                    sql_senha = 'SELECT senha FROM admin_database WHERE nome_usuario = %s'
+                    valor = (n,)
+                    cursor.execute(sql_senha, valor)
+                    senha_admin = cursor.fetchone()
 
-                if senha == senha_admin[0]:
-                    cursor.close()
-                    conn.close()
+                    if senha == senha_admin[0]:
+                        cursor.close()
+                        conn.close()
 
-                    return True
+                        return True
                 
         cursor.close()
         conn.close()
-        return (False, "Acesso negado")
+        return False
     
     except Error as e:
+        print(e)
         cursor.close()
         conn.close()    
-        return (False, f"Ocorreu um erro {e}. Login cancelado")
+        return False
     
 def validar_professor(nome, senha):
     '''Verifica se o usuário e senha do professor estão corretos'''
@@ -92,7 +94,7 @@ def validar_professor(nome, senha):
                 
         cursor.close()
         conn.close()
-        return (False, "Acesso negado")
+        return False
     
     except Error as e:
         cursor.close()
@@ -100,8 +102,8 @@ def validar_professor(nome, senha):
         return (False, f"Ocorreu um erro {e}. Login cancelado")
     
 def validar_usuario(nome, senha):
+    '''valida o login'''
     admin = validar_adm(nome, senha)
-
     if admin:
         return (True, "admin")
     professor = validar_professor(nome, senha)
@@ -109,4 +111,24 @@ def validar_usuario(nome, senha):
     if professor:
         return (True, "professor")
     
+    return (False, "Acesso negado")
+
+
+def validar_id_aluno(id):
+    '''valida id de alguma conta'''
+    conn = conectar()
+    cursor = conn.cursor()
+    sql = 'SELECT id_aluno FROM alunos'
+
+    cursor.execute(sql,)
+    resultado = cursor.fetchall()
+
+    for aluno in resultado:
+        if id == aluno:
+            cursor.close()
+            conn.close()
+            return True
+    
+    cursor.close()
+    conn.close()
     return False
