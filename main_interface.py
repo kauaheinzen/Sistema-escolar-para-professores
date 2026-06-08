@@ -287,15 +287,15 @@ def tela_desativar_aluno():
         global acao
         acao = 0
         
-    ctk.CTkLabel(frame_principal,text="Desativar ALUNO",font=("Arial",45,"bold")).grid(row=0, column=0, columnspan=3, pady=20)
-    ctk.CTkButton(frame_principal,text="←",width=50,command=menu_principal_admin).grid(row=0, column=0, sticky="w", padx=20)
-    ctk.CTkButton(frame_principal,text="☀️",width=50,command=mudar_tema).grid(row=0 ,column=2, sticky="e", padx=20)
-    ctk.CTkButton(frame_principal,text="Ativar Aluno",width=50,command=ativa).grid(row=1, column=1, padx=30)
-    ctk.CTkButton(frame_principal,text="Desativar Aluno",width=50,command=desativa).grid(row=1, column=2, padx=30)
+    ctk.CTkLabel(frame_principal, text="Desativar ALUNO", font=("Arial",45,"bold")).grid(row=0, column=0, columnspan=3, pady=20)
+    ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=tela_login).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
+    ctk.CTkButton(frame_principal, text="☀️", width=50, height=30, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
+    ctk.CTkButton(frame_principal, text="Ativar Aluno", height=50, width=200, command=ativa).grid(row=1, column=1, pady=30, sticky="nw")
+    ctk.CTkButton(frame_principal, text="Desativar Aluno", height=50, width=200, command=desativa).grid(row=1, column=1, pady=30)
 
-    entrar_id_desativar=ctk.CTkEntry(frame_principal,placeholder_text="ID do aluno",width=300); entrar_id_desativar.grid(row=1,column=0,columnspan=3,pady=20)
+    entrar_id_desativar=ctk.CTkEntry(frame_principal,placeholder_text="ID do aluno",width=300); entrar_id_desativar.grid(row=2,column=0,columnspan=3,pady=20)
 
-    ctk.CTkButton(frame_principal,text="Ativar/Desativar Aluno",width=250,fg_color="red",command=lambda: desativar_reativar_aluno(entrar_id_desativar.get(), acao)).grid(row=2,column=0,columnspan=3,pady=20)
+    ctk.CTkButton(frame_principal, text="Ativar/Desativar Aluno", width=250, fg_color='red', command=lambda: desativar_reativar_aluno(entrar_id_desativar.get(), acao)).grid(row=3,column=0,columnspan=3,pady=20)
 
 
 def tela_buscar_aluno():
@@ -334,8 +334,6 @@ def tela_login():
     entrar_senha = ctk.CTkEntry(frame_senha, placeholder_text="Senha", show="*", height=30, width=450)
     entrar_senha.pack(side="left", padx=5)
 
-    
-    
     
     def exibir_senha():
         nonlocal botao_mostrar
