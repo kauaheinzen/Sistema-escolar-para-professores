@@ -87,7 +87,7 @@ def tela_cadastrar_aluno():
             ctk.CTkLabel(frame_principal,text="NÃO HÁ TURMAS CADASTRADAS",width=250, text_color="red", font=("Arial",35,"bold")).grid(row=1, column=1, pady=200) 
             app.update()
 
-            sleep(3)
+            sleep(1.5)
             app.after(0, menu_principal_admin)
 
         else:
@@ -128,8 +128,8 @@ def tela_listar_alunos():
 
 def tela_atualizar_aluno():
     limpar_frame()
-    entrar_id = ''
-    entrar_item = ''
+    global item
+    item = ''
     id_turma = 0
 
     def executar_atualizacao():
@@ -192,26 +192,31 @@ def tela_atualizar_aluno():
 
     def atualizar():
         alunos = ler_alunos()
+        valida_id = validar_id_aluno(entrar_id.get())
+        valida_nome = validar_nome(entrar_item.get())
         if not alunos:
-            ctk.CTkLabel(frame_principal,text="NÃO HÁ ALUNOS CADASTRADOS",width=250, text_color="red", font=("Arial",45,"bold")).place(x=600, y=700)
-            sleep(2)
+            ctk.CTkLabel(frame_principal,text="NÃO HÁ ALUNOS CADASTRADOS",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=1, pady=50)
+            app.update()
+            sleep(1.5)
             app.after(0000, menu_principal_admin)
-
-        elif not entrar_id.get():
-            ctk.CTkLabel(frame_principal,text="MATRICULA DO ALUNO NÃO INSERIDA",width=250, text_color="red", font=("Arial",45,"bold")).place(x=600, y=700)
-            sleep(2)
-            app.after(0000, tela_atualizar_aluno)
-
-        elif not entrar_item.get():
-            ctk.CTkLabel(frame_principal,text="NOVA ALTERAÇÃO NÃO INSERIDA",width=250, text_color="red", font=("Arial",45,"bold")).place(x=600, y=700)
-            sleep(2)
-            app.after(0000, tela_atualizar_aluno)
 
         if id_turma != 0:
             atualizar_aluno(entrar_id.get(), "fk_id_turma", id_turma)
             ctk.CTkLabel(frame_principal,text="Cadastro Atualizado", width=250, font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
-            
+
+        elif not valida_id:
+            tela_atualizar_aluno()
+            ctk.CTkLabel(frame_principal,text="MATRICULA DO ALUNO NÃO INSERIDA",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=1, pady=50)
+
+        elif not valida_nome[0]:
+            tela_atualizar_aluno()
+            ctk.CTkLabel(frame_principal,text="NOVA ALTERAÇÃO NÃO INSERIDA",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=1, pady=50)
+    
         else:
+            if not item:
+                tela_atualizar_aluno()
+                ctk.CTkLabel(frame_principal,text="OPÇÃO DE ALTERAÇÃO NÃO INSERIDA",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=1, pady=50)
+
             match item:
                 case "nome":
                     valida=validar_nome(entrar_item.get())
@@ -288,7 +293,7 @@ def tela_desativar_aluno():
         acao = 0
         
     ctk.CTkLabel(frame_principal, text="Desativar ALUNO", font=("Arial",45,"bold")).grid(row=0, column=0, columnspan=3, pady=20)
-    ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=tela_login).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
+    ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=menu_principal_admin).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
     ctk.CTkButton(frame_principal, text="☀️", width=50, height=30, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
     ctk.CTkButton(frame_principal, text="Ativar Aluno", height=50, width=200, command=ativa).grid(row=1, column=1, pady=30, sticky="nw")
     ctk.CTkButton(frame_principal, text="Desativar Aluno", height=50, width=200, command=desativa).grid(row=1, column=1, pady=30)
