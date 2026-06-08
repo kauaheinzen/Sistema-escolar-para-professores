@@ -361,7 +361,7 @@ def tela_login():
     botao_mostrar = ctk.CTkButton(frame_senha, text="👁", width=50, command=exibir_senha)
     botao_mostrar.pack(side="left")
     
-    entrar_usuario.bind("<Return>", lambda event: fazer_login())
+    entrar_usuario.bind("<Return>", lambda event: entrar_senha.focus_set())
     entrar_senha.bind("<Return>", lambda event: fazer_login())
         
     
