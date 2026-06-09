@@ -404,6 +404,7 @@ def tela_buscar_aluno():
     ctk.CTkButton(frame_principal,text="Buscar",width=250,command=lambda: buscar(entrar_busca.get())).grid(row=3,column=0,columnspan=3,pady=20)
 
 
+
     
 
 
