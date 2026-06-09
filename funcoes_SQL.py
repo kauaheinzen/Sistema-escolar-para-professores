@@ -37,7 +37,7 @@ def criar_admin_iniciar():
     conn.close()
 
 
-def cadastrar_materias(nome_materia):
+def cadastrar_materia(nome_materia):
     '''Cadastra novas matérias'''
     conn = conectar()
     cursor = conn.cursor()
@@ -48,11 +48,10 @@ def cadastrar_materias(nome_materia):
 
         cursor.execute(sql, valor)
         conn.commit()
-        print(f"{cursor.rowcount()} matéria(s) cadastrada(s).")
 
     except Error as e:
-        print(f"Ocorreu um erro {e}. Cadastro cancelado.")
         conn.rollback()
+        return f"Ocorreu um erro {e}. Cadastro cancelado."
     
     finally:
         cursor.close()
