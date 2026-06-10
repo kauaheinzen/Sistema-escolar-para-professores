@@ -82,22 +82,29 @@ def tela_login():
 
 def menu_principal_admin():
     limpar_frame()
-    ctk.CTkLabel(frame_principal, text="SISTEMA ESCOLAR", font=("Arial",35,"bold")).grid(row=0, column=1, pady=40)
-    ctk.CTkButton(frame_principal, text="Cadastrar Matéria", width=300, height=50, command=tela_cadastrar_materia).grid(row=1, column=0, pady=10)
-    ctk.CTkButton(frame_principal, text="Cadastrar Aluno", width=300, height=50, command=tela_cadastrar_aluno).grid(row=1, column=1, pady=10)
-    ctk.CTkButton(frame_principal, text="Cadastrar Professor", width=300, height=50, command=tela_cadastrar_aluno).grid(row=1, column=2, pady=10)
-    ctk.CTkButton(frame_principal, text="Cadastrar Turma", width=300, height=50, command=tela_listar_alunos).grid(row=2, column=0, pady=10)
-    ctk.CTkButton(frame_principal, text="Listar Alunos", width=300, height=50, command=tela_listar_alunos).grid(row=2, column=1, pady=10)
-    ctk.CTkButton(frame_principal, text="Listar Professores", width=300, height=50, command=tela_listar_alunos).grid(row=2, column=2, pady=10)
-    ctk.CTkButton(frame_principal, text="Desativar/Ativar Matéria", width=300, height=50, fg_color="red", command=tela_atualizar_aluno).grid(row=3, column=0, pady=10)
-    ctk.CTkButton(frame_principal, text="Atualizar Aluno", width=300, height=50, command=tela_atualizar_aluno).grid(row=3, column=1, pady=10)
-    ctk.CTkButton(frame_principal, text="Atualizar Professor", width=300, height=50, command=tela_atualizar_aluno).grid(row=3, column=2, pady=10)
-    ctk.CTkButton(frame_principal, text="Desativar/Ativar Turma", width=300, height=50, fg_color="red", command=tela_desativar_aluno).grid(row=4, column=0, pady=10)
-    ctk.CTkButton(frame_principal, text="Desativar/Ativar Aluno", width=300, height=50, fg_color="red", command=tela_desativar_aluno).grid(row=4, column=1, pady=10)
-    ctk.CTkButton(frame_principal, text="Desativar/Ativar Professor", width=300, height=50, fg_color="red", command=tela_desativar_aluno).grid(row=4, column=2, pady=10)
-    ctk.CTkButton(frame_principal, text="Buscar Aluno", width=300, height=50, command=tela_buscar_aluno).grid(row=5, column=1, pady=10)
-    ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=tela_login).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
-    ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
+
+    ctk.CTkLabel(frame_principal,text=" Sistema Escolar",font=("Arial",35,"bold")).place(x=810, y=40)
+    
+    ctk.CTkButton(frame_principal, text="Cadastrar Matéria", width=300, height=50, command=tela_cadastrar_aluno).place(x=280, y=180)
+    ctk.CTkButton(frame_principal, text="Cadastrar Aluno", width=300, height=50, command=tela_cadastrar_aluno).place(x=810, y=180)
+    ctk.CTkButton(frame_principal, text="Cadastrar Professor", width=300, height=50, command=tela_cadastrar_aluno).place(x=1340, y=180)
+
+    ctk.CTkButton(frame_principal, text="Cadastrar Turma", width=300, height=50, command=tela_listar_alunos).place(x=280, y=270)
+    ctk.CTkButton(frame_principal, text="Listar Alunos", width=300, height=50, command=tela_listar_alunos).place(x=810, y=270)
+    ctk.CTkButton(frame_principal, text="Listar Professores", width=300, height=50, command=tela_listar_alunos).place(x=1340, y=270)
+
+    ctk.CTkButton(frame_principal, text="Desativar/Ativar Matéria", width=300, height=50, fg_color="red", command=tela_atualizar_aluno).place(x=280, y=360)
+    ctk.CTkButton(frame_principal, text="Atualizar Aluno", width=300, height=50, command=tela_atualizar_aluno).place(x=810, y=360)
+    ctk.CTkButton(frame_principal, text="Atualizar Professor", width=300, height=50, command=tela_atualizar_aluno).place(x=1340, y=360)
+
+    ctk.CTkButton(frame_principal, text="Desativar/Ativar Turma", width=300, height=50, fg_color="red", command=tela_desativar_aluno).place(x=280, y=450)
+    ctk.CTkButton(frame_principal, text="Desativar/Ativar Aluno", width=300, height=50, fg_color="red", command=tela_desativar_aluno).place(x=810, y=450)
+    ctk.CTkButton(frame_principal, text="Desativar/Ativar Professor", width=300, height=50, fg_color="red", command=tela_desativar_aluno).place(x=1340, y=450)
+
+    ctk.CTkButton(frame_principal, text="Buscar Aluno", width=300, height=50, command=tela_buscar_aluno).place(x=810, y=540)
+
+    ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=tela_login).place(x=20, y=20)
+    ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1840, y=20)
 
 
 def tela_cadastrar_materia():
