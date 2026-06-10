@@ -199,11 +199,14 @@ def tela_cadastrar_aluno():
 def tela_cadastrar_professor():
     turmas = []
     def executar_cadastro(nome, idade, email, usuario, senha, matéria):
+        if not turmas:
+            ctk.CTkLabel(frame_principal, text="NÃO HÁ TURMAS CADASTRADAS", fg_color="red", font=("Arial",30,"bold")).grid(row=..., column=1, pady=30)
+
         cadastro = cadastrar_professores(nome, idade, email, usuario, senha, matéria)
         if not cadastro:
-            ctk.CTkLabel(frame_principal, text="PROFESSOR CADASTRADO", font=("Arial",30,"bold")).grid(row=0, column=1, pady=30)
+            ctk.CTkLabel(frame_principal, text="PROFESSOR CADASTRADO", font=("Arial",30,"bold")).grid(row=..., column=1, pady=30)
         else:
-            ctk.CTkLabel(frame_principal, text=cadastro, font=("Arial",30,"bold")).grid(row=0, column=1, pady=30)
+            ctk.CTkLabel(frame_principal, text=cadastro.upper(), fg_color="red", font=("Arial",30,"bold")).grid(row=..., column=1, pady=30)
 
         app.after(1500, menu_principal_admin)
     
@@ -222,8 +225,10 @@ def tela_cadastrar_professor():
         except:
             None
         
-        turmas_adicionadas.grid(row=6, column=0, columnspan=3, pady=(40, 20), sticky="n")
+        turmas_adicionadas.grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
 
+    def tela_cadastro():
+        ...
 
 
     def tela_turmas_cadastro():
@@ -251,6 +256,7 @@ def tela_cadastrar_professor():
                     botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=lambda: adicionar_turmas(turma[1])).grid(row=turma[0] - 15, column=3, padx=100, pady=50, stick="ne")
 
 
+        ctk.CTkButton(frame_principal, text="ADICIONAR TURMAS", width=50, height=30, command=tela_cadastro).grid(row=6, column=0, columnspan=3, pady=(40, 20), sticky="n")
         ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=menu_principal_admin).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
         ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
 
