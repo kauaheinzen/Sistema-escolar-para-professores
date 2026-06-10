@@ -80,22 +80,21 @@ def cadastrar_turma(nome, materias):
         conn.close()
 
 
-def cadastrar_professores(nome, idade, email, usuario, senha, materia, turmas):
+def cadastrar_professores(nome, idade, email, usuario, senha, materia):
     '''Cadastra novos professores'''
     conn = conectar()
     cursor = conn.cursor()
 
     try:
-        sql = 'INSERT INTO professores (nome_professor, idade_professor, email_professor nome_usuario, senha, fk_id_materia, fk_id_turmas) VALUES (%s, %s, %s, %s, %s, %s, %s)'
-        valores = (nome, idade, email, usuario, senha, materia, turmas)
+        sql = 'INSERT INTO professores (nome_professor, idade_professor, email_professor nome_usuario, senha, fk_id_materia, fk_id_turmas) VALUES (%s, %s, %s, %s, %s, %s)'
+        valores = (nome, idade, email, usuario, senha, materia)
 
         cursor.execute(sql, valores)
         conn.commit()
-        print(f"{cursor.rowcount()} professor(s) cadastrado(s).")
 
     except Error as e:
-        print(f"Ocorreu um erro {e}. Cadastro cancelado.")
         conn.rollback()
+        return f"Ocorreu um erro {e}. Cadastro cancelado."
     
     finally:
         cursor.close()
@@ -116,9 +115,7 @@ def cadastrar_alunos(nome, idade, email, turma, nome_responsavel = '', email_res
 
     except Error as e:
         conn.rollback()
-        cursor.close()
-        conn.close()
-        return(f"Ocorreu um erro {e}. Cadastro cancelado.")
+        return f"Ocorreu um erro {e}. Cadastro cancelado."
     
     finally:
         cursor.close()
@@ -136,11 +133,10 @@ def registrar_avaliacao(data, aluno, nome_avaliacao, nota):
 
         cursor.execute(sql, valores)
         conn.commit()
-        print("Avaliação registrada")
 
     except Error as e:
-        print(f"Ocorreu um erro {e}. Registro da avaliação cancelado.")
         conn.rollback()
+        return f"Ocorreu um erro {e}. Registro da avaliação cancelado."
     
     finally:
         cursor.close()
@@ -158,11 +154,10 @@ def atualizar_professor(id, item_alterar, alteracao):
 
         cursor.execute(sql, valores)
         conn.commit()
-        print(f"{cursor.rowcount()} cadastro(s) alterado(s).")
 
     except Error as e:
-        print(f"Ocorreu um erro {e}. Alteração cancelada.")
         conn.rollback()
+        return f"Ocorreu um erro {e}. Alteração cancelada."
     
     finally:
         cursor.close()
@@ -183,9 +178,7 @@ def atualizar_aluno(id, item_alterar, alteracao):
 
     except Error as e:
         conn.rollback()
-        cursor.close()
-        conn.close()
-        return (True, f"Ocorreu um erro {e}. Atualização cancelada.")
+        return f"Ocorreu um erro {e}. Atualização cancelada."
     
     finally:
         cursor.close()
@@ -203,11 +196,10 @@ def atualizar_avaliacao(id, item_alterar, alteracao):
 
         cursor.execute(sql, valores)
         conn.commit()
-        print(f"{cursor.rowcount()} avaliações(s) alterado(s).")
 
     except Error as e:
-        print(f"Ocorreu um erro {e}. Alteração cancelada.")
         conn.rollback()
+        return f"Ocorreu um erro {e}. Alteração cancelada."
     
     finally:
         cursor.close()
@@ -311,6 +303,21 @@ def vincular_turma_materia(turma, materia):
         
     sql = 'INSERT INTO turma_materias (fk_id_turma, fk_id_materia) VALUES (%s, %s)'
     valores = (turma, materia)
+    cursor.execute(sql, valores)
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
+def vincular_professor_turma(professor, turma):
+    '''vincula um professor em uma turma'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+        
+    sql = 'INSERT INTO professor_turma (fk_id_professor, fk_id_turma) VALUES (%s, %s)'
+    valores = (professor, turma)
     cursor.execute(sql, valores)
     
     conn.commit()
