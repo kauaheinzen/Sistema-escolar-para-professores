@@ -383,3 +383,18 @@ def buscar_alunos(nome):
     cursor.close()
     conn.close()
     return alunos
+
+
+def ler_id_professor(nome):
+    '''retorna o ID do professor'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = "SELECT id_professor FROM professores WHERE nome_professor = %s"
+    cursor.execute(sql, nome)
+    
+    professor = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+    return professor
