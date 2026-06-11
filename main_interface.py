@@ -193,8 +193,7 @@ def tela_cadastrar_aluno():
         ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
 
 
-    tela_turmas_cadastro()
-        
+    tela_turmas_cadastro() 
 
 def tela_cadastrar_professor():
     turmas = []
