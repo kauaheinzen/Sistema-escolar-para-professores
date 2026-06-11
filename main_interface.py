@@ -199,9 +199,6 @@ def tela_cadastrar_aluno():
 def tela_cadastrar_professor():
     turmas = []
     def executar_cadastro(nome, idade, email, usuario, senha, matéria):
-        if not turmas:
-            ctk.CTkLabel(frame_principal, text="NÃO HÁ TURMAS CADASTRADAS", fg_color="red", font=("Arial",30,"bold")).grid(row=..., column=1, pady=30)
-
         cadastro = cadastrar_professores(nome, idade, email, usuario, senha, matéria)
         if not cadastro:
             ctk.CTkLabel(frame_principal, text="PROFESSOR CADASTRADO", font=("Arial",30,"bold")).grid(row=..., column=1, pady=30)
@@ -227,8 +224,25 @@ def tela_cadastrar_professor():
         
         turmas_adicionadas.grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
 
-    def tela_cadastro():
+    def tela_escolher_materia():
         ...
+
+    def tela_cadastro():
+        if not turmas:
+            ctk.CTkLabel(frame_principal, text="NÃO HÁ TURMAS ESCOLHIDAS", fg_color="red", font=("Arial",30,"bold")).grid(row=7, column=1, pady=30)
+            app.update()
+            app.after(1500, tela_turmas_cadastro)
+        else:
+            limpar_frame()
+            ctk.CTkLabel(frame_principal,text="CADASTRE O PROFESSOR",width=300, font=("Arial",50,"bold")).grid(row=0, column=0, columnspan=3, pady=(40, 20), sticky="n")
+            entrar_nome = ctk.CTkEntry(frame_principal, placeholder_text="Nome do Professor", height=30, width=300); entrar_nome.grid(row=1, column=1, pady=50)
+            entrar_idade = ctk.CTkEntry(frame_principal, placeholder_text="Idade do Professor", height=30, width=300); entrar_idade.grid(row=2, column=1, pady=10)
+            entrar_email = ctk.CTkEntry(frame_principal, placeholder_text="E-mail do Professor", height=30, width=300); entrar_email.grid(row=3, column=1, pady=10)
+            entrar_usuario = ctk.CTkEntry(frame_principal, placeholder_text="Nome de Usuário do Professor", height=30, width=300); entrar_usuario.grid(row=4, column=1, pady=10)
+            entrar_senha = ctk.CTkEntry(frame_principal, placeholder_text="Crie uma Senha", height=30, width=300); entrar_senha.grid(row=5, column=1, pady=10)
+            ctk.CTkButton(frame_principal, text="CADASTRAR PROFESSOR", width=50, height=30, command=).grid(row=6, column=0, columnspan=3, pady=(40, 20), sticky="n")
+            ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=menu_principal_admin).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
+            ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
 
 
     def tela_turmas_cadastro():
@@ -261,7 +275,7 @@ def tela_cadastrar_professor():
         ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
 
 
-    tela_turmas_cadastro()
+    tela_cadastro()
         
 
 def tela_listar_alunos():
