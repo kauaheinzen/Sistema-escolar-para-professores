@@ -78,6 +78,7 @@ def tela_login():
 
 
 def menu_principal_admin():
+    limpar_frame()
     ctk.CTkLabel(frame_principal,text=" Sistema Escolar",font=("Arial",35,"bold")).place(x=810,y=40)
 
     ctk.CTkButton(frame_principal,text="Cadastrar Matéria",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_cadastrar_materia).place(x=280,y=180)
