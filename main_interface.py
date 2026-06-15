@@ -89,7 +89,7 @@ def menu_principal_admin():
     ctk.CTkButton(frame_principal,text="Listar Alunos",width=300,height=50,fg_color=("#2563EB","#475569"),hover_color=("#1D4ED8","#334155"),command=tela_listar_alunos).place(x=810,y=270)
     ctk.CTkButton(frame_principal,text="Listar Professores",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_listar_professores).place(x=1340,y=270)
 
-    ctk.CTkButton(frame_principal,text="Desativar/Ativar Matéria",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_atualizar_aluno).place(x=280,y=360)
+    ctk.CTkButton(frame_principal,text="Desativar/Ativar Matéria",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_desativar_materia).place(x=280,y=360)
     ctk.CTkButton(frame_principal,text="Atualizar Aluno",width=300,height=50,fg_color=("#2563EB","#475569"),hover_color=("#1D4ED8","#334155"),command=tela_atualizar_aluno).place(x=810,y=360)
     ctk.CTkButton(frame_principal,text="Atualizar Professor",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_atualizar_aluno).place(x=1340,y=360)
 
@@ -366,6 +366,29 @@ def tela_listar_professores():
             textbox.insert("end", f"ID: {professor[0]} | NOME: {professor[1]} | IDADE: {professor[2]} | EMAIL: {professor[3]} | USUÁRIO: {professor[4][:4] + "*" * usuario} | SENHA: {"*" * len(professor[5])} | ATIVO [1-SIM, 0-NÃO]: {professor[6]} | MATÉRIA: {materia}")
 
 
+def tela_desativar_materia():
+    limpar_frame()
+    global acao
+    acao = 0
+    def ativa():
+        global acao
+        acao = 1
+
+    def desativa():
+        global acao
+        acao = 0
+        
+    ctk.CTkLabel(frame_principal, text="DESATIVAR/ATIVAR MATÉRIA", font=("Arial",45,"bold")).place(x=780, y=40)
+    ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=menu_principal_admin).place(x=20, y=20)
+    ctk.CTkButton(frame_principal, text="☀️", width=50, height=30, command=mudar_tema).place(x=1850, y=20)
+    ctk.CTkButton(frame_principal, text="Ativar Matéria", height=50, width=200, command=ativa).place(x=760, y=180)
+    ctk.CTkButton(frame_principal, text="Desativar Matéria", height=50, width=200, command=desativa).place(x=980, y=180)
+
+    entrar_id_desativar=ctk.CTkEntry(frame_principal,placeholder_text="ID da matéria",width=300); entrar_id_desativar.place(x=820, y=280)
+
+    ctk.CTkButton(frame_principal, text="Ativar/Desativar Matéria", width=250, fg_color='red', command=lambda: desativar_reativar_materia(entrar_id_desativar.get(), acao)).place(x=850, y=350)
+
+
 def tela_atualizar_aluno():
     limpar_frame()
     global item
@@ -519,7 +542,6 @@ def tela_atualizar_aluno():
     ctk.CTkButton(frame_principal,text="Atualizar Aluno",height=50, width=450,command=atualizar).grid(row=6, column=1, pady=40)
 
 
-
 def tela_desativar_aluno():
     limpar_frame()
     global acao
@@ -541,6 +563,7 @@ def tela_desativar_aluno():
     entrar_id_desativar=ctk.CTkEntry(frame_principal,placeholder_text="ID do aluno",width=300); entrar_id_desativar.place(x=820, y=280)
 
     ctk.CTkButton(frame_principal, text="Ativar/Desativar Aluno", width=250, fg_color='red', command=lambda: desativar_reativar_aluno(entrar_id_desativar.get(), acao)).place(x=850, y=350)
+
 
 def tela_buscar_aluno():
     limpar_frame()
