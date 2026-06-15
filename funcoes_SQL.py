@@ -355,6 +355,21 @@ def ler_materias():
     return materias
 
 
+def ler_professores():
+    '''mostra todos os professores'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = 'SELECT * FROM professores'
+    cursor.execute(sql,)
+    
+    professores = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return professores
+
+
 def ler_alunos():
     '''mostra todos os alunos'''
     conn = conectar()
@@ -398,3 +413,18 @@ def ler_id_professor(nome):
     cursor.close()
     conn.close()
     return professor
+
+
+def ler_nome_materia(id):
+    '''retorna o ID do professor'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = "SELECT nome_materia FROM materias WHERE id_materia = %s"
+    cursor.execute(sql, id)
+    
+    materia = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+    return materia

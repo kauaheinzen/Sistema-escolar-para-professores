@@ -83,11 +83,11 @@ def menu_principal_admin():
 
     ctk.CTkButton(frame_principal,text="Cadastrar Matéria",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_cadastrar_materia).place(x=280,y=180)
     ctk.CTkButton(frame_principal,text="Cadastrar Aluno",width=300,height=50,fg_color=("#2563EB","#475569"),hover_color=("#1D4ED8","#334155"),command=tela_cadastrar_aluno).place(x=810,y=180)
-    ctk.CTkButton(frame_principal,text="Cadastrar Professor",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_cadastrar_aluno).place(x=1340,y=180)
+    ctk.CTkButton(frame_principal,text="Cadastrar Professor",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_cadastrar_professor).place(x=1340,y=180)
 
     ctk.CTkButton(frame_principal,text="Cadastrar Turma",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_listar_alunos).place(x=280,y=270)
     ctk.CTkButton(frame_principal,text="Listar Alunos",width=300,height=50,fg_color=("#2563EB","#475569"),hover_color=("#1D4ED8","#334155"),command=tela_listar_alunos).place(x=810,y=270)
-    ctk.CTkButton(frame_principal,text="Listar Professores",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_listar_alunos).place(x=1340,y=270)
+    ctk.CTkButton(frame_principal,text="Listar Professores",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_listar_professores).place(x=1340,y=270)
 
     ctk.CTkButton(frame_principal,text="Desativar/Ativar Matéria",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_atualizar_aluno).place(x=280,y=360)
     ctk.CTkButton(frame_principal,text="Atualizar Aluno",width=300,height=50,fg_color=("#2563EB","#475569"),hover_color=("#1D4ED8","#334155"),command=tela_atualizar_aluno).place(x=810,y=360)
@@ -207,11 +207,18 @@ def tela_cadastrar_professor():
             app.update()
             app.after(1500, tela_turmas_cadastro(nome, idade, email, usuario, senha, materia))
         else:
-            cadastro = cadastrar_professores(nome, idade, email, usuario, senha, materia)
-            if not cadastro:
-                ctk.CTkLabel(frame_principal, text="PROFESSOR CADASTRADO", font=("Arial",30,"bold")).grid(row=7, column=1, pady=30)
+            valida_nome = validar_nome(nome)
+            valida_idade = validar_idade(idade)
+
+            if valida_nome and valida_idade:
+                cadastro = cadastrar_professores(nome, idade, email, usuario, senha, materia)
+                if not cadastro:
+                    ctk.CTkLabel(frame_principal, text="PROFESSOR CADASTRADO", font=("Arial",30,"bold")).grid(row=7, column=1, pady=30)
+                else:
+                    ctk.CTkLabel(frame_principal, text=cadastro.upper(), fg_color="red", font=("Arial",30,"bold")).grid(row=7, column=1, pady=30)
             else:
-                ctk.CTkLabel(frame_principal, text=cadastro.upper(), fg_color="red", font=("Arial",30,"bold")).grid(row=7, column=1, pady=30)
+                ctk.CTkLabel(frame_principal, text="NOME E/OU IDADE INVÁLIDA", fg_color="red", font=("Arial",30,"bold")).grid(row=7, column=1, pady=30)
+
 
         professor = ler_id_professor(nome)
         for turma in turmas:
@@ -220,13 +227,13 @@ def tela_cadastrar_professor():
         app.after(0000, menu_principal_admin)
 
     def adicionar_turmas(turma):
-        adicionar = 1
-        for i, j in turmas:
+        for i, j in enumerate(turmas):
+            adicionar = 1
             if turma == j:
                 adicionar = 0
                 turmas.pop(i)
-        if adicionar == 1:
-            turmas.append(turma)
+            if adicionar == 1:
+                turmas.append(turma)
      
         turmas_adicionadas = ctk.CTkLabel(frame_principal, text=f"Turmas adicionadas ao professor: {turmas}", font=("Arial",20))
         try:
@@ -252,6 +259,9 @@ def tela_cadastrar_professor():
                 botao_materia[materia[0]] = ctk.CTkButton(frame_principal, text=materia[1], width=350, height=40, font=("Arial", 25), command=lambda: tela_turmas_cadastro(nome, idade, email, usuario, senha, materia[1])).grid(row=materia[0] - 10, column=2, padx=100, pady=50, stick="ne")
             else:
                 botao_materia[materia[0]] = ctk.CTkButton(frame_principal, text=materia[1], width=350, height=40, font=("Arial", 25), command=lambda: tela_turmas_cadastro(nome, idade, email, usuario, senha, materia[1])).grid(row=materia[0] - 15, column=3, padx=100, pady=50, stick="ne")
+        
+        ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=tela_cadastro).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
+        ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
 
 
     def tela_cadastro():
@@ -314,6 +324,24 @@ def tela_listar_alunos():
     else:
         for aluno in alunos:
             textbox.insert("end", f"MATRÍCULA: {aluno[0]} | NOME: {aluno[1]} | IDADE: {aluno[2]} | EMAIL: {aluno[3]} | TURMA: {aluno[4]} | ATIVO [1-SIM, 0-NÃO]: {aluno[5]} | RESPONSÁVEL: {aluno[6]} | EMAIL DO RESPONSÁVEL: {aluno[7]}")
+
+
+def tela_listar_professores():
+    limpar_frame()
+    ctk.CTkLabel(frame_principal,text="LISTA DE PROFESSORES",font=("Arial",45,"bold")).pack(pady=20)
+    textbox=ctk.CTkTextbox(frame_principal,width=700,height=350); textbox.pack(pady=20)
+    ctk.CTkButton(frame_principal,text="←",width=250,command=menu_principal_admin).place(x=50, y=50)
+    ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1800,y=50)
+    professores = ler_professores()
+    if not professores:
+        ctk.CTkLabel(frame_principal,text="NÃO HÁ PROFESSORES CADASTRADOS",width=250, text_color="red", font=("Arial",45,"bold")).place(x=600, y=700) 
+        app.after(1500, menu_principal_admin)
+
+    else:
+        for professor in professores:
+            materia = ler_nome_materia(professor[7])
+            usuario = len(professor[4]) - 4
+            textbox.insert("end", f"ID: {professor[0]} | NOME: {professor[1]} | IDADE: {professor[2]} | EMAIL: {professor[3]} | USUÁRIO: {professor[4][:4] + "*" * usuario} | SENHA: {"*" * len(professor[5])} | ATIVO [1-SIM, 0-NÃO]: {professor[6]} | MATÉRIA: {materia}")
 
 
 def tela_atualizar_aluno():
