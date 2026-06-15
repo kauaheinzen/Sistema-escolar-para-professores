@@ -85,7 +85,7 @@ def menu_principal_admin():
     ctk.CTkButton(frame_principal,text="Cadastrar Aluno",width=300,height=50,fg_color=("#2563EB","#475569"),hover_color=("#1D4ED8","#334155"),command=tela_cadastrar_aluno).place(x=810,y=180)
     ctk.CTkButton(frame_principal,text="Cadastrar Professor",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_cadastrar_professor).place(x=1340,y=180)
 
-    ctk.CTkButton(frame_principal,text="Cadastrar Turma",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_listar_alunos).place(x=280,y=270)
+    ctk.CTkButton(frame_principal,text="Cadastrar Turma",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_cadastrar_turmas).place(x=280,y=270)
     ctk.CTkButton(frame_principal,text="Listar Alunos",width=300,height=50,fg_color=("#2563EB","#475569"),hover_color=("#1D4ED8","#334155"),command=tela_listar_alunos).place(x=810,y=270)
     ctk.CTkButton(frame_principal,text="Listar Professores",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_listar_professores).place(x=1340,y=270)
 
@@ -93,9 +93,9 @@ def menu_principal_admin():
     ctk.CTkButton(frame_principal,text="Atualizar Aluno",width=300,height=50,fg_color=("#2563EB","#475569"),hover_color=("#1D4ED8","#334155"),command=tela_atualizar_aluno).place(x=810,y=360)
     ctk.CTkButton(frame_principal,text="Atualizar Professor",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_atualizar_professor).place(x=1340,y=360)
 
-    ctk.CTkButton(frame_principal,text="Desativar/Ativar Turma",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_desativar_aluno).place(x=280,y=450)
+    ctk.CTkButton(frame_principal,text="Desativar/Ativar Turma",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_desativar_turma).place(x=280,y=450)
     ctk.CTkButton(frame_principal,text="Desativar/Ativar Aluno",width=300,height=50,fg_color=("#2563EB","#475569"),hover_color=("#1D4ED8","#334155"),command=tela_desativar_aluno).place(x=810,y=450)
-    ctk.CTkButton(frame_principal,text="Desativar/Ativar Professor",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_desativar_aluno).place(x=1340,y=450)
+    ctk.CTkButton(frame_principal,text="Desativar/Ativar Professor",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_desativar_professor).place(x=1340,y=450)
 
     ctk.CTkButton(frame_principal,text="Buscar Aluno",width=300,height=50,fg_color=("#2563EB","#475569"),hover_color=("#1D4ED8","#334155"),command=tela_buscar_aluno).place(x=810,y=540)
 
@@ -406,89 +406,7 @@ def tela_cadastrar_turmas():
         limpar_frame()
         ctk.CTkLabel(frame_principal, text="CADASTRAR TURMA", font=("Arial",45,"bold")).grid(row=0, column=1, pady=30)
         entrar_nome = ctk.CTkEntry(frame_principal,placeholder_text="Nome Da Turma",width=300, height=30); entrar_nome.grid(row=1, column=1, pady=50)
-        ctk.CTkButton(frame_principal,text="Cadastrar",width=250, height=50,command=lambda: executar_cadastro(entrar_nome.get())).grid(row=2, column=1, pady=10)
-        ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=menu_principal_admin).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
-        ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
-
-    
-    tela_cadastro_materia()
-
-
-def tela_cadastrar_turmas():
-    materias = []
-    def executar_cadastro(nome):
-        executar = 1
-        turmas = ler_turmas()
-        for turma in turmas:
-            if turma == nome:
-                executar = 0
-                ctk.CTkLabel(frame_principal, text="TURMA JÁ EXISTENTE", font=("Arial",30,"bold")).grid(row=3, column=1, pady=30)
-        
-        if executar == 1:
-            cadastro=cadastrar_turma(nome)
-            if not cadastro:
-                ctk.CTkLabel(frame_principal, text="TURMA CADASTRADA", font=("Arial",30,"bold")).grid(row=3, column=1, pady=30)
-            else:
-                ctk.CTkLabel(frame_principal, text=cadastro, font=("Arial",30,"bold")).grid(row=3, column=1, pady=30)
-        
-        materias = ler_id_materia(nome)
-        for materia in materias:
-            vincular_turma_materia(turma, materia[0])
-        
-        app.update()
-        app.after(1500, menu_principal_admin)
-
-    def adicionar_materia(materia):
-        for i, j in enumerate(materias):
-            adicionar = 1
-            if materia == j:
-                adicionar = 0
-                materias.pop(i)
-            if adicionar == 1:
-                materias.append(materia)
-     
-        materias_adicionadas = ctk.CTkLabel(frame_principal, text=f"Matérias adicionadas ao professor: {materias}", font=("Arial",20))
-        try:
-            materias_adicionadas.destroy()
-        except:
-            None
-        
-        materias_adicionadas.grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
-
-    def tela_escolher_materias(nome):
-        botao_materia = {}
-        limpar_frame()
-        materias = ler_materias()
-        ctk.CTkLabel(frame_principal,text="SELECIONE AS MATÉRIAS DA TURMA",width=300, font=("Arial",50,"bold")).grid(row=0, column=0, columnspan=3, pady=(40, 20), sticky="n")
-
-        if not materias:
-            ctk.CTkLabel(frame_principal,text="NÃO HÁ MATÉRIAS CADASTRADAS",width=250, text_color="red", font=("Arial",35,"bold")).grid(row=1, column=1, pady=200) 
-            app.update()
-
-            sleep(1.5)
-            app.after(0, menu_principal_admin)
-
-        else:
-            for materia in materias:
-                if materia[0] < 6:
-                    botao_materia[materia[0]] = ctk.CTkButton(frame_principal, text=materia[1], width=350, height=40, font=("Arial", 25), command=lambda: adicionar_materia(materia[1])).grid(row=materia[0], column=0, padx=100, pady=50, stick="nw")
-                elif materia[0] < 11:
-                    botao_materia[materia[0]] = ctk.CTkButton(frame_principal, text=materia[1], width=350, height=40, font=("Arial", 25), command=lambda: adicionar_materia(materia[1])).grid(row=materia[0] - 5, column=1, pady=50)
-                elif materia[0] < 16:
-                    botao_materia[materia[0]] = ctk.CTkButton(frame_principal, text=materia[1], width=350, height=40, font=("Arial", 25), command=lambda: adicionar_materia(materia[1])).grid(row=materia[0] - 10, column=2, padx=100, pady=50, stick="ne")
-                else:
-                    botao_materia[materia[0]] = ctk.CTkButton(frame_principal, text=materia[1], width=350, height=40, font=("Arial", 25), command=lambda: adicionar_materia(materia[1])).grid(row=materia[0] - 15, column=3, padx=100, pady=50, stick="ne")
-
-
-        ctk.CTkButton(frame_principal, text="ADICIONAR MATÉRIAS E FINALIZAR", width=50, height=30, command=lambda: executar_cadastro(nome)).grid(row=6, column=0, columnspan=3, pady=(40, 20), sticky="n")
-        ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=menu_principal_admin).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
-        ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
-
-    def tela_cadastro_materia():
-        limpar_frame()
-        ctk.CTkLabel(frame_principal, text="CADASTRAR TURMA", font=("Arial",45,"bold")).grid(row=0, column=1, pady=30)
-        entrar_nome = ctk.CTkEntry(frame_principal,placeholder_text="Nome Da Turma",width=300, height=30); entrar_nome.grid(row=1, column=1, pady=50)
-        ctk.CTkButton(frame_principal,text="Cadastrar",width=250, height=50,command=lambda: executar_cadastro(entrar_nome.get())).grid(row=2, column=1, pady=10)
+        ctk.CTkButton(frame_principal,text="Cadastrar",width=250, height=50,command=lambda: tela_escolher_materias(entrar_nome.get())).grid(row=2, column=1, pady=10)
         ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=menu_principal_admin).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
         ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
 
@@ -831,6 +749,29 @@ def tela_atualizar_professor():
     ctk.CTkButton(frame_principal,text="Atualizar Professor",height=50, width=450,command=atualizar).grid(row=6, column=1, pady=40)
 
 
+def tela_desativar_turma():
+    limpar_frame()
+    global acao
+    acao = 0
+    def ativa():
+        global acao
+        acao = 1
+
+    def desativa():
+        global acao
+        acao = 0
+        
+    ctk.CTkLabel(frame_principal, text="DESATIVAR/ATIVAR TURMA", font=("Arial",45,"bold")).place(x=780, y=40)
+    ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=menu_principal_admin).place(x=20, y=20)
+    ctk.CTkButton(frame_principal, text="☀️", width=50, height=30, command=mudar_tema).place(x=1850, y=20)
+    ctk.CTkButton(frame_principal, text="Ativar Turma", height=50, width=200, command=ativa).place(x=760, y=180)
+    ctk.CTkButton(frame_principal, text="Desativar Turma", height=50, width=200, command=desativa).place(x=980, y=180)
+
+    entrar_id_desativar=ctk.CTkEntry(frame_principal,placeholder_text="ID Da Turma",width=300); entrar_id_desativar.place(x=820, y=280)
+
+    ctk.CTkButton(frame_principal, text="Ativar/Desativar Turma", width=250, fg_color='red', command=lambda: desativar_reativar_turma_e_alunos(entrar_id_desativar.get(), acao)).place(x=850, y=350)
+
+
 def tela_desativar_aluno():
     limpar_frame()
     global acao
@@ -852,6 +793,29 @@ def tela_desativar_aluno():
     entrar_id_desativar=ctk.CTkEntry(frame_principal,placeholder_text="ID do aluno",width=300); entrar_id_desativar.place(x=820, y=280)
 
     ctk.CTkButton(frame_principal, text="Ativar/Desativar Aluno", width=250, fg_color='red', command=lambda: desativar_reativar_aluno(entrar_id_desativar.get(), acao)).place(x=850, y=350)
+
+
+def tela_desativar_professor():
+    limpar_frame()
+    global acao
+    acao = 0
+    def ativa():
+        global acao
+        acao = 1
+
+    def desativa():
+        global acao
+        acao = 0
+        
+    ctk.CTkLabel(frame_principal, text="DESATIVAR/ATIVAR PROFESSOR", font=("Arial",45,"bold")).place(x=780, y=40)
+    ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=menu_principal_admin).place(x=20, y=20)
+    ctk.CTkButton(frame_principal, text="☀️", width=50, height=30, command=mudar_tema).place(x=1850, y=20)
+    ctk.CTkButton(frame_principal, text="Ativar Professor", height=50, width=200, command=ativa).place(x=760, y=180)
+    ctk.CTkButton(frame_principal, text="Desativar Professor", height=50, width=200, command=desativa).place(x=980, y=180)
+
+    entrar_id_desativar=ctk.CTkEntry(frame_principal,placeholder_text="ID Do Professor",width=300); entrar_id_desativar.place(x=820, y=280)
+
+    ctk.CTkButton(frame_principal, text="Ativar/Desativar Professor", width=250, fg_color='red', command=lambda: desativar_reativar_professor(entrar_id_desativar.get(), acao)).place(x=850, y=350)
 
 
 def tela_buscar_aluno():
