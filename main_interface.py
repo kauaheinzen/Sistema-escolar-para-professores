@@ -73,6 +73,10 @@ def tela_login():
                 limpar_frame()
                 tela_login()
                 ctk.CTkLabel(frame_principal,text="Login realizado com sucesso",width=250,font=("Arial",35,"bold")).pack(pady=40); app.after(1000, menu_principal_admin)
+            elif usuario[2] == "professor":
+                limpar_frame()
+                tela_login()
+                ctk.CTkLabel(frame_principal,text="Login realizado com sucesso",width=250,font=("Arial",35,"bold")).pack(pady=40); app.after(1000, menu_principal_professor)
 
     btn_login = ctk.CTkButton(frame_principal,text="Entrar",width=450,command=fazer_login).pack(pady=20)
 
