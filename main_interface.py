@@ -186,7 +186,7 @@ def tela_cadastrar_aluno():
 
 
     def executar_cadastro(turma):
-        mudar_id()
+        mudar_id(turma)
         cadastro_aluno()
 
 
@@ -229,17 +229,11 @@ def tela_cadastrar_professor():
             app.update()
             app.after(1500, tela_turmas_cadastro(nome, idade, email, usuario, senha, materia))
         else:
-            valida_nome = validar_nome(nome)
-            valida_idade = validar_idade(idade)
-
-            if valida_nome and valida_idade:
-                cadastro = cadastrar_professores(nome.get(), idade.get(), email.get(), usuario.get(), senha.get(), materia.get())
-                if not cadastro:
-                    ctk.CTkLabel(frame_principal, text="PROFESSOR CADASTRADO", font=("Arial",30,"bold")).grid(row=7, column=1, pady=30)
-                else:
-                    ctk.CTkLabel(frame_principal, text=cadastro.upper(), fg_color="red", font=("Arial",30,"bold")).grid(row=7, column=1, pady=30)
+            cadastro = cadastrar_professores(nome.get(), idade.get(), email.get(), usuario.get(), senha.get(), materia.get())
+            if not cadastro:
+                ctk.CTkLabel(frame_principal, text="PROFESSOR CADASTRADO", font=("Arial",30,"bold")).grid(row=7, column=1, pady=30)
             else:
-                ctk.CTkLabel(frame_principal, text="NOME E/OU IDADE INVÁLIDA", fg_color="red", font=("Arial",30,"bold")).grid(row=7, column=1, pady=30)
+                ctk.CTkLabel(frame_principal, text=cadastro.upper(), fg_color="red", font=("Arial",30,"bold")).grid(row=7, column=1, pady=30)
 
 
         professor = ler_id_professor(nome)
@@ -248,6 +242,16 @@ def tela_cadastrar_professor():
         
         app.update()
         app.after(1500, menu_principal_admin)
+    
+    def validar_cadastro(nome, idade, email, usuario, senha):
+        valida_nome = validar_nome(nome)
+        valida_idade = validar_idade(idade)
+
+        if valida_nome and valida_idade and email and usuario and senha:
+            return True
+        else:
+            ctk.CTkLabel(frame_principal, text="NOME E/OU IDADE INVÁLIDA OU CAMPO NÃO PREENCHIDO", fg_color="red", font=("Arial",30,"bold")).grid(row=7, column=1, pady=30)
+            return False
 
     def adicionar_turmas(turma):
         for i, j in enumerate(turmas):
@@ -267,15 +271,20 @@ def tela_cadastrar_professor():
         turmas_adicionadas.grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
 
     def tela_escolher_materia(nome, idade, email, usuario, senha):
+        validacao = validar_cadastro(nome, idade)
+        if not validacao:
+            app.update()
+            sleep(1)
+            app.after(0000, tela_cadastro)
         botao_materia = {}
         limpar_frame()
         ctk.CTkLabel(frame_principal,text="SELECIONE A MATÉRIA DO PROFESSOR",width=300, font=("Arial",50,"bold")).grid(row=0, column=0, columnspan=3, pady=(40, 20), sticky="n")
         materias = ler_materias()
         if not materias:
             ctk.CTkLabel(frame_principal, text="NÃO HÁ MATÉRIAS CADASTRADAS", fg_color="red", font=("Arial",30,"bold")).grid(row=1, column=1, pady=30)
-        for materia in materia:
+        for materia in materias:
             if materia[0] < 6:
-                botao_materia[materia[0]] = ctk.CTkButton(frame_principal, text=materia[1], width=350, height=40, font=("Arial", 25), command=lambda: tela_turmas_cadastro(nome, idade, email, usuario, senha, materia[1])).get().grid(row=materia[0], column=0, padx=100, pady=50, stick="nw")
+                botao_materia[materia[0]] = ctk.CTkButton(frame_principal, text=materia[1], width=350, height=40, font=("Arial", 25), command=lambda: tela_turmas_cadastro(nome, idade, email, usuario, senha, materia[1])).grid(row=materia[0], column=0, padx=100, pady=50, stick="nw")
             elif materia[0] < 11:
                 botao_materia[materia[0]] = ctk.CTkButton(frame_principal, text=materia[1], width=350, height=40, font=("Arial", 25), command=lambda: tela_turmas_cadastro(nome, idade, email, usuario, senha, materia[1])).grid(row=materia[0] - 5, column=1, pady=50)
             elif materia[0] < 16:
@@ -295,7 +304,7 @@ def tela_cadastrar_professor():
         entrar_email = ctk.CTkEntry(frame_principal, placeholder_text="E-mail do Professor", height=30, width=300); entrar_email.grid(row=3, column=1, pady=10)
         entrar_usuario = ctk.CTkEntry(frame_principal, placeholder_text="Nome de Usuário do Professor", height=30, width=300); entrar_usuario.grid(row=4, column=1, pady=10)
         entrar_senha = ctk.CTkEntry(frame_principal, placeholder_text="Crie uma Senha", height=30, width=300); entrar_senha.grid(row=5, column=1, pady=10)
-        ctk.CTkButton(frame_principal, text="CADASTRAR PROFESSOR", width=50, height=30, command=lambda: tela_escolher_materia(entrar_nome, entrar_idade, entrar_email, entrar_usuario, entrar_senha)).grid(row=6, column=0, columnspan=3, pady=(40, 20), sticky="n")
+        ctk.CTkButton(frame_principal, text="CADASTRAR PROFESSOR", width=50, height=30, command=lambda: tela_escolher_materia(entrar_nome.get(), entrar_idade.get(), entrar_email.get(), entrar_usuario.get(), entrar_senha.get())).grid(row=6, column=0, columnspan=3, pady=(40, 20), sticky="n")
         ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=menu_principal_admin).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
         ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
 
@@ -343,7 +352,7 @@ def tela_cadastrar_turmas():
                 ctk.CTkLabel(frame_principal, text="TURMA JÁ EXISTENTE", font=("Arial",30,"bold")).grid(row=3, column=1, pady=30)
         
         if executar == 1:
-            cadastro=cadastrar_turma(nome.get())
+            cadastro=cadastrar_turma(nome)
             if not cadastro:
                 ctk.CTkLabel(frame_principal, text="TURMA CADASTRADA", font=("Arial",30,"bold")).grid(row=3, column=1, pady=30)
             else:
@@ -365,12 +374,12 @@ def tela_cadastrar_turmas():
             if adicionar == 1:
                 materias.append(materia)
      
-        materias_adicionadas = ctk.CTkLabel(frame_principal, text=f"Matérias adicionadas ao professor: {materias}", font=("Arial",20))
         try:
             materias_adicionadas.destroy()
         except:
             None
         
+        materias_adicionadas = ctk.CTkLabel(frame_principal, text=f"Matérias adicionadas ao professor: {materias}", font=("Arial",20))
         materias_adicionadas.grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
 
     def tela_escolher_materias(nome):
