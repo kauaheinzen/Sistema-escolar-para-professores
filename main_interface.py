@@ -4,8 +4,11 @@ from time import sleep
 from funcoes_SQL import *
 from validacoes import *
 
+
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("dark-blue")
+
+
 
 app = ctk.CTk()
 app.geometry("1920x1080")
@@ -107,7 +110,6 @@ def menu_principal_admin():
     ctk.CTkButton(frame_principal,text="☀️",width=50,command=mudar_tema).place(x=1840,y=20)
 
 
-
 def menu_principal_professor():
     limpar_frame()
     ctk.CTkLabel(frame_principal,text=" Sistema Escolar",font=("Arial",35,"bold")).place(x=810,y=40)
@@ -128,6 +130,7 @@ def menu_principal_professor():
 
     ctk.CTkButton(frame_principal,text="←",width=50,height=30,command=tela_login).place(x=20,y=20)
     ctk.CTkButton(frame_principal,text="☀️",width=50,command=mudar_tema).place(x=1840,y=20)
+
 
 def tela_cadastrar_materia():
     def executar_cadastro(nome):
@@ -224,6 +227,7 @@ def tela_cadastrar_aluno():
 
 
     tela_turmas_cadastro() 
+
 
 def tela_cadastrar_professor():
     turmas = []
@@ -344,6 +348,7 @@ def tela_cadastrar_professor():
 
 
     tela_cadastro()
+
         
 def tela_cadastrar_turmas():
     materias = []
