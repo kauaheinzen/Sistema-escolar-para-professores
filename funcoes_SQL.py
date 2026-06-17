@@ -58,22 +58,21 @@ def cadastrar_materia(nome_materia):
         conn.close()
 
 
-def cadastrar_turma(nome, materias):
+def cadastrar_turma(nome):
     '''Cadastra novas turmas'''
     conn = conectar()
     cursor = conn.cursor()
 
     try:
-        sql = 'INSERT INTO turmas (nome_turma, fk_id_materias) VALUES (%s, %s)'
-        valor = (nome, materias)
+        sql = 'INSERT INTO turmas (nome_turma) VALUES (%s)'
+        valor = (nome,)
 
         cursor.execute(sql, valor)
         conn.commit()
-        print(f"{cursor.rowcount()} aluno(s) cadastrado(s).")
 
     except Error as e:
-        print(f"Ocorreu um erro {e}. Cadastro cancelado.")
         conn.rollback()
+        return f"Ocorreu um erro {e}. Cadastro cancelado."
     
     finally:
         cursor.close()
@@ -421,7 +420,7 @@ def ler_id_materia(nome):
     cursor = conn.cursor()
 
     sql = "SELECT id_materia FROM materias WHERE nome_materia = %s"
-    cursor.execute(sql, nome)
+    cursor.execute(sql, (nome,))
     
     materia = cursor.fetchone()
 

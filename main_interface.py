@@ -346,6 +346,7 @@ def tela_cadastrar_professor():
     tela_cadastro()
         
 def tela_cadastrar_turmas():
+    materias_adicionadas = None
     materias = []
     def executar_cadastro(nome):
         executar = 1
@@ -362,26 +363,28 @@ def tela_cadastrar_turmas():
             else:
                 ctk.CTkLabel(frame_principal, text=cadastro, font=("Arial",30,"bold")).grid(row=3, column=1, pady=30)
         
-        materias = ler_id_materia(nome)
-        for materia in materias:
-            vincular_turma_materia(turma, materia[0])
+            for materia in materias:
+                vincular_turma_materia(nome, materia[0])
         
         app.update()
         app.after(1500, menu_principal_admin)
 
     def adicionar_materia(materia):
+        nonlocal materias_adicionadas
+
+        adicionar = 1
         for i, j in enumerate(materias):
-            adicionar = 1
             if materia == j:
                 adicionar = 0
                 materias.pop(i)
-            if adicionar == 1:
-                materias.append(materia)
-     
-        try:
-            materias_adicionadas.destroy()
-        except:
-            None
+        if adicionar == 1:
+            materias.append(materia)
+
+        if materias_adicionadas is not None:
+            try:
+                materias_adicionadas.destroy()
+            except:
+                None
         
         materias_adicionadas = ctk.CTkLabel(frame_principal, text=f"Matérias adicionadas ao professor: {materias}", font=("Arial",20))
         materias_adicionadas.grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
@@ -402,16 +405,16 @@ def tela_cadastrar_turmas():
         else:
             for materia in materias:
                 if materia[0] < 6:
-                    botao_materia[materia[0]] = ctk.CTkButton(frame_principal, text=materia[1], width=350, height=40, font=("Arial", 25), command=lambda: adicionar_materia(materia[1])).grid(row=materia[0], column=0, padx=100, pady=50, stick="nw")
+                    botao_materia[materia[0]] = ctk.CTkButton(frame_principal, text=materia[1], width=350, height=40, font=("Arial", 25), command=lambda m=materia[1]: adicionar_materia(m)).grid(row=materia[0], column=0, padx=100, pady=50, stick="nw")
                 elif materia[0] < 11:
-                    botao_materia[materia[0]] = ctk.CTkButton(frame_principal, text=materia[1], width=350, height=40, font=("Arial", 25), command=lambda: adicionar_materia(materia[1])).grid(row=materia[0] - 5, column=1, pady=50)
+                    botao_materia[materia[0]] = ctk.CTkButton(frame_principal, text=materia[1], width=350, height=40, font=("Arial", 25), command=lambda m=materia[1]: adicionar_materia(m)).grid(row=materia[0] - 5, column=1, pady=50)
                 elif materia[0] < 16:
-                    botao_materia[materia[0]] = ctk.CTkButton(frame_principal, text=materia[1], width=350, height=40, font=("Arial", 25), command=lambda: adicionar_materia(materia[1])).grid(row=materia[0] - 10, column=2, padx=100, pady=50, stick="ne")
+                    botao_materia[materia[0]] = ctk.CTkButton(frame_principal, text=materia[1], width=350, height=40, font=("Arial", 25), command=lambda m=materia[1]: adicionar_materia(m)).grid(row=materia[0] - 10, column=2, padx=100, pady=50, stick="ne")
                 else:
-                    botao_materia[materia[0]] = ctk.CTkButton(frame_principal, text=materia[1], width=350, height=40, font=("Arial", 25), command=lambda: adicionar_materia(materia[1])).grid(row=materia[0] - 15, column=3, padx=100, pady=50, stick="ne")
+                    botao_materia[materia[0]] = ctk.CTkButton(frame_principal, text=materia[1], width=350, height=40, font=("Arial", 25), command=lambda m=materia[1]: adicionar_materia(m)).grid(row=materia[0] - 15, column=3, padx=100, pady=50, stick="ne")
 
 
-        ctk.CTkButton(frame_principal, text="ADICIONAR MATÉRIAS E FINALIZAR", width=50, height=30, command=lambda: executar_cadastro(nome.get())).grid(row=6, column=0, columnspan=3, pady=(40, 20), sticky="n")
+        ctk.CTkButton(frame_principal, text="ADICIONAR MATÉRIAS E FINALIZAR", width=50, height=30, command=lambda: executar_cadastro(nome)).grid(row=6, column=0, columnspan=3, pady=(40, 20), sticky="n")
         ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=menu_principal_admin).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
         ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
 
