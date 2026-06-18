@@ -6,7 +6,7 @@ def validar_nome(nome):
     if not nome.strip():
         return (False, "Nome inválido.")
     for n in nome:
-        if n.isdigt():
+        if n.isdigit():
             return (False, "Nome inválido.")
     return True
 

@@ -106,7 +106,7 @@ def cadastrar_alunos(nome, idade, email, turma, nome_responsavel = '', email_res
     cursor = conn.cursor()
 
     try:
-        sql = 'INSERT INTO alunos (nome_alunos, idade_aluno, email_aluno, fk_id_turma, nome_responsavel,email_responsavel) VALUES (%s, %s, %s, %s, %s, %s)'
+        sql = 'INSERT INTO alunos (nome_aluno, idade_aluno, email_aluno, fk_id_turma, nome_responsavel,email_responsavel) VALUES (%s, %s, %s, %s, %s, %s)'
         valores = (nome, idade, email, turma, nome_responsavel, email_responvel)
 
         cursor.execute(sql, valores)
@@ -458,3 +458,18 @@ def ler_nome_materia(id):
     cursor.close()
     conn.close()
     return materia
+
+
+def ler_id_turma(nome):
+    '''retorna o ID da turma'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = "SELECT id_turma FROM turmas WHERE nome_turma = %s"
+    cursor.execute(sql, (nome,))
+    
+    turma = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+    return turma
