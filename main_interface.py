@@ -255,10 +255,10 @@ def tela_cadastrar_professor():
             else:
                 ctk.CTkLabel(frame_principal, text=cadastro.upper(), text_color="red", font=("Arial",30,"bold")).grid(row=7, column=1, pady=30)
 
-
-        professor = ler_id_professor(nome)
-        for turma in turmas:
-            vincular_professor_turma(professor[0], turma)
+            id_professor_adicionado = ler_id_professor(nome.get())
+            for turma in turmas:
+                id_turma = ler_id_turma(turma)
+                vincular_professor_turma(id_professor_adicionado[0], id_turma[0])
         
         app.update()
         app.after(1500, menu_principal_admin)
@@ -299,6 +299,7 @@ def tela_cadastrar_professor():
             validacao = validar_cadastro(nome.get(), idade.get(), email.get(), usuario.get(), senha.get())
         
         if not validacao:
+            ctk.CTkLabel(frame_principal,text="INFORMAÇÕES NÃO VÁLIDAS",width=300, font=("Arial",50,"bold")).grid(row=8, column=0, columnspan=3, pady=(40, 20), sticky="n")
             app.update()
             sleep(1)
             app.after(0000, tela_cadastro)

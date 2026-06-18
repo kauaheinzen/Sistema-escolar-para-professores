@@ -445,6 +445,21 @@ def ler_id_materia(nome):
     return materia
 
 
+def ler_id_turma(nome):
+    '''retorna o ID da turma'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = "SELECT id_turma FROM turmas WHERE nome_turma = %s"
+    cursor.execute(sql, (nome,))
+    
+    turma = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+    return turma
+
+
 def ler_nome_materia(id):
     '''retorna o nome da matéria'''
     conn = conectar()
