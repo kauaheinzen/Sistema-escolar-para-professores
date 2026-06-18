@@ -35,7 +35,7 @@ def tela_login():
     limpar_frame()
     criar_admin_iniciar()
     ctk.CTkLabel(frame_principal,text="LOGIN",font=("Arial",55,"bold")).pack(pady=40)
-    botao_alterar = ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1800,y=50)
+    botao_alterar = ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1840,y=20)
 
     entrar_usuario=ctk.CTkEntry(frame_principal,placeholder_text="Usuário",height=30,width=500); entrar_usuario.pack(pady=30)
     
@@ -448,8 +448,8 @@ def tela_listar_alunos():
     limpar_frame()
     ctk.CTkLabel(frame_principal,text="LISTA DE ALUNOS",font=("Arial",45,"bold")).pack(pady=20)
     textbox=ctk.CTkTextbox(frame_principal,width=700,height=350); textbox.pack(pady=20)
-    ctk.CTkButton(frame_principal,text="←",width=250,command=menu_principal_admin).place(x=50, y=50)
-    ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1800,y=50)
+    ctk.CTkButton(frame_principal,text="←",width=50,command=menu_principal_admin).place(x=20, y=20)
+    ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1840,y=20)
     alunos = ler_alunos()
     if not alunos:
         ctk.CTkLabel(frame_principal,text="NÃO HÁ ALUNOS CADASTRADOS",width=250, text_color="red", font=("Arial",45,"bold")).place(x=600, y=700) 
@@ -464,8 +464,8 @@ def tela_listar_professores():
     limpar_frame()
     ctk.CTkLabel(frame_principal,text="LISTA DE PROFESSORES",font=("Arial",45,"bold")).pack(pady=20)
     textbox=ctk.CTkTextbox(frame_principal,width=700,height=350); textbox.pack(pady=20)
-    ctk.CTkButton(frame_principal,text="←",width=250,command=menu_principal_admin).place(x=50, y=50)
-    ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1800,y=50)
+    ctk.CTkButton(frame_principal,text="←",width=50,command=menu_principal_admin).place(x=20, y=20)
+    ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1840,y=20)
     professores = ler_professores()
     if not professores:
         ctk.CTkLabel(frame_principal,text="NÃO HÁ PROFESSORES CADASTRADOS",width=250, text_color="red", font=("Arial",45,"bold")).place(x=600, y=700) 
@@ -477,6 +477,40 @@ def tela_listar_professores():
             usuario = len(professor[4]) - 4
             textbox.insert("end", f"ID: {professor[0]} | NOME: {professor[1]} | IDADE: {professor[2]} | EMAIL: {professor[3]} | USUÁRIO: {professor[4][:4] + "*" * usuario} | SENHA: {"*" * len(professor[5])} | ATIVO [1-SIM, 0-NÃO]: {professor[6]} | MATÉRIA: {materia}")
 
+def tela_listar_turmas():
+    limpar_frame()
+    ctk.CTkLabel(frame_principal,text="LISTA DE TURMAS",font=("Arial",45,"bold")).pack(pady=20)
+    textbox=ctk.CTkTextbox(frame_principal,width=700,height=350); textbox.pack(pady=20)
+    ctk.CTkButton(frame_principal,text="←",width=50,command=menu_principal_admin).place(x=20,y=20)
+    ctk.CTkButton(frame_principal,text="☀️",width=50,command=mudar_tema).place(x=1840,y=20)
+
+    turmas = ler_turmas()
+
+    if not turmas:
+        ctk.CTkLabel(frame_principal,text="NÃO HÁ TURMAS CADASTRADAS",text_color="red",font=("Arial",45,"bold")).place(x=600,y=700)
+        app.after(1500,menu_principal_admin)
+
+    else:
+        for turma in turmas:
+            textbox.insert("end",f"ID: {turma[0]} | TURMA: {turma[1]}\n")
+
+
+def tela_listar_materias():
+    limpar_frame()
+    ctk.CTkLabel(frame_principal,text="LISTA DE MATÉRIAS",font=("Arial",45,"bold")).pack(pady=20)
+    textbox=ctk.CTkTextbox(frame_principal,width=700,height=350); textbox.pack(pady=20)
+    ctk.CTkButton(frame_principal,text="←",width=50,command=menu_principal_admin).place(x=20,y=20)
+    ctk.CTkButton(frame_principal,text="☀️",width=50,command=mudar_tema).place(x=1840,y=20)
+
+    materias = ler_materias()
+
+    if not materias:
+        ctk.CTkLabel(frame_principal,text="NÃO HÁ MATÉRIAS CADASTRADAS",text_color="red",font=("Arial",45,"bold")).place(x=600,y=700)
+        app.after(1500,menu_principal_admin)
+
+    else:
+        for materia in materias:
+            textbox.insert("end",f"ID: {materia[0]} | MATÉRIA: {materia[1]}\n")
 
 def tela_desativar_materia():
     limpar_frame()
