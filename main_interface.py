@@ -76,6 +76,8 @@ def tela_login():
                 tela_login()
                 ctk.CTkLabel(frame_principal,text="Login realizado com sucesso",width=250,font=("Arial",35,"bold")).pack(pady=40); app.after(1000, menu_principal_admin)
             elif usuario[2] == "professor":
+                global id_login
+                id_login = ler_usuarios_professor(entrar_usuario.get())
                 limpar_frame()
                 tela_login()
                 ctk.CTkLabel(frame_principal,text="Login realizado com sucesso",width=250,font=("Arial",35,"bold")).pack(pady=40); app.after(1000, menu_principal_professor)
@@ -353,25 +355,33 @@ def tela_cadastrar_turmas():
     materias_adicionadas = None
     materias = []
     def executar_cadastro(nome):
-        executar = 1
-        turmas = ler_turmas()
-        for turma in turmas:
-            if turma == nome:
-                executar = 0
-                ctk.CTkLabel(frame_principal, text="TURMA JÁ EXISTENTE", font=("Arial",30,"bold")).grid(row=3, column=1, pady=30)
-        
-        if executar == 1:
-            cadastro=cadastrar_turma(nome)
-            if not cadastro:
-                ctk.CTkLabel(frame_principal, text="TURMA CADASTRADA", font=("Arial",30,"bold")).grid(row=3, column=1, pady=30)
-            else:
-                ctk.CTkLabel(frame_principal, text=cadastro, font=("Arial",30,"bold")).grid(row=3, column=1, pady=30)
-        
-            for materia in materias:
-                vincular_turma_materia(nome, materia[0])
-        
-        app.update()
-        app.after(1500, menu_principal_admin)
+        if materias:
+            executar = 1
+            turmas = ler_turmas()
+            for turma in turmas:
+                if turma[1] == nome:
+                    executar = 0
+                    ctk.CTkLabel(frame_principal, text="TURMA JÁ EXISTENTE", font=("Arial",30,"bold")).grid(row=8, column=0, columnspan=3, pady=(40, 20), sticky="n")
+                    app.update()
+                    app.after(1500, menu_principal_admin)
+            
+            if executar == 1:
+                cadastro=cadastrar_turma(nome)
+                if not cadastro:
+                    ctk.CTkLabel(frame_principal, text="TURMA CADASTRADA", font=("Arial",30,"bold")).grid(row=8, column=0, columnspan=3, pady=(40, 20), sticky="n")
+                else:
+                    ctk.CTkLabel(frame_principal, text=cadastro, font=("Arial",30,"bold")).grid(row=8, column=0, columnspan=3, pady=(40, 20), sticky="n")
+
+                for materia in materias:
+                    vincular_turma_materia(nome, materia[0])
+                
+                app.update()
+                app.after(1500, menu_principal_admin)
+        else:
+            ctk.CTkLabel(frame_principal, text="NÃO FOI SELECIONADA NENHUMA MATÉRIA", font=("Arial",30,"bold")).grid(row=8, column=0, columnspan=3, pady=(40, 20), sticky="n")
+            app.update()
+            app.after(1500, tela_escolher_materias(nome))
+              
 
     def adicionar_materia(materia):
         nonlocal materias_adicionadas
@@ -394,8 +404,8 @@ def tela_cadastrar_turmas():
         materias_adicionadas.grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
 
     def tela_escolher_materias(nome):
-        botao_materia = {}
         limpar_frame()
+        botao_materia = {}
         materias = ler_materias()
         ctk.CTkLabel(frame_principal,text="SELECIONE AS MATÉRIAS DA TURMA",width=300, font=("Arial",50,"bold")).grid(row=0, column=0, columnspan=3, pady=(40, 20), sticky="n")
 

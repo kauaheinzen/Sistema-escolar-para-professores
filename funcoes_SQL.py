@@ -414,6 +414,22 @@ def ler_id_professor(nome):
     return professor
 
 
+def ler_usuarios_professor(usuarios):
+    '''retorna o ID do professor'''
+    conn = conectar()
+    cursor = conn.cursor()
+ 
+    sql = "SELECT id_professor FROM professores WHERE nome_usuario = %s"
+    cursor.execute(sql, usuarios)
+   
+    professor = cursor.fetchone()
+ 
+    cursor.close()
+    conn.close()
+    return professor
+ 
+ 
+
 def ler_id_materia(nome):
     '''retorna o ID da matéria'''
     conn = conectar()
