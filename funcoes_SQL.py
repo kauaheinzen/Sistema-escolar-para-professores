@@ -85,7 +85,7 @@ def cadastrar_professores(nome, idade, email, usuario, senha, materia):
     cursor = conn.cursor()
 
     try:
-        sql = 'INSERT INTO professores (nome_professor, idade_professor, email_professor nome_usuario, senha, fk_id_materia, fk_id_turmas) VALUES (%s, %s, %s, %s, %s, %s)'
+        sql = 'INSERT INTO professores (nome_professor, idade_professor, email_professor, nome_usuario, senha, fk_id_materia) VALUES (%s, %s, %s, %s, %s, %s)'
         valores = (nome, idade, email, usuario, senha, materia)
 
         cursor.execute(sql, valores)
