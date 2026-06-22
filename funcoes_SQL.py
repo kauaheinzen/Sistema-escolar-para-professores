@@ -517,3 +517,39 @@ def ler_id_materia(nome):
     cursor.close()
     conn.close()
     return materia
+
+
+
+
+
+def ler_turmas_professor(id_professor):
+    '''retorna as turmas vinculadas a um professor'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = '''SELECT t.id_turma, t.nome_turma 
+              FROM turmas t
+              INNER JOIN professor_turma pt ON t.id_turma = pt.fk_id_turma
+              WHERE pt.fk_id_professor = %s'''
+    cursor.execute(sql, (id_professor,))
+
+    turmas = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return turmas
+
+
+def ler_alunos_turma(id_turma):
+    '''retorna os alunos de uma turma específica'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = 'SELECT * FROM alunos WHERE fk_id_turma = %s'
+    cursor.execute(sql, (id_turma,))
+
+    alunos = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return alunos

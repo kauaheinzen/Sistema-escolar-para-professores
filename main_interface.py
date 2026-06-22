@@ -109,6 +109,8 @@ def menu_principal_admin():
     ctk.CTkButton(frame_principal,text="Desativar/Ativar Turma",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_desativar_turma).place(x=280,y=450)
     ctk.CTkButton(frame_principal,text="Desativar/Ativar Aluno",width=300,height=50,fg_color=("#2563EB","#475569"),hover_color=("#1D4ED8","#334155"),command=tela_desativar_aluno).place(x=810,y=450)
     ctk.CTkButton(frame_principal,text="Desativar/Ativar Professor",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_desativar_professor).place(x=1340,y=450)
+    
+    ctk.CTkButton(frame_principal,text="Desativar/Ativar Professor",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_ler_alunos_do_professor).place(x=1340,y=50)
 
     ctk.CTkButton(frame_principal,text="Buscar Aluno",width=300,height=50,fg_color=("#2563EB","#475569"),hover_color=("#1D4ED8","#334155"),command=tela_buscar_aluno).place(x=810,y=540)
     
@@ -121,6 +123,11 @@ def menu_principal_admin():
 
 def tela_cadastrar_materia():
     def executar_cadastro(nome):
+        nome = nome.strip()
+        if nome == "":
+            ctk.CTkLabel(frame_principal, text="DIGITE A MATÉRIA", font=("Arial",30,"bold")).grid(row=3, column=1, pady=30)
+            return
+        
         executar = 1
         materias = ler_materias()
         for materia in materias:
@@ -988,44 +995,60 @@ def menu_principal_professor():
     ctk.CTkButton(frame_principal,text="☀️",width=50,command=mudar_tema).place(x=1840,y=20)
 
 
-# tela do professor
+def tela_ler_alunos_do_professor():
+    limpar_frame()
+    ctk.CTkLabel(frame_principal,text="ALUNOS DO PROFESSOR",font=("Arial",40,"bold")).pack(pady=20)
+    ctk.CTkButton(frame_principal,text="←",width=50,command=menu_principal_admin).place(x=20, y=20)
+    ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1840,y=20)
 
-# def tela_ler_alunos_do_professor():
-#     limpar_frame()
-        
-#     def todas_as_turmas():
-#         ctk.CTkLabel(frame_principal,text="LISTA DE ALUNOS",font=("Arial",45,"bold")).pack(pady=20)
-#         textbox=ctk.CTkTextbox(frame_principal,width=700,height=350); textbox.pack(pady=20)
-#         ctk.CTkButton(frame_principal,text="←",width=50,command=menu_principal_admin).place(x=20, y=20)
-#         ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1840,y=20)
-#         alunos = ler_alunos()
-#         if not alunos:
-#             ctk.CTkLabel(frame_principal,text="NÃO HÁ ALUNOS CADASTRADOS",width=250, text_color="red", font=("Arial",45,"bold")).place(x=600, y=700) 
-#             app.after(1500, menu_principal_admin)
+    frame_botoes = ctk.CTkFrame(frame_principal)
+    frame_botoes.pack(pady=10)
 
-#         else:
-#             for aluno in alunos:
-#                 textbox.insert("end", f"|NOME: {aluno[1]} | IDADE: {aluno[2]} | TURMA: {aluno[4]} | RESPONSÁVEL: {aluno[6]} | EMAIL DO RESPONSÁVEL: {aluno[7]}")
-       
-#         if not turmas:
-#             ctk.CTkLabel(frame_principal,text="NÃO HÁ TURMAS CADASTRADAS",width=250, text_color="red", font=("Arial",35,"bold")).grid(row=1, column=1, pady=200) 
-#             app.update()
+    textbox = ctk.CTkTextbox(frame_principal, width=900, height=500)
+    textbox.pack(pady=20)
 
-#             sleep(1.5)
-#             app.after(0, menu_principal_admin)
+    def mostrar_alunos_turma(id_turma, nome_turma):
+        textbox.delete("1.0", "end")
+        alunos = ler_alunos_turma(id_turma)
+        textbox.insert("end", f"--- TURMA: {nome_turma} ---\n\n")
+        if not alunos:
+            textbox.insert("end", "NÃO HÁ ALUNOS NESTA TURMA\n")
+        else:
+            for aluno in alunos:
+                textbox.insert("end", f"MATRÍCULA: {aluno[0]} | NOME: {aluno[1]}\nIDADE: {aluno[2]}\nEMAIL: {aluno[3]}\nRESPONSÁVEL: {aluno[5]}\nEMAIL DO RESPONSÁVEL: {aluno[6]}\n==========\n")
 
-#         else:
-#             for turma in turmas:
-#                 if turma[0] < 6:
-#                     botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=lambda t=turma[0]: ...(t)).grid(row=turma[0], column=0, padx=100, pady=50, stick="nw")
-#                 elif turma[0] < 11:
-#                     botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=lambda t=turma[0]: executar_cadastro(t)).grid(row=turma[0] - 5, column=1, pady=50)
-#                 elif turma[0] < 16:
-#                     botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=lambda t=turma[0]: executar_cadastro(t)).grid(row=turma[0] - 10, column=2, padx=100, pady=50, stick="ne")
-#                 else:
-#                     botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=lambda t=turma[0]: executar_cadastro(t)).grid(row=turma[0] - 15, column=3, padx=100, pady=50, stick="ne")
+    def mostrar_todas_turmas():
+        textbox.delete("1.0", "end")
+        turmas = ler_turmas_professor(id_login[0])
+        if not turmas:
+            textbox.insert("end", "NÃO HÁ TURMAS VINCULADAS A ESTE PROFESSOR\n")
+            return
+        for turma in turmas:
+            alunos = ler_alunos_turma(turma[0])
+            textbox.insert("end", f"--- TURMA: {turma[1]} ---\n\n")
+            if not alunos:
+                textbox.insert("end", "NÃO HÁ ALUNOS NESTA TURMA\n\n")
+            else:
+                for aluno in alunos:
+                    textbox.insert("end", f"MATRÍCULA: {aluno[0]} | NOME: {aluno[1]}\nIDADE: {aluno[2]}\nEMAIL: {aluno[3]}\nRESPONSÁVEL: {aluno[5]}\nEMAIL DO RESPONSÁVEL: {aluno[6]}\n==========\n")
+            textbox.insert("end", "\n")
 
-#     todas_as_turmas()
+    turmas_professor = ler_turmas_professor(id_login[0])
+
+    ctk.CTkButton(frame_botoes, text="Todas as Turmas", width=200, height=40,fg_color=("#2563EB","#475569"), hover_color=("#1D4ED8","#334155"),command=mostrar_todas_turmas).pack(side="left", padx=10, pady=10)
+
+    if not turmas_professor:
+        ctk.CTkLabel(frame_principal, text="NÃO HÁ TURMAS VINCULADAS A ESTE PROFESSOR",text_color="red", font=("Arial",25,"bold")).pack(pady=10)
+    else:
+        for turma in turmas_professor:
+            ctk.CTkButton(frame_botoes, text=turma[1], width=200, height=40,fg_color=("#475569","#2563EB"), hover_color=("#334155","#1D4ED8"),command=lambda t=turma[0], n=turma[1]: mostrar_alunos_turma(t, n)
+).pack(side="left", padx=10, pady=10)
+
+
+
+
+
+
 
 tela_login()
 app.mainloop()
