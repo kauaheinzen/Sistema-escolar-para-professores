@@ -124,7 +124,7 @@ def validar_id_aluno(id):
     resultado = cursor.fetchall()
 
     for aluno in resultado:
-        if id == aluno:
+        if id == aluno[0]:
             cursor.close()
             conn.close()
             return True

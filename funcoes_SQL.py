@@ -236,23 +236,26 @@ def desativar_reativar_turma_e_alunos(id, acao):
     cursor = conn.cursor()
     try:
         sql = 'UPDATE turmas SET ativo = %s WHERE id_turma = %s'
-        valores = (acao, id)
+        valores = (acao, id[0])
         cursor.execute(sql, valores)
 
-        sql_ver_alunos = 'SELECT id_aluno WHERE id_turma = %s'
+        sql_ver_alunos = 'SELECT id_aluno FROM alunos WHERE fk_id_turma = %s'
         valor = (id,)
         cursor.execute(sql_ver_alunos, valor)
         alunos = cursor.fetchall()
 
         for aluno in alunos:
             sql_aluno = 'UPDATE alunos SET ativo = %s WHERE id_aluno = %s'
-            valores = (acao, aluno)
+            valores = (acao, aluno[0])
             cursor.execute(sql_aluno, valores)
     
         conn.commit()
+        return False
 
-    except:
+    except Exception as e:
         conn.rollback()
+        print(e)
+        return e
     
     finally:
         cursor.close()
@@ -358,7 +361,7 @@ def ler_turmas():
     conn = conectar()
     cursor = conn.cursor()
 
-    sql = 'SELECT id_turma, nome_turma FROM turmas'
+    sql = 'SELECT * FROM turmas'
     cursor.execute(sql,)
     
     turmas = cursor.fetchall()
@@ -373,7 +376,7 @@ def ler_materias():
     conn = conectar()
     cursor = conn.cursor()
 
-    sql = 'SELECT id_materia, nome_materia FROM materias'
+    sql = 'SELECT * FROM materias'
     cursor.execute(sql,)
     
     materias = cursor.fetchall()
