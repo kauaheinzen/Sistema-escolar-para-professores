@@ -207,91 +207,120 @@ def atualizar_avaliacao(id, item_alterar, alteracao):
 
 def desativar_reativar_materia(id, acao):
     '''desativa ou reativa uma matéria'''
-    conn = conectar()
-    cursor = conn.cursor()
+    try:
+        conn = conectar()
+        cursor = conn.cursor()
 
-    if acao == 0:
-        valores = (0, id)
+        if acao == 0:
+            valores = (0, id)
 
-    else:
-        valores = (1, id)
+        else:
+            valores = (1, id)
+            
+        sql = 'UPDATE materias SET ativo = %s WHERE id_materia = %s'
+        cursor.execute(sql, valores)
         
-    sql = 'UPDATE materias SET ativo = %s WHERE id_materia = %s'
-    cursor.execute(sql, valores)
+        conn.commit()
     
-    conn.commit()
-    cursor.close()
-    conn.close()
+    except:
+        conn.rollbacl()
+    
+    finally:
+        cursor.close()
+        conn.close()
 
 
 def desativar_reativar_turma_e_alunos(id, acao):
     '''desativa ou reativa uma turma e todos os seus alunos'''
     conn = conectar()
     cursor = conn.cursor()
+    try:
+        sql = 'UPDATE turmas SET ativo = %s WHERE id_turma = %s'
+        valores = (acao, id)
+        cursor.execute(sql, valores)
 
-    sql = 'UPDATE turmas SET ativo = %s WHERE id_turma = %s'
-    cursor.execute(sql, valores)
-    valores = (acao, id)
+        sql_ver_alunos = 'SELECT id_aluno WHERE id_turma = %s'
+        valor = (id,)
+        cursor.execute(sql_ver_alunos, valor)
+        alunos = cursor.fetchall()
 
-    sql_ver_alunos = 'SELECT id_aluno WHERE id_turma = %s'
-    valor = (id,)
-    cursor.execute(sql_ver_alunos, valor)
-    alunos = cursor.fetchall()
-
-    for aluno in alunos:
-        sql_aluno = 'UPDATE alunos SET ativo = %s WHERE id_aluno = %s'
-        valores = (acao, aluno)
-        cursor.execute(sql_aluno, valores)
+        for aluno in alunos:
+            sql_aluno = 'UPDATE alunos SET ativo = %s WHERE id_aluno = %s'
+            valores = (acao, aluno)
+            cursor.execute(sql_aluno, valores)
     
-    conn.commit()
-    cursor.close()
-    conn.close()
+        conn.commit()
+
+    except:
+        conn.rollback()
+    
+    finally:
+        cursor.close()
+        conn.close()
 
 
 def desativar_reativar_professor(id, acao):
     '''desativa ou reativa um professor'''
-    conn = conectar()
-    cursor = conn.cursor()
+    try:
+        conn = conectar()
+        cursor = conn.cursor()
 
+            
+        sql = 'UPDATE professores SET ativo = %s WHERE id_professor = %s'
+        valores = (acao, id)
+        cursor.execute(sql, valores)
         
-    sql = 'UPDATE professores SET ativo = %s WHERE id_professor = %s'
-    valores = (acao, id)
-    cursor.execute(sql, valores)
+        conn.commit()
     
-    conn.commit()
-    cursor.close()
-    conn.close()
+    except:
+        conn.rollback()
+    
+    finally:
+        cursor.close()
+        conn.close()
 
 
 def desativar_reativar_aluno(id, acao):
     '''desativa ou reativa um aluno'''
-    conn = conectar()
-    cursor = conn.cursor()
+    try:
+        conn = conectar()
+        cursor = conn.cursor()
 
+            
+        sql = 'UPDATE alunos SET ativo = %s WHERE id_aluno = %s'
+        valores = (acao, id)
+        cursor.execute(sql, valores)
         
-    sql = 'UPDATE alunos SET ativo = %s WHERE id_aluno = %s'
-    valores = (acao, id)
-    cursor.execute(sql, valores)
+        conn.commit()
     
-    conn.commit()
-    cursor.close()
-    conn.close()
+    except:
+        conn.rollback()
+    
+    finally:
+        cursor.close()
+        conn.close()
     
 
 
 def desativar_reativar_avaliacao(id, acao):
     '''desativa ou reativa uma avaliação'''
-    conn = conectar()
-    cursor = conn.cursor()
+    try:
+        conn = conectar()
+        cursor = conn.cursor()
 
+            
+        sql = 'UPDATE avaliacoes SET ativo = %s WHERE id_avaliacao = %s'
+        valores = (acao, id)
+        cursor.execute(sql, valores)
         
-    sql = 'UPDATE avaliacoes SET ativo = %s WHERE id_avaliacao = %s'
-    valores = (acao, id)
-    cursor.execute(sql, valores)
+        conn.commit()
     
-    conn.commit()
-    cursor.close()
-    conn.close()
+    except:
+        conn.rollback()
+    
+    finally:
+        cursor.close()
+        conn.close()
 
 
 def vincular_turma_materia(turma, materia):
@@ -390,7 +419,7 @@ def buscar_alunos(nome):
     cursor = conn.cursor()
 
     sql = "SELECT * FROM alunos WHERE nome_aluno LIKE %s"
-    cursor.execute(sql, nome)
+    cursor.execute(sql, (nome,))
     
     alunos = cursor.fetchall()
 
@@ -405,7 +434,7 @@ def ler_id_professor(nome):
     cursor = conn.cursor()
 
     sql = "SELECT id_professor FROM professores WHERE nome_professor = %s"
-    cursor.execute(sql, nome)
+    cursor.execute(sql, (nome,))
     
     professor = cursor.fetchone()
 
@@ -420,7 +449,7 @@ def ler_usuarios_professor(usuarios):
     cursor = conn.cursor()
  
     sql = "SELECT id_professor FROM professores WHERE nome_usuario = %s"
-    cursor.execute(sql, usuarios)
+    cursor.execute(sql, (usuarios))
    
     professor = cursor.fetchone()
  
@@ -466,7 +495,7 @@ def ler_nome_materia(id):
     cursor = conn.cursor()
 
     sql = "SELECT nome_materia FROM materias WHERE id_materia = %s"
-    cursor.execute(sql, id)
+    cursor.execute(sql, (id,))
     
     materia = cursor.fetchone()
 
