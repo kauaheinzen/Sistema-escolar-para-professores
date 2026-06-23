@@ -77,20 +77,21 @@ def validar_professor(nome, senha):
     try:
         sql_usuario = 'SELECT nome_usuario FROM professores'
         cursor.execute(sql_usuario,)
-        nomes = cursor.fetchall()
+        nomes_professor = cursor.fetchall()
 
-        for n in nomes:
-            if n == nome:
-                sql_senha = 'SELECT senha FROM professores WHERE nome_usuario = %s'
-                valor = (n,)
-                cursor.execute(sql_senha, valor)
-                senha_admin = cursor.fetchone()
+        for nomes in nomes_professor:
+            for n in nomes:
+                if n == nome:
+                    sql_senha = 'SELECT senha FROM professores WHERE nome_usuario = %s'
+                    valor = (n,)
+                    cursor.execute(sql_senha, valor)
+                    senha_admin = cursor.fetchone()
 
-                if senha == senha_admin[0]:
-                    cursor.close()
-                    conn.close()
+                    if senha == senha_admin[0]:
+                        cursor.close()
+                        conn.close()
 
-                    return True
+                        return True
                 
         cursor.close()
         conn.close()

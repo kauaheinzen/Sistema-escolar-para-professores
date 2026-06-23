@@ -452,15 +452,14 @@ def ler_usuarios_professor(usuarios):
     cursor = conn.cursor()
  
     sql = "SELECT id_professor FROM professores WHERE nome_usuario = %s"
-    cursor.execute(sql, (usuarios))
+    cursor.execute(sql, (usuarios,))
    
     professor = cursor.fetchone()
  
     cursor.close()
     conn.close()
     return professor
- 
- 
+
 
 def ler_id_materia(nome):
     '''retorna o ID da matéria'''
@@ -530,10 +529,7 @@ def ler_turmas_professor(id_professor):
     conn = conectar()
     cursor = conn.cursor()
 
-    sql = '''SELECT t.id_turma, t.nome_turma 
-              FROM turmas t
-              INNER JOIN professor_turma pt ON t.id_turma = pt.fk_id_turma
-              WHERE pt.fk_id_professor = %s'''
+    sql = 'SELECT id_turma, nome_turma FROM turmas INNER JOIN professor_turma pt ON turma.id_turma = pt.fk_id_turma WHERE pt.fk_id_professor = %s'
     cursor.execute(sql, (id_professor,))
 
     turmas = cursor.fetchall()
