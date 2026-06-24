@@ -1,5 +1,6 @@
 from datetime import datetime
 from funcoes_SQL import *
+import re
 
 def validar_nome(nome):
     '''Valida nomes de alunos, professores e de avaliações'''
@@ -152,4 +153,13 @@ def validar_id_professor(id):
     
     cursor.close()
     conn.close()
+    return False
+
+
+def validar_nota(nota):
+    '''valida a nota de uma avaliação'''
+    padrao = r"^(10\.00?|[0-9]\.[0-9]{1,2})$"
+    
+    if re.match(padrao, nota):
+        return True
     return False

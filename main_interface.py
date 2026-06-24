@@ -1007,27 +1007,54 @@ def menu_principal_professor():
     ctk.CTkLabel(frame_principal,text=" Sistema Escolar",font=("Arial",35,"bold")).place(x=810,y=40)
 
 
-    ctk.CTkButton(frame_principal,text="Cadastrar Aluno",width=300,height=50,fg_color=("#2563EB","#475569"),hover_color=("#1D4ED8","#334155"),command=tela_cadastrar_aluno).place(x=810,y=180)
+    ctk.CTkButton(frame_principal,text="Adicionar Avaliação", font=("arial", 30),width=350,height=65, fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_cadastrar_aluno).place(x=780,y=180)
  
-    ctk.CTkButton(frame_principal,text="Listar Alunos",width=300,height=50,fg_color=("#2563EB","#475569"),hover_color=("#1D4ED8","#334155"),command=tela_listar_alunos).place(x=810,y=270)
+    ctk.CTkButton(frame_principal,text="Desativar/Ativar avaliação", font=("arial", 30),width=350,height=65, fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_listar_alunos).place(x=780,y=270)
 
     
-    ctk.CTkButton(frame_principal,text="Atualizar Aluno",width=300,height=50,fg_color=("#2563EB","#475569"),hover_color=("#1D4ED8","#334155"),command=tela_atualizar_aluno).place(x=810,y=360)
+    ctk.CTkButton(frame_principal,text="Listar Aluno", font=("arial", 30),width=350,height=65, fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_ler_alunos_do_professor).place(x=780,y=360)
     
     
-    ctk.CTkButton(frame_principal,text="Desativar/Ativar Aluno",width=300,height=50,fg_color=("#2563EB","#475569"),hover_color=("#1D4ED8","#334155"),command=tela_desativar_aluno).place(x=810,y=450)
+    ctk.CTkButton(frame_principal,text="Buscar Aluno", font=("arial", 30),width=350,height=65, fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_desativar_aluno).place(x=780,y=450)
     
-
-    ctk.CTkButton(frame_principal,text="Buscar Aluno",width=300,height=50,fg_color=("#2563EB","#475569"),hover_color=("#1D4ED8","#334155"),command=tela_buscar_aluno).place(x=810,y=540)
 
     ctk.CTkButton(frame_principal,text="←",width=50,height=30,command=tela_login).place(x=20,y=20)
     ctk.CTkButton(frame_principal,text="☀️",width=50,command=mudar_tema).place(x=1840,y=20)
 
 
+def tela_adicionar_avaliacao():
+    def validar_dados(aluno, nome, data, nota):
+        valida_aluno = ''
+        valida_nome = ''
+        valida_data = ''
+        valida_nota = ''
+
+        if aluno.get():
+            valida_aluno = validar_id_aluno(aluno.get())
+        if nome.get():
+            valida_nome = validar_nome(nome.get())
+        if data.get():
+            valida_data = validar_data(data.get())
+        if nota.get():
+            valida_nota = validar_nota(nota.get())
+
+    limpar_frame()
+    ctk.CTkLabel(frame_principal,text="ADICIONAR AVALIAÇÃO",font=("Arial",40,"bold")).grid(row=0,column=1,pady=20)
+    ctk.CTkButton(frame_principal,text="←",width=50,command=menu_principal_professor).grid(row=0,column=0,sticky="w",padx=20)
+    ctk.CTkButton(frame_principal,text="☀️",width=50,command=mudar_tema).grid(row=0,column=2,sticky="e",padx=20)
+
+    entrar_aluno=ctk.CTkEntry(frame_principal,placeholder_text="Digite a matrícula do aluno",width=300); entrar_aluno.grid(row=1,column=1,pady=10)
+    entrar_nome=ctk.CTkEntry(frame_principal,placeholder_text="Digite o nome da avaliação",width=300); entrar_nome.grid(row=2,column=1,pady=30)
+    entrar_data=ctk.CTkEntry(frame_principal,placeholder_text="Digite a data da avaliação [AAAA/MM/DD]",width=300); entrar_data.grid(row=3,column=1,pady=10)
+    entrar_nota=ctk.CTkEntry(frame_principal,placeholder_text="Digite a nota do aluno",width=300); entrar_nota.grid(row=4,column=1,pady=10)
+
+
+
+
 def tela_ler_alunos_do_professor():
     limpar_frame()
     ctk.CTkLabel(frame_principal,text="ALUNOS DO PROFESSOR",font=("Arial",40,"bold")).pack(pady=20)
-    ctk.CTkButton(frame_principal,text="←",width=50,command=menu_principal_admin).place(x=20, y=20)
+    ctk.CTkButton(frame_principal,text="←",width=50,command=menu_principal_professor).place(x=20, y=20)
     ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1840,y=20)
 
     frame_botoes = ctk.CTkFrame(frame_principal)
@@ -1070,8 +1097,7 @@ def tela_ler_alunos_do_professor():
         ctk.CTkLabel(frame_principal, text="NÃO HÁ TURMAS VINCULADAS A ESTE PROFESSOR",text_color="red", font=("Arial",25,"bold")).pack(pady=10)
     else:
         for turma in turmas_professor:
-            ctk.CTkButton(frame_botoes, text=turma[1], width=200, height=40,fg_color=("#475569","#2563EB"), hover_color=("#334155","#1D4ED8"),command=lambda t=turma[0], n=turma[1]: mostrar_alunos_turma(t, n)
-).pack(side="left", padx=10, pady=10)
+            ctk.CTkButton(frame_botoes, text=turma[1], width=200, height=40,fg_color=("#475569","#2563EB"), hover_color=("#334155","#1D4ED8"),command=lambda t=turma[0], n=turma[1]: mostrar_alunos_turma(t, n)).pack(side="left", padx=10, pady=10)
 
 
 
