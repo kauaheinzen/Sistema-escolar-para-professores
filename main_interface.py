@@ -655,13 +655,13 @@ def tela_atualizar_aluno():
             app.update()
             sleep(1.5)
             app.after(0000, menu_principal_admin)
-
+            return
         if not valida_id:
             ctk.CTkLabel(frame_principal,text="MATRICULA DO ALUNO NÃO INSERIDA",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=1, pady=50)
             app.update()
             sleep(1.5)
             app.after(0000, tela_atualizar_aluno)
-
+            return
         elif id_turma != 0:
             atualizar_aluno(entrar_id.get(), "fk_id_turma", id_turma)
             ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO", width=250, font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
@@ -676,7 +676,7 @@ def tela_atualizar_aluno():
                 app.update()
                 sleep(1.5)
                 app.after(0000, tela_atualizar_aluno)
-
+                return 
             match item:
                 case "nome":
                     valida=validar_nome(entrar_item.get())
@@ -778,10 +778,10 @@ def tela_atualizar_professor():
         if not turmas:
             ctk.CTkLabel(frame_principal,text="NÃO HÁ TURMAS CADASTRADAS",width=250, text_color="red", font=("Arial",35,"bold")).grid(row=1, column=1, pady=200) 
             app.update()
-
+            
             sleep(1.5)
             app.after(0, tela_atualizar_aluno)
-
+            return 
         else:
             for turma in turmas:
                 if turma[0] < 6:
@@ -829,12 +829,12 @@ def tela_atualizar_professor():
         elif not valida_id:
             tela_atualizar_aluno()
             ctk.CTkLabel(frame_principal,text="ID DO PROFESSOR NÃO INSERIDO",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=1, pady=50)
-
+            return
         else:
             if not item:
                 tela_atualizar_aluno()
                 ctk.CTkLabel(frame_principal,text="OPÇÃO DE ALTERAÇÃO NÃO INSERIDA",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=1, pady=50)
-
+                return
             match item:
                 case "nome":
                     valida=validar_nome(entrar_item.get())
