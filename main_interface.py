@@ -287,7 +287,7 @@ def tela_cadastrar_professor():
                 None
         
         turmas_adicionadas = ctk.CTkLabel(frame_principal, text=f"Matérias adicionadas ao professor: {turmas}", font=("Arial",20))
-        turmas_adicionadas.grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
+        turmas_adicionadas.grid(row=7, column=1, pady=40, sticky="n")
 
     def tela_escolher_materia(nome, idade, email, usuario, senha):
         botao_materia = {}
@@ -394,16 +394,16 @@ def tela_cadastrar_turmas():
             for turma in turmas:
                 if turma[1] == nome:
                     executar = 0
-                    ctk.CTkLabel(frame_principal, text="TURMA JÁ EXISTENTE", font=("Arial",30,"bold")).grid(row=8, column=0, columnspan=3, pady=(40, 20), sticky="n")
+                    ctk.CTkLabel(frame_principal, text="TURMA JÁ EXISTENTE", font=("Arial",30,"bold")).grid(row=8, column=1, pady=40, sticky="n")
                     app.update()
                     app.after(1500, menu_principal_admin)
             
             if executar == 1:
                 cadastro=cadastrar_turma(nome)
                 if not cadastro:
-                    ctk.CTkLabel(frame_principal, text="TURMA CADASTRADA", font=("Arial",30,"bold")).grid(row=8, column=0, columnspan=3, pady=(40, 20), sticky="n")
+                    ctk.CTkLabel(frame_principal, text="TURMA CADASTRADA", font=("Arial",30,"bold")).grid(row=8, column=1, pady=40, sticky="n")
                 else:
-                    ctk.CTkLabel(frame_principal, text=cadastro, font=("Arial",30,"bold")).grid(row=8, column=0, columnspan=3, pady=(40, 20), sticky="n")
+                    ctk.CTkLabel(frame_principal, text=cadastro, font=("Arial",30,"bold")).grid(row=8, column=1, pady=40, sticky="n")
 
                 id_turma_adicionada = ler_id_turma(nome)
                 for materia in materias:
@@ -527,7 +527,7 @@ def tela_listar_turmas():
 
     else:
         for turma in turmas:
-            textbox.insert("end",f"ID: {turma[0]} | TURMA: {turma[1]} | ATIVO [1-SIM; 0-NÃO]: {turma[2]}\n=========\n")
+            textbox.insert("end",f"ID: {turma[0]} | TURMA: {turma[1]} | DATA DE ABERTURA: {turma[2]} | ATIVO [1-SIM; 0-NÃO]: {turma[3]}\n=========\n")
 
 
 def tela_listar_materias():
@@ -1007,7 +1007,7 @@ def menu_principal_professor():
     ctk.CTkLabel(frame_principal,text=" Sistema Escolar",font=("Arial",35,"bold")).place(x=810,y=40)
 
 
-    ctk.CTkButton(frame_principal,text="Adicionar Avaliação", font=("arial", 30),width=350,height=65, fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_cadastrar_aluno).place(x=780,y=180)
+    ctk.CTkButton(frame_principal,text="Adicionar Avaliação", font=("arial", 30),width=350,height=65, fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_adicionar_avaliacao).place(x=780,y=180)
  
     ctk.CTkButton(frame_principal,text="Desativar/Ativar avaliação", font=("arial", 30),width=350,height=65, fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_listar_alunos).place(x=780,y=270)
 
@@ -1031,12 +1031,26 @@ def tela_adicionar_avaliacao():
 
         if aluno.get():
             valida_aluno = validar_id_aluno(aluno.get())
+            if valida_aluno:
+                data_turma = ler_data_turma(aluno.get())
+                if data.get():
+                    valida_data = validar_data(data.get(), data_turma[0])
         if nome.get():
             valida_nome = validar_nome(nome.get())
-        if data.get():
-            valida_data = validar_data(data.get())
         if nota.get():
             valida_nota = validar_nota(nota.get())
+        
+        if valida_aluno and valida_nome and valida_data and valida_nota:
+            avaliacao = registrar_avaliacao(valida_data, aluno.get(), nome.get(), nota.get())
+            if not avaliacao:
+                ctk.CTkLabel(frame_principal, text="AVALIAÇÃO ADICIONADA", font=("Arial",45,"bold")).grid(row=6, column=1, pady=20)
+            else:
+                ctk.CTkLabel(frame_principal, text="OCORREU UM ERRO. TENTE NOVAMENTE MAIS TARDE", font=("Arial",45,"bold")).grid(row=6, column=1, pady=20)
+        else:
+            print(valida_aluno, valida_nome, valida_data, valida_nota)
+            ctk.CTkLabel(frame_principal, text="INFORMAÇÕES NÃO VÁLIDAS PREENCHIDAS", font=("Arial",45,"bold")).grid(row=6, column=1, pady=20)
+        app.after(1500, menu_principal_professor)
+
 
     limpar_frame()
     ctk.CTkLabel(frame_principal,text="ADICIONAR AVALIAÇÃO",font=("Arial",40,"bold")).grid(row=0,column=1,pady=20)
@@ -1048,7 +1062,7 @@ def tela_adicionar_avaliacao():
     entrar_data=ctk.CTkEntry(frame_principal,placeholder_text="Digite a data da avaliação [AAAA/MM/DD]",width=300); entrar_data.grid(row=3,column=1,pady=10)
     entrar_nota=ctk.CTkEntry(frame_principal,placeholder_text="Digite a nota do aluno",width=300); entrar_nota.grid(row=4,column=1,pady=10)
 
-
+    ctk.CTkButton(frame_principal,text="ADICIONAR AVALIAÇÃO",width=250,command=lambda: validar_dados(entrar_aluno, entrar_nome, entrar_data, entrar_nota)).grid(row=5, column=1, pady=20)
 
 
 def tela_ler_alunos_do_professor():

@@ -27,14 +27,17 @@ def validar_data(data, turma_abertura):
         data = datetime.strptime(data, "%Y/%m/%d").date()
         hoje = datetime.now().date()
 
+        abertura_limpa = turma_abertura[:10].replace("-", "/")
+        abertura_objeto = datetime.strptime(abertura_limpa, "%Y/%m/%d").date()
+
         if data > hoje:
             return False
-        if data < turma_abertura:
+        if data < abertura_objeto:
             return False
         
-        return True
+        return data.strftime("%Y-%m-%d")
     except:
-        return (False, "Data inválida.")
+        return False
 
 def validar_adm(nome, senha):
     '''Verifica se o usuário e senha do admin estão corretos'''
@@ -120,20 +123,16 @@ def validar_id_aluno(id):
     '''valida id de alguma conta de aluno'''
     conn = conectar()
     cursor = conn.cursor()
-    sql = 'SELECT id_aluno FROM alunos'
-
-    cursor.execute(sql,)
-    resultado = cursor.fetchall()
-
-    for aluno in resultado:
-        if id == aluno[0]:
-            cursor.close()
-            conn.close()
-            return True
-    
-    cursor.close()
-    conn.close()
-    return False
+ 
+    try:
+        sql = 'SELECT 1 FROM alunos WHERE id_aluno = %s'
+        cursor.execute(sql, (id,))
+ 
+        return cursor.fetchone() is not None
+ 
+    finally:
+        cursor.close()
+        conn.close()
 
 
 def validar_id_professor(id):

@@ -132,6 +132,7 @@ def registrar_avaliacao(data, aluno, nome_avaliacao, nota):
 
         cursor.execute(sql, valores)
         conn.commit()
+        return False
 
     except Error as e:
         conn.rollback()
@@ -552,3 +553,23 @@ def ler_alunos_turma(id_turma):
     cursor.close()
     conn.close()
     return alunos
+
+
+def ler_data_turma(id_aluno):
+    '''retorna data de abertura de uma turma com base na turma que o aluno está'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = 'SELECT fk_id_turma FROM alunos WHERE id_aluno = %s'
+    cursor.execute(sql, (id_aluno,))
+
+    turma = cursor.fetchone()
+
+    sql_data = 'SELECT data_abertura FROM turmas WHERE id_turma = %s'
+    cursor.execute(sql_data, (turma[0],))
+
+    data = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+    return data
