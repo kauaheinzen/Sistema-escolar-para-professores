@@ -130,7 +130,6 @@ def validar_id_aluno(id):
         cursor.close()
         conn.close()
 
-
 def validar_id_professor(id):
     '''valida id de alguma conta de professor'''
     conn = conectar()
