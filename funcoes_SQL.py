@@ -164,26 +164,43 @@ def atualizar_professor(id, item_alterar, alteracao):
         conn.close()
 
 
-def atualizar_aluno(id, item_alterar, alteracao):
-    '''atualiza o cadastro de um aluno ou para mudar sua turma'''
+def atualizar_aluno(id_aluno, coluna, valor):
     conn = conectar()
     cursor = conn.cursor()
 
     try:
-        sql = 'UPDATE alunos SET %s = %s WHERE id_aluno = %s'
-        valores = (item_alterar, alteracao, id)
+        colunas_permitidas = [
+            "nome_aluno",
+            "idade_aluno",
+            "email_aluno",
+            "fk_id_turma",
+            "nome_responsavel",
+            "email_responsavel"
+        ]
 
-        cursor.execute(sql, valores)
+        if coluna not in colunas_permitidas:
+            print("Coluna inválida")
+            return False
+
+        # força tipo correto
+        if coluna in ["idade_aluno", "fk_id_turma"]:
+            valor = int(valor)
+            id_aluno = int(id_aluno)
+
+        sql = f"UPDATE alunos SET {coluna} = %s WHERE id_aluno = %s"
+        cursor.execute(sql, (valor, id_aluno))
+
         conn.commit()
+        return True
 
     except Error as e:
+        print("ERRO MYSQL:", e)
         conn.rollback()
-        return f"Ocorreu um erro {e}. Atualização cancelada."
-    
+        return False
+
     finally:
         cursor.close()
         conn.close()
-
 
 def atualizar_avaliacao(id, item_alterar, alteracao):
     '''atualiza alguma avaliação, como aluno que fez ou nota'''
@@ -224,7 +241,7 @@ def desativar_reativar_materia(id, acao):
         conn.commit()
     
     except:
-        conn.rollbacl()
+        conn.rollback()
     
     finally:
         cursor.close()
@@ -526,13 +543,18 @@ def ler_id_materia(nome):
 
 
 def ler_turmas_professor(id_professor):
-    '''retorna as turmas vinculadas a um professor'''
     conn = conectar()
     cursor = conn.cursor()
 
-    sql = 'SELECT id_turma, nome_turma FROM turmas INNER JOIN professor_turma pt ON turma.id_turma = pt.fk_id_turma WHERE pt.fk_id_professor = %s'
-    cursor.execute(sql, (id_professor,))
+    sql = '''
+    SELECT t.id_turma, t.nome_turma
+    FROM turmas t
+    INNER JOIN professor_turma pt
+    ON t.id_turma = pt.fk_id_turma
+    WHERE pt.fk_id_professor = %s
+    '''
 
+    cursor.execute(sql, (id_professor,))
     turmas = cursor.fetchall()
 
     cursor.close()

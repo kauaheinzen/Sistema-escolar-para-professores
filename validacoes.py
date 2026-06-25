@@ -120,20 +120,19 @@ def validar_usuario(nome, senha):
 
 
 def validar_id_aluno(id):
-    '''valida id de alguma conta de aluno'''
     conn = conectar()
     cursor = conn.cursor()
- 
+
     try:
         sql = 'SELECT 1 FROM alunos WHERE id_aluno = %s'
         cursor.execute(sql, (id,))
- 
+
         return cursor.fetchone() is not None
- 
+
+
     finally:
         cursor.close()
         conn.close()
-
 
 def validar_id_professor(id):
     '''valida id de alguma conta de professor'''
