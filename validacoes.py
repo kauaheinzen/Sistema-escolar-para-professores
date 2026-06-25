@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from funcoes_SQL import *
 import re
 
@@ -24,11 +24,20 @@ def validar_idade(idade):
 def validar_data(data, turma_abertura):
     '''Valida se a data é maior que a de hoje ou se é menor que a data de abertura da turma'''
     try:
-        data = datetime.strptime(data, "%Y/%m/%d").date()
-        hoje = datetime.now().date()
+        if isinstance(data, str):
+            data = datetime.datetime.strptime(data.replace("-", "/"), "%Y/%m/%d").date()
+        
+        hoje = datetime.date.today()
 
-        abertura_limpa = turma_abertura[:10].replace("-", "/")
-        abertura_objeto = datetime.strptime(abertura_limpa, "%Y/%m/%d").date()
+        if isinstance(turma_abertura, datetime.datetime):
+            abertura_objeto = turma_abertura.date()
+
+        elif isinstance(turma_abertura, datetime.date):
+            abertura_objeto = turma_abertura
+
+        else:
+            abertura_limpa = str(turma_abertura)[:10].replace("-", "/")
+            abertura_objeto = datetime.datetime.strptime(abertura_limpa, "%Y/%m/%d").date()
 
         if data > hoje:
             return False

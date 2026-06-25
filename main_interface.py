@@ -394,16 +394,16 @@ def tela_cadastrar_turmas():
             for turma in turmas:
                 if turma[1] == nome:
                     executar = 0
-                    ctk.CTkLabel(frame_principal, text="TURMA JÁ EXISTENTE", font=("Arial",30,"bold")).grid(row=8, column=1, pady=40, sticky="n")
+                    ctk.CTkLabel(frame_principal, text="TURMA JÁ EXISTENTE", font=("Arial",30,"bold")).grid(row=8, column=0, columnspan=3, pady=(40,20), sticky="n")
                     app.update()
                     app.after(1500, menu_principal_admin)
             
             if executar == 1:
                 cadastro=cadastrar_turma(nome)
                 if not cadastro:
-                    ctk.CTkLabel(frame_principal, text="TURMA CADASTRADA", font=("Arial",30,"bold")).grid(row=8, column=1, pady=40, sticky="n")
+                    ctk.CTkLabel(frame_principal, text="TURMA CADASTRADA", font=("Arial",30,"bold")).grid(row=8, column=0, columnspan=3, pady=(40,20), sticky="n")
                 else:
-                    ctk.CTkLabel(frame_principal, text=cadastro, font=("Arial",30,"bold")).grid(row=8, column=1, pady=40, sticky="n")
+                    ctk.CTkLabel(frame_principal, text=cadastro, font=("Arial",30,"bold")).grid(row=8, column=0, columnspan=3, pady=(40,20), sticky="n")
 
                 id_turma_adicionada = ler_id_turma(nome)
                 for materia in materias:
@@ -651,20 +651,20 @@ def tela_atualizar_aluno():
         alunos = ler_alunos()
         valida_id = validar_id_aluno(entrar_id.get())
         if not alunos:
-            ctk.CTkLabel(frame_principal,text="NÃO HÁ ALUNOS CADASTRADOS",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=1, pady=50)
+            ctk.CTkLabel(frame_principal,text="NÃO HÁ ALUNOS CADASTRADOS",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
             app.update()
             sleep(1.5)
             app.after(0000, menu_principal_admin)
             return
         if not valida_id:
-            ctk.CTkLabel(frame_principal,text="MATRICULA DO ALUNO NÃO INSERIDA",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=1, pady=50)
+            ctk.CTkLabel(frame_principal,text="MATRICULA DO ALUNO NÃO INSERIDA",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
             app.update()
             sleep(1.5)
             app.after(0000, tela_atualizar_aluno)
             return
         elif id_turma != 0:
             atualizar_aluno(entrar_id.get(), "fk_id_turma", id_turma)
-            ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO", width=250, font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
+            ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO", width=250, font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
             app.update()
             sleep(1.5)
             app.after(0000, menu_principal_admin)
@@ -672,7 +672,7 @@ def tela_atualizar_aluno():
         else:
             if not item:
                 tela_atualizar_aluno()
-                ctk.CTkLabel(frame_principal,text="OPÇÃO DE ALTERAÇÃO NÃO INSERIDA",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=1, pady=50)
+                ctk.CTkLabel(frame_principal,text="OPÇÃO DE ALTERAÇÃO NÃO INSERIDA",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
                 app.update()
                 sleep(1.5)
                 app.after(0000, tela_atualizar_aluno)
@@ -681,24 +681,24 @@ def tela_atualizar_aluno():
                 case "nome":
                     valor = entrar_item.get().strip()
                     if not validar_nome(valor):
-                        ctk.CTkLabel(frame_principal,text="Nome inválido",text_color="red",font=("Arial",35,"bold")).grid(row=7, column=1)
+                        ctk.CTkLabel(frame_principal,text="Nome inválido",text_color="red",font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
                         return
                     resultado = atualizar_aluno(entrar_id.get(), "nome_aluno", valor)
                     if resultado:
-                        ctk.CTkLabel(frame_principal,text="Cadastro atualizado com sucesso",font=("Arial",35,"bold")).grid(row=7, column=1)
+                        ctk.CTkLabel(frame_principal,text="Cadastro atualizado com sucesso",font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
                     else:
-                        ctk.CTkLabel(frame_principal,text="Erro ao atualizar no banco",text_color="red",font=("Arial",35,"bold")).grid(row=7, column=1)
+                        ctk.CTkLabel(frame_principal,text="Erro ao atualizar no banco",text_color="red",font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
 
                 case "idade":
                     valida=validar_idade(entrar_item.get())
                     if valida:
                         atualiza=atualizar_aluno(entrar_id.get(), "idade_aluno", entrar_item.get())
                         if atualiza:
-                            ctk.CTkLabel(frame_principal,text=valida[1], width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
+                            ctk.CTkLabel(frame_principal,text=valida[1], width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
                         else:
-                            ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO", width=250, font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
+                            ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO", width=250, font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
                     else:
-                        ctk.CTkLabel(frame_principal,text="Idade Inválida", width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
+                        ctk.CTkLabel(frame_principal,text="Idade Inválida", width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
                         app.update()
                         sleep(1.5)
                         app.after(0000, tela_atualizar_aluno)
@@ -707,9 +707,9 @@ def tela_atualizar_aluno():
                 case "e-mail":
                     atualiza=atualizar_aluno(entrar_id.get(), "email_aluno", entrar_item.get())
                     if atualiza:
-                        ctk.CTkLabel(frame_principal,text=valida[1], width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
+                        ctk.CTkLabel(frame_principal,text=valida[1], width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
                     else:
-                        ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO", width=250, font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
+                        ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO", width=250, font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
 
 
                 case "nome do responsável":
@@ -717,11 +717,11 @@ def tela_atualizar_aluno():
                     if valida:
                         atualiza=atualizar_aluno(entrar_id.get(), "nome_responsavel", entrar_item.get())
                         if atualiza:
-                            ctk.CTkLabel(frame_principal,text=valida[1], width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
+                            ctk.CTkLabel(frame_principal,text=valida[1], width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
                         else:
-                            ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO",width=250, font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
+                            ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO",width=250, font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
                     else:
-                        ctk.CTkLabel(frame_principal,text="Nome Inválido", width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
+                        ctk.CTkLabel(frame_principal,text="Nome Inválido", width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
                         app.update()
                         sleep(1.5)
                         app.after(0000, tela_atualizar_aluno)
@@ -730,20 +730,20 @@ def tela_atualizar_aluno():
                 case "e-mail do responsável":
                     atualiza=atualizar_aluno(entrar_id.get(), "email_responsavel", entrar_item.get())
                     if atualiza:
-                        ctk.CTkLabel(frame_principal,text=valida[1], width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
+                        ctk.CTkLabel(frame_principal,text=valida[1], width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
                     else:
-                        ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO",width=250, font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
+                        ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO",width=250, font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
                 
 
                 case default:
-                    ctk.CTkLabel(frame_principal,text="Erro ao Realizar Cadastro, por favor preencha os dados corretamente", width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
+                    ctk.CTkLabel(frame_principal,text="Erro ao Realizar Cadastro, por favor preencha os dados corretamente", width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
         
 
             app.after(1500, menu_principal_admin)
             print("ITEM:", item)
             print("VALOR:", entrar_item.get())
             print("DEBUG VALIDAR:", validar_nome(entrar_item.get()))
-    ctk.CTkButton(frame_principal,text="Atualizar Aluno",height=50, width=450,command=atualizar).grid(row=6, column=1, pady=40)
+    ctk.CTkButton(frame_principal,text="Atualizar Aluno",height=50, width=450,command=atualizar).grid(row=6, column=0, columnspan=3, pady=(40, 20), sticky="n")
 
 
 def tela_atualizar_professor():
@@ -815,23 +815,23 @@ def tela_atualizar_professor():
         professores = ler_professores()
         valida_id = validar_id_professor(entrar_id.get())
         if not professores:
-            ctk.CTkLabel(frame_principal,text="NÃO HÁ PROFESSORES CADASTRADOS",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=1, pady=50)
+            ctk.CTkLabel(frame_principal,text="NÃO HÁ PROFESSORES CADASTRADOS",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
             app.update()
             sleep(1.5)
             app.after(0000, menu_principal_admin)
 
         if id_turma != 0:
             vincular_professor_turma(entrar_id.get(), "fk_id_turma")
-            ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO", width=250, font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
+            ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO", width=250, font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
 
         elif not valida_id:
             tela_atualizar_aluno()
-            ctk.CTkLabel(frame_principal,text="ID DO PROFESSOR NÃO INSERIDO",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=1, pady=50)
+            ctk.CTkLabel(frame_principal,text="ID DO PROFESSOR NÃO INSERIDO",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
             return
         else:
             if not item:
                 tela_atualizar_aluno()
-                ctk.CTkLabel(frame_principal,text="OPÇÃO DE ALTERAÇÃO NÃO INSERIDA",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=1, pady=50)
+                ctk.CTkLabel(frame_principal,text="OPÇÃO DE ALTERAÇÃO NÃO INSERIDA",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
                 return
             match item:
                 case "nome":
@@ -839,11 +839,11 @@ def tela_atualizar_professor():
                     if valida:
                         atualiza=atualizar_professor(entrar_id.get(), "nome_professor", entrar_item.get())
                         if atualiza:
-                            ctk.CTkLabel(frame_principal,text=valida[1], width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
+                            ctk.CTkLabel(frame_principal,text=valida[1], width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
                         else:
-                            ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO", width=250, font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
+                            ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO", width=250, font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
                     else:
-                        ctk.CTkLabel(frame_principal,text="Nome Inválido", width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
+                        ctk.CTkLabel(frame_principal,text="Nome Inválido", width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
 
 
                 case "idade":
@@ -1039,7 +1039,8 @@ def tela_adicionar_avaliacao():
             valida_nota = validar_nota(nota.get())
         
         if valida_aluno and valida_nome and valida_data and valida_nota:
-            avaliacao = registrar_avaliacao(valida_data, aluno.get(), nome.get(), nota.get())
+            turma = ler_turma_aluno(aluno.get())
+            avaliacao = registrar_avaliacao(valida_data, aluno.get(), nome.get(), nota.get(), turma[0])
             if not avaliacao:
                 ctk.CTkLabel(frame_principal, text="AVALIAÇÃO ADICIONADA", font=("Arial",45,"bold")).grid(row=6, column=1, pady=20)
             else:

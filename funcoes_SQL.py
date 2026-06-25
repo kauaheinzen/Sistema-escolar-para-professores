@@ -595,3 +595,18 @@ def ler_data_turma(id_aluno):
     cursor.close()
     conn.close()
     return data
+
+
+def ler_turma_aluno(id):
+    '''retorna o id da turma de um aluno'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = 'SELECT fk_id_turma FROM alunos WHERE id_aluno = %s'
+    cursor.execute(sql, (id,))
+
+    turma = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+    return turma
