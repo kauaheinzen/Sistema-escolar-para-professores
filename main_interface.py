@@ -97,22 +97,17 @@ def menu_principal_admin():
     ctk.CTkButton(frame_principal,text="Listar Alunos",width=300,height=50,fg_color=("#2563EB","#475569"),hover_color=("#1D4ED8","#334155"),command=tela_listar_alunos).place(x=810,y=270)
     ctk.CTkButton(frame_principal,text="Listar Professores",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_listar_professores).place(x=1340,y=270)
 
-    
-    ctk.CTkButton(frame_principal,text="Listar Turmas",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_listar_turmas).place(x=810,y=630)
-    ctk.CTkButton(frame_principal,text="Listar Materias",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_listar_materias).place(x=810,y=720)
-    
-    
-    ctk.CTkButton(frame_principal,text="Desativar/Ativar Matéria",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_desativar_materia).place(x=280,y=360)
+    ctk.CTkButton(frame_principal,text="Listar Turmas",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_listar_turmas).place(x=280,y=360)
     ctk.CTkButton(frame_principal,text="Atualizar Aluno",width=300,height=50,fg_color=("#2563EB","#475569"),hover_color=("#1D4ED8","#334155"),command=tela_atualizar_aluno).place(x=810,y=360)
-    ctk.CTkButton(frame_principal,text="Atualizar Professor",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_atualizar_professor).place(x=1340,y=360)
+    ctk.CTkButton(frame_principal,text="Listar Materias",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_listar_materias).place(x=1340,y=360)
 
-    ctk.CTkButton(frame_principal,text="Desativar/Ativar Turma",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_desativar_turma).place(x=280,y=450)
+    ctk.CTkButton(frame_principal,text="Desativar/Ativar Matéria",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_desativar_materia).place(x=280,y=450)
     ctk.CTkButton(frame_principal,text="Desativar/Ativar Aluno",width=300,height=50,fg_color=("#2563EB","#475569"),hover_color=("#1D4ED8","#334155"),command=tela_desativar_aluno).place(x=810,y=450)
-    ctk.CTkButton(frame_principal,text="Desativar/Ativar Professor",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_desativar_professor).place(x=1340,y=450)
-    
-    ctk.CTkButton(frame_principal,text="SIGMA",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_ler_alunos_do_professor).place(x=1340,y=50)
+    ctk.CTkButton(frame_principal,text="Atualizar Professor",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_atualizar_professor).place(x=1340,y=450)
 
+    ctk.CTkButton(frame_principal,text="Desativar/Ativar Turma",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_desativar_turma).place(x=280,y=540)
     ctk.CTkButton(frame_principal,text="Buscar Aluno",width=300,height=50,fg_color=("#2563EB","#475569"),hover_color=("#1D4ED8","#334155"),command=tela_buscar_aluno).place(x=810,y=540)
+    ctk.CTkButton(frame_principal,text="Desativar/Ativar Professor",width=300,height=50,fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_desativar_professor).place(x=1340,y=540)
     
     
     ctk.CTkButton(frame_principal,text="←",width=50,height=30,command=tela_login).place(x=20,y=20)
@@ -170,6 +165,10 @@ def tela_cadastrar_aluno():
                 cadastro = cadastrar_alunos(nome.get(), idade.get(), email.get(), turma_aplicada, nome_resp.get(), email_resp.get())
                 if not cadastro:
                     ctk.CTkLabel(frame_principal, text="ALUNO CADASTRADO", font=("Arial",30,"bold")).grid(row=8, column=1, pady=30)
+                    id_aluno = ler_id_aluno(nome.get())
+                    materias = ler_materias_turma(turma_aplicada)
+                    for materia in materias:
+                        vincular_aluno_materias(id_aluno[0], materia)
                 else:
                     ctk.CTkLabel(frame_principal, text=cadastro, text_color="red", font=("Arial",30,"bold")).grid(row=8, column=1, pady=30)
                     print(cadastro)
@@ -242,19 +241,19 @@ def tela_cadastrar_professor():
         if turmas:
             cadastro = cadastrar_professores(nome, idade, email, usuario, senha, materia)
             if not cadastro:
-                ctk.CTkLabel(frame_principal, text="PROFESSOR CADASTRADO", font=("Arial",30,"bold")).grid(row=8, column=1, pady=30)
+                ctk.CTkLabel(frame_principal, text="PROFESSOR CADASTRADO", font=("Arial",30,"bold")).grid(row=8, column=0, columnspan=3, pady=(40, 20), sticky="n")
                 id_professor_adicionado = ler_id_professor(nome)
                 for turma in turmas:
                     id_turma = ler_id_turma(turma)
                     vincular_professor_turma(id_professor_adicionado[0], id_turma[0])
             else:
-                ctk.CTkLabel(frame_principal, text=cadastro.upper(), text_color="red", font=("Arial",30,"bold")).grid(row=7, column=1, pady=30)
+                ctk.CTkLabel(frame_principal, text=cadastro.upper(), text_color="red", font=("Arial",30,"bold")).grid(row=8, column=0, columnspan=3, pady=(40, 20), sticky="n")
                 print(cadastro)
 
             app.update()
             app.after(1500, menu_principal_admin)
         else:
-            ctk.CTkLabel(frame_principal, text="NÃO FOI SELECIONADA NENHUMA TURMA", font=("Arial",30,"bold")).grid(row=8, column=1, pady=30)
+            ctk.CTkLabel(frame_principal, text="NÃO FOI SELECIONADA NENHUMA TURMA", font=("Arial",30,"bold")).grid(row=8, column=0, columnspan=3, pady=(40, 20))
             app.update()
             app.after(1500, tela_turmas_cadastro(nome, idade, email, usuario, senha, materia))
               
@@ -266,7 +265,7 @@ def tela_cadastrar_professor():
         if valida_nome and valida_idade and email and usuario and senha:
             return True
         else:
-            ctk.CTkLabel(frame_principal, text="NOME E/OU IDADE INVÁLIDA", text_color="red", font=("Arial",30,"bold")).grid(row=7, column=1, pady=30)
+            ctk.CTkLabel(frame_principal, text="NOME E/OU IDADE INVÁLIDA", text_color="red", font=("Arial",30,"bold")).grid(row=8, column=0, columnspan=3, pady=(40, 20))
             return False
 
     def adicionar_turmas(turma):
@@ -287,7 +286,7 @@ def tela_cadastrar_professor():
                 None
         
         turmas_adicionadas = ctk.CTkLabel(frame_principal, text=f"Matérias adicionadas ao professor: {turmas}", font=("Arial",20))
-        turmas_adicionadas.grid(row=7, column=1, pady=40, sticky="n")
+        turmas_adicionadas.grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
 
     def tela_escolher_materia(nome, idade, email, usuario, senha):
         botao_materia = {}
@@ -354,7 +353,7 @@ def tela_cadastrar_professor():
     def tela_turmas_cadastro(nome, idade, email, usuario, senha, materia):
         botao_turma = {}
         limpar_frame()
-        turmas = ler_turmas()
+        turmas = ler_turmas_materias(materia)
         ctk.CTkLabel(frame_principal,text="SELECIONE AS TURMAS DO PROFESSOR",width=300, font=("Arial",50,"bold")).grid(row=0, column=0, columnspan=3, pady=(40, 20), sticky="n")
 
         if not turmas:
@@ -1027,10 +1026,12 @@ def tela_adicionar_avaliacao():
         valida_data = ''
         valida_nota = ''
         valida_data = ''
+        valida_turma = ''
 
         if aluno.get():
             valida_aluno = validar_id_aluno(aluno.get())
             if valida_aluno:
+                valida_turma = validar_turma_aluno_professor(aluno.get(), id_login)
                 data_turma = ler_data_turma(aluno.get())
                 if data.get():
                     valida_data = validar_data(data.get(), data_turma[0])
@@ -1039,13 +1040,21 @@ def tela_adicionar_avaliacao():
         if nota.get():
             valida_nota = validar_nota(nota.get())
         
-        if valida_aluno and valida_nome and valida_data and valida_nota:
+        if valida_aluno and valida_nome and valida_data and valida_nota and valida_turma:
             materia = ler_materia_professor(id_login)
             avaliacao = registrar_avaliacao(valida_data, aluno.get(), nome.get(), nota.get(), materia[0])
             if not avaliacao:
                 ctk.CTkLabel(frame_principal, text="AVALIAÇÃO ADICIONADA", font=("Arial",45,"bold")).grid(row=6, column=1, pady=20)
             else:
                 ctk.CTkLabel(frame_principal, text="OCORREU UM ERRO. TENTE NOVAMENTE MAIS TARDE", font=("Arial",45,"bold")).grid(row=6, column=1, pady=20)
+        
+        elif not valida_aluno:
+            ctk.CTkLabel(frame_principal, text="MATRÍCULA DO ALUNO NÃO VÁLIDA", font=("Arial",45,"bold")).grid(row=6, column=1, pady=20)
+            ctk.CTkLabel(frame_principal, text="VERIFIQUE SE VOCÊ INSERIU A MATRÍCULA DE UM ALUNO QUE É SEU CORRETAMENTE", font=("Arial",45,"bold")).grid(row=7, column=1, pady=20)
+
+        elif not valida_turma:
+            ctk.CTkLabel(frame_principal, text="VOCÊ NÃO DÁ AULA AO ALUNO ESCOLHIDO", font=("Arial",45,"bold")).grid(row=6, column=1, pady=20)
+
         else:
             print(valida_aluno, valida_nome, valida_data, valida_nota)
             ctk.CTkLabel(frame_principal, text="INFORMAÇÕES NÃO VÁLIDAS PREENCHIDAS", font=("Arial",45,"bold")).grid(row=6, column=1, pady=20)

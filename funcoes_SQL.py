@@ -545,22 +545,31 @@ def ler_id_materia(nome):
 def ler_turmas_professor(id_professor):
     conn = conectar()
     cursor = conn.cursor()
+    try:
+        sql = '''
+        SELECT t.id_turma, t.nome_turma
+        FROM turmas t
+        INNER JOIN professor_turma pt
+        ON t.id_turma = pt.fk_id_turma
+        WHERE pt.fk_id_professor = %s
+        '''
 
-    sql = '''
-    SELECT t.id_turma, t.nome_turma
-    FROM turmas t
-    INNER JOIN professor_turma pt
-    ON t.id_turma = pt.fk_id_turma
-    WHERE pt.fk_id_professor = %s
-    '''
+        cursor.execute(sql, (id_professor,))
+        turmas = cursor.fetchall()
 
-    cursor.execute(sql, (id_professor,))
-    turmas = cursor.fetchall()
-
-    cursor.close()
-    conn.close()
-    return turmas
-
+        return turmas
+    
+    except:
+        try:
+            cursor.execute(sql, id_professor)
+            turmas = cursor.fetchall()
+            return turmas
+        except:
+            None
+    
+    finally:
+        cursor.close()
+        conn.close()
 
 def ler_alunos_turma(id_turma):
     '''retorna os alunos de uma turma específica'''
@@ -613,15 +622,81 @@ def ler_materia_professor(id):
 
 
 def ler_turmas_materias(materia):
+    turmas = []
     '''retorna o id de turmas que possuem uma matéria específica'''
     conn = conectar()
     cursor = conn.cursor()
 
     sql = 'SELECT fk_id_turma FROM turma_materias WHERE fk_id_materia = %s'
-    cursor.execute(sql, materia)
+    cursor.execute(sql, (materia,))
 
-    turmas = cursor.fetchall()
+    id_turma = cursor.fetchall()
+    for turma in id_turma:
+        sql_turmas = 'SELECT id_turma, nome_turma FROM turmas WHERE id_turma = %s'
+        cursor.execute(sql_turmas, turma)
+
+        turmas.append(cursor.fetchone())
 
     cursor.close()
     conn.close()
     return turmas
+
+
+def ler_id_aluno(nome):
+    '''retorna o ID de um aluno'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = "SELECT id_aluno FROM alunos WHERE nome_aluno = %s"
+    cursor.execute(sql, (nome,))
+    
+    id = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+    return id
+
+
+def ler_materias_turma(id):
+    '''retorna o id de matérias que possuem uma turma específica'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = 'SELECT fk_id_materia FROM turma_materias WHERE fk_id_turma = %s'
+    cursor.execute(sql, (id,))
+
+    materias = cursor.fetchall()
+    
+    cursor.close()
+    conn.close()
+    return materias
+
+
+def vincular_aluno_materias(aluno, materia):
+    '''vincula um aluno em uma materia'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+        
+    sql = 'INSERT INTO aluno_materias (fk_id_aluno, fk_id_materia) VALUES (%s, %s)'
+    valores = (aluno, materia)
+    cursor.execute(sql, valores)
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
+def ler_turma_aluno(id_aluno):
+    '''retorna a turma de um aluno específico'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = 'SELECT fk_id_turma FROM alunos WHERE id_aluno = %s'
+    cursor.execute(sql, (id_aluno,))
+
+    turma = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+    return turma

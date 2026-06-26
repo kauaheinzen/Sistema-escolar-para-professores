@@ -39,19 +39,12 @@ def validar_data(data, turma_abertura):
             abertura_limpa = str(turma_abertura)[:10].replace("-", "/")
             abertura_objeto = datetime.strptime(abertura_limpa, "%Y/%m/%d").date()
 
-        print("data:", data)
-        print("hoje:", hoje)
-        print("abertura:", abertura_objeto)
-
         if data > hoje:
-            print("Data maior que hoje")
             return False
 
         if data < abertura_objeto:
-            print("Data menor que abertura")
             return False
         
-        print(data.strftime("%Y-%m-%d"))
         return data.strftime("%Y-%m-%d")
     except Exception as e:
         print (e)
@@ -152,6 +145,7 @@ def validar_id_aluno(id):
         cursor.close()
         conn.close()
 
+
 def validar_id_professor(id):
     '''valida id de alguma conta de professor'''
     conn = conectar()
@@ -174,8 +168,46 @@ def validar_id_professor(id):
 
 def validar_nota(nota):
     '''valida a nota de uma avaliação'''
-    padrao = r"^(10\.00?|[0-9]\.[0-9]{1,2})$"
     
-    if re.match(padrao, nota):
+    nota_str = str(nota).strip()
+    padrao = r"^(10(\.00?)?|[0-9](\.[0-9]{1,2})?)$"
+    
+    if re.match(padrao, nota_str):
         return True
     return False
+
+
+def validar_materia_aluno(id):
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        sql = 'SELECT 1 FROM aluno_materias WHERE fk_id_aluno = %s'
+        cursor.execute(sql, (id,))
+
+        return cursor.fetchone() is not None
+
+
+    finally:
+        cursor.close()
+        conn.close()
+
+
+def validar_turma_aluno_professor(id_aluno, id_professor):
+    '''valida se o professor da aula para o aluno'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        turma_aluno = ler_turma_aluno(id_aluno)
+        turma_professor = ler_turmas_professor(id_professor)
+
+        for turma in turma_professor:
+            if turma[0] == turma_aluno[0]:
+                return True
+            
+        return False
+
+    finally:
+        cursor.close()
+        conn.close()
