@@ -1026,6 +1026,7 @@ def tela_adicionar_avaliacao():
         valida_nome = ''
         valida_data = ''
         valida_nota = ''
+        valida_data = ''
 
         if aluno.get():
             valida_aluno = validar_id_aluno(aluno.get())
@@ -1039,8 +1040,8 @@ def tela_adicionar_avaliacao():
             valida_nota = validar_nota(nota.get())
         
         if valida_aluno and valida_nome and valida_data and valida_nota:
-            turma = ler_turma_aluno(aluno.get())
-            avaliacao = registrar_avaliacao(valida_data, aluno.get(), nome.get(), nota.get(), turma[0])
+            materia = ler_materia_professor(id_login)
+            avaliacao = registrar_avaliacao(valida_data, aluno.get(), nome.get(), nota.get(), materia[0])
             if not avaliacao:
                 ctk.CTkLabel(frame_principal, text="AVALIAÇÃO ADICIONADA", font=("Arial",45,"bold")).grid(row=6, column=1, pady=20)
             else:

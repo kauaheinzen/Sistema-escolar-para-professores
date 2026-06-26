@@ -25,11 +25,11 @@ def validar_data(data, turma_abertura):
     '''Valida se a data é maior que a de hoje ou se é menor que a data de abertura da turma'''
     try:
         if isinstance(data, str):
-            data = datetime.datetime.strptime(data.replace("-", "/"), "%Y/%m/%d").date()
+            data = datetime.strptime(data.replace("-", "/"), "%Y/%m/%d").date()
         
-        hoje = datetime.date.today()
+        hoje = date.today()
 
-        if isinstance(turma_abertura, datetime.datetime):
+        if isinstance(turma_abertura, datetime):
             abertura_objeto = turma_abertura.date()
 
         elif isinstance(turma_abertura, datetime.date):
@@ -37,15 +37,24 @@ def validar_data(data, turma_abertura):
 
         else:
             abertura_limpa = str(turma_abertura)[:10].replace("-", "/")
-            abertura_objeto = datetime.datetime.strptime(abertura_limpa, "%Y/%m/%d").date()
+            abertura_objeto = datetime.strptime(abertura_limpa, "%Y/%m/%d").date()
+
+        print("data:", data)
+        print("hoje:", hoje)
+        print("abertura:", abertura_objeto)
 
         if data > hoje:
+            print("Data maior que hoje")
             return False
+
         if data < abertura_objeto:
+            print("Data menor que abertura")
             return False
         
+        print(data.strftime("%Y-%m-%d"))
         return data.strftime("%Y-%m-%d")
-    except:
+    except Exception as e:
+        print (e)
         return False
 
 def validar_adm(nome, senha):

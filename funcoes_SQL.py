@@ -121,14 +121,14 @@ def cadastrar_alunos(nome, idade, email, turma, nome_responsavel = '', email_res
         conn.close()
 
 
-def registrar_avaliacao(data, aluno, nome_avaliacao, nota):
+def registrar_avaliacao(data, aluno, nome_avaliacao, nota, materia):
     '''Registra avaliações'''
     conn = conectar()
     cursor = conn.cursor()
 
     try:
-        sql = 'INSERT INTO avaliacoes (data_avaliacao, fk_id_alunos, nome_avaliacao, nota) VALUES (%s, %s, %s, %s)'
-        valores = (data, aluno, nome_avaliacao, nota)
+        sql = 'INSERT INTO avaliacoes (data_avaliacao, fk_id_aluno, nome_avaliacao, nota, fk_id_materia) VALUES (%s, %s, %s, %s, %s)'
+        valores = (data, aluno, nome_avaliacao, nota, materia)
 
         cursor.execute(sql, valores)
         conn.commit()
@@ -597,16 +597,31 @@ def ler_data_turma(id_aluno):
     return data
 
 
-def ler_turma_aluno(id):
-    '''retorna o id da turma de um aluno'''
+def ler_materia_professor(id):
+    '''retorna o id da materia de um professor'''
     conn = conectar()
     cursor = conn.cursor()
 
-    sql = 'SELECT fk_id_turma FROM alunos WHERE id_aluno = %s'
-    cursor.execute(sql, (id,))
+    sql = 'SELECT fk_id_materia FROM professores WHERE id_professor = %s'
+    cursor.execute(sql, id)
 
-    turma = cursor.fetchone()
+    materia = cursor.fetchone()
 
     cursor.close()
     conn.close()
-    return turma
+    return materia
+
+
+def ler_turmas_materias(materia):
+    '''retorna o id de turmas que possuem uma matéria específica'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = 'SELECT fk_id_turma FROM turma_materias WHERE fk_id_materia = %s'
+    cursor.execute(sql, materia)
+
+    turmas = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return turmas
