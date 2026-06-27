@@ -211,3 +211,63 @@ def validar_turma_aluno_professor(id_aluno, id_professor):
     finally:
         cursor.close()
         conn.close()
+
+
+def validar_limite_turma():
+    '''valida se o sistema atingiu o limite de turmas'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        sql = 'SELECT COUNT(*) FROM turmas WHERE ativo = 1'
+        cursor.execute(sql,)
+        quantidade_turmas = cursor.fetchone()[0]
+
+        if quantidade_turmas < 20:
+            return True
+
+        return False
+
+    finally:
+        cursor.close()
+        conn.close()
+
+
+def validar_limite_materias():
+    '''valida se o sistema atingiu o limite de materias'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        sql = 'SELECT COUNT(*) FROM materias WHERE ativo = 1'
+        cursor.execute(sql,)
+        quantidade_materias = cursor.fetchone()[0]
+
+        if quantidade_materias < 20:
+            return True
+
+        return False
+
+    finally:
+        cursor.close()
+        conn.close()
+
+
+def validar_limite_alunos_turma(turma):
+    '''valida se a turma atingiu o limite de alunos'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        sql = 'SELECT COUNT(*) FROM alunos WHERE fk_id_turma = %s AND ativo = 1'
+        cursor.execute(sql, (turma,))
+        quantidade_alunos = cursor.fetchone()[0]
+
+        if quantidade_alunos < 40:
+            return True
+
+        return False
+
+    finally:
+        cursor.close()
+        conn.close()

@@ -135,6 +135,7 @@ def registrar_avaliacao(data, aluno, nome_avaliacao, nota, materia):
         return False
 
     except Error as e:
+        print(e)
         conn.rollback()
         return f"Ocorreu um erro {e}. Registro da avaliação cancelado."
     
@@ -627,7 +628,7 @@ def ler_turmas_materias(materia):
     conn = conectar()
     cursor = conn.cursor()
 
-    sql = 'SELECT fk_id_turma FROM turma_materias WHERE fk_id_materia = %s'
+    sql = 'SELECT fk_id_turma FROM turma_materias WHERE fk_id_materia = %s AND ativo = 1'
     cursor.execute(sql, (materia,))
 
     id_turma = cursor.fetchall()
@@ -700,3 +701,109 @@ def ler_turma_aluno(id_aluno):
     cursor.close()
     conn.close()
     return turma
+
+
+def ler_media_aluno(id_aluno, id_materia):
+    '''Retorna a média de um aluno com base em seu ID e o ID da matéria na qual está sendo avaliado'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = 'SELECT media_atual FROM aluno_materias WHERE fk_id_aluno = %s and fk_id_materia = %s'
+    valores = (id_aluno, id_materia)
+    cursor.execute(sql, valores)
+
+    media = cursor.fetchone()
+
+    conn.close()
+    cursor.close()
+    return media
+
+
+def ler_turmas_ativas():
+    '''mostra todos as turmas ativas'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = 'SELECT * FROM turmas WHERE ativo = 1'
+    cursor.execute(sql,)
+    
+    turmas = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return turmas
+
+
+def ler_materias_ativas():
+    '''mostra todas as matérias ativas'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = 'SELECT * FROM materias WHERE ativo = 1'
+    cursor.execute(sql,)
+    
+    materias = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return materias
+
+
+def ler_alunos_ativados_desativados(acao):
+    '''mostra alunos ativados ou desativados'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = 'SELECT * FROM alunos WHERE ativo = %s'
+    cursor.execute(sql, (acao,))
+    
+    alunos = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return alunos
+
+
+def ler_professores_ativados_desativados(acao):
+    '''mostra professores ativados ou desativados'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = 'SELECT * FROM professores WHERE ativo = %s'
+    cursor.execute(sql, (acao,))
+    
+    professores = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return professores
+
+
+def ler_turmas_ativadas_desativadas(acao):
+    '''mostra turmas ativadas ou desativadas'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = 'SELECT * FROM turmas WHERE ativo = %s'
+    cursor.execute(sql, (acao,))
+    
+    turmas = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return turmas
+
+
+def ler_materias_ativadas_desativadas(acao):
+    '''mostra matérias ativadas ou desativadas'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = 'SELECT * FROM materias WHERE ativo = %s'
+    cursor.execute(sql, (acao,))
+    
+    materias = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return materias
