@@ -978,7 +978,7 @@ def tela_atualizar_professor():
                     materia = ler_materia_professor(id.get())
                     valida_turma = validar_turma_materias(id_turma, materia[0])
                     if valida_turma:
-                        vincular_professor_turma(id.get(), "fk_id_turma", id_turma)
+                        atualizar_professor(id.get(), "fk_id_turma", id_turma)
                         ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO", width=250, font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
                     else:
                         ctk.CTkLabel(frame_principal,text="TURMA NÃO POSSUI A MATÉRIA DO PROFESSOR", width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
