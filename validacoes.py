@@ -319,3 +319,19 @@ def validar_id_materia(id):
     finally:
         cursor.close()
         conn.close()
+
+
+def validar_turma_materias(id_turma, id_materia):
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        sql = 'SELECT 1 FROM turma_materias WHERE fk_id_turma = %s AND fk_id_materia = %s'
+        cursor.execute(sql, (id_turma, id_materia))
+
+        return cursor.fetchone() is not None
+
+
+    finally:
+        cursor.close()
+        conn.close()

@@ -7,7 +7,7 @@ def conectar():
         conexao = mysql.connector.connect(
             host = '127.0.0.1',
             user = 'root',
-            password = 'Senac2026',
+            password = '0201/Snoopy',
             database = 'escola'
         )
         return conexao
@@ -142,28 +142,52 @@ def registrar_avaliacao(data, aluno, nome_avaliacao, nota, materia):
         conn.close()
 
 
-def atualizar_professor(id, item_alterar, alteracao):
+def atualizar_professor(id_professor, coluna, valor):
     '''atualiza o cadastro de um professor'''
     conn = conectar()
     cursor = conn.cursor()
 
     try:
-        sql = 'UPDATE professores SET %s = %s WHERE id_professor = %s'
-        valores = (item_alterar, alteracao, id)
+        colunas_permitidas = [
+            "nome_professor",
+            "idade_professor",
+            "email_professor",
+            "fk_id_turma",
+        ]
 
-        cursor.execute(sql, valores)
+        if coluna not in colunas_permitidas:
+            print("Coluna inválida")
+            return False
+
+        if coluna == "idade_professor":
+            valor = int(valor)
+            id_professor = int(id_professor)
+
+        if coluna == "fk_id_turma":
+            valor = int(valor)
+            id_professor = int(id_professor)
+            sql = "INSERT INTO professor_turma (fk_id_professor, fk_id_turma) VALUES (%s, %s)"
+            cursor.execute(sql, (id_professor, valor))
+        
+        else:
+            sql = f"UPDATE professores SET {coluna} = %s WHERE id_professor = %s"
+            cursor.execute(sql, (valor, id_professor))
+
         conn.commit()
+        return True
 
     except Error as e:
+        print("ERRO MYSQL:", e)
         conn.rollback()
-        return f"Ocorreu um erro {e}. Alteração cancelada."
-    
+        return False
+
     finally:
         cursor.close()
         conn.close()
 
 
 def atualizar_aluno(id_aluno, coluna, valor):
+    '''atualiza o cadastro de um aluno'''
     conn = conectar()
     cursor = conn.cursor()
 
@@ -181,7 +205,6 @@ def atualizar_aluno(id_aluno, coluna, valor):
             print("Coluna inválida")
             return False
 
-        # força tipo correto
         if coluna in ["idade_aluno", "fk_id_turma"]:
             valor = int(valor)
             id_aluno = int(id_aluno)
@@ -238,8 +261,10 @@ def desativar_reativar_materia(id, acao):
         cursor.execute(sql, valores)
         
         conn.commit()
-        desativar_reativar_turma_materia(acao, materia=id)
-        desativar_reativar_aluno_materia(acao, materia=id)
+
+        if acao == 0:
+            desativar_reativar_turma_materia(acao, materia=id)
+            desativar_reativar_aluno_materia(acao, materia=id)
     
     except:
         conn.rollback()
@@ -269,8 +294,30 @@ def desativar_reativar_turma_e_alunos(id, acao):
             cursor.execute(sql_aluno, valores)
     
         conn.commit()
-        desativar_reativar_turma_materia(acao, turma=id)
-        desativar_reativar_professor_turma(acao, turma=id)
+        
+        if acao == 0:
+            desativar_reativar_turma_materia(acao, turma=id)
+            desativar_reativar_professor_turma(acao, turma=id)
+        else:
+            sql_ver_materia = 'SELECT id_materia FROM materias WHERE ativo = 1'
+            cursor.execute(sql_ver_materia,)
+            materias = cursor.fetchall()
+            for materia in materias:
+                sql_ver_turma_materia = 'SELECT 1 FROM turma_materias WHERE fk_id_turma = %s AND fk_id_materia = %s'
+                cursor.execute(sql_ver_turma_materia, (id, materia[0]))
+                resultado = cursor.fetchone()
+                if resultado is not None:
+                    desativar_reativar_turma_materia(acao, turma=id, materia=materia[0])
+
+            sql_ver_professor = 'SELECT id_professor FROM professores WHERE ativo = 1'
+            cursor.execute(sql_ver_professor,)
+            professores = cursor.fetchall()
+            for professor in professores:
+                sql_ver_professor_turma = 'SELECT 1 FROM professor_turma WHERE fk_id_turma = %s AND fk_id_professor = %s'
+                cursor.execute(sql_ver_professor_turma, (id, professor[0]))
+                resultado = cursor.fetchone()
+                if resultado is not None:
+                    desativar_reativar_professor_turma(acao, turma=id, professor=professor[0])
         return False
 
     except Exception as e:
@@ -295,7 +342,9 @@ def desativar_reativar_professor(id, acao):
         cursor.execute(sql, valores)
         
         conn.commit()
-        desativar_reativar_professor_turma(acao, professor=id)
+
+        if acao == 0:
+            desativar_reativar_professor_turma(acao, professor=id)
     
     except:
         conn.rollback()
@@ -317,7 +366,9 @@ def desativar_reativar_aluno(id, acao):
         cursor.execute(sql, valores)
         
         conn.commit()
-        desativar_reativar_aluno_materia(acao, aluno=id)
+
+        if acao == 0:
+            desativar_reativar_aluno_materia(acao, aluno=id)
     
     except:
         conn.rollback()

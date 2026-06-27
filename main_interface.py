@@ -702,11 +702,11 @@ def tela_atualizar_aluno():
     global id_turma
     id_turma = 0
 
-    def executar_atualizacao(turma):
+    def executar_atualizacao(id, turma):
         global id_turma
         id_turma = 0
         id_turma = (turma)
-        atualizar()
+        atualizar(id)
 
 
     def muda_opcao(opcao):
@@ -719,9 +719,10 @@ def tela_atualizar_aluno():
         limpar_frame()
         turmas = ler_turmas_ativas()
         ctk.CTkLabel(frame_principal,text="SELECIONE A TURMA DO ALUNO",width=300, font=("Arial",50,"bold")).grid(row=0, column=0, columnspan=3, pady=(40, 20), sticky="n")
+        entrar_id=ctk.CTkEntry(frame_principal,placeholder_text="MATRÍCULA DO ALUNO",width=300); entrar_id.grid(row=1, column=0, columnspan=3, pady=10)
 
         if not turmas:
-            ctk.CTkLabel(frame_principal,text="NÃO HÁ TURMAS CADASTRADAS",width=250, text_color="red", font=("Arial",35,"bold")).grid(row=1, column=1, pady=200) 
+            ctk.CTkLabel(frame_principal,text="NÃO HÁ TURMAS CADASTRADAS",width=250, text_color="red", font=("Arial",35,"bold")).grid(row=2, column=0, columnspan=3, pady=200) 
             app.update()
 
             sleep(1.5)
@@ -730,13 +731,13 @@ def tela_atualizar_aluno():
         else:
             for turma in turmas:
                 if turma[0] < 6:
-                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=lambda m=turma[0]: executar_atualizacao(m)).grid(row=turma[0], column=0, padx=100, pady=50, stick="nw")
+                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=lambda m=turma[0]: executar_atualizacao(entrar_id, m)).grid(row=turma[0] + 1, column=0, padx=100, pady=50, stick="nw")
                 elif turma[0] < 11:
-                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=lambda m=turma[0]: executar_atualizacao(m)).grid(row=turma[0] - 5, column=1, pady=50)
+                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=lambda m=turma[0]: executar_atualizacao(entrar_id, m)).grid(row=turma[0] - 4, column=1, pady=50)
                 elif turma[0] < 16:
-                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=lambda m=turma[0]: executar_atualizacao(m)).grid(row=turma[0] - 10, column=2, padx=100, pady=50, stick="ne")
+                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=lambda m=turma[0]: executar_atualizacao(entrar_id,  m)).grid(row=turma[0] - 9, column=2, padx=100, pady=50, stick="ne")
                 else:
-                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=lambda m=turma[0]: executar_atualizacao(m)).grid(row=turma[0] - 15, column=3, padx=100, pady=50, stick="ne")
+                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=lambda m=turma[0]: executar_atualizacao(entrar_id, m)).grid(row=turma[0] - 14, column=3, padx=100, pady=50, stick="ne")
 
 
         ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=tela_atualizar_aluno).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
@@ -760,28 +761,45 @@ def tela_atualizar_aluno():
     
 
 
-    def atualizar():
+    def atualizar(id = ''):
         alunos = ler_alunos()
-        valida_id = validar_id_aluno(entrar_id.get())
+        valida_id = False
+
         if not alunos:
             ctk.CTkLabel(frame_principal,text="NÃO HÁ ALUNOS CADASTRADOS",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
             app.update()
             sleep(1.5)
             app.after(0000, menu_principal_admin)
             return
+        
+        if not id == '':
+            if id.get().strip():
+                valida_id = validar_id_aluno(id.get())
+                if valida_id and id_turma != 0:
+                    atualizar_aluno(id.get(), "fk_id_turma", id_turma)
+                    ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO", width=250, font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
+                    app.update()
+                    sleep(1.5)
+                    app.after(0000, menu_principal_admin)
+                    return
+            
+        elif entrar_id.get().strip():
+            valida_id = validar_id_aluno(entrar_id.get())
+            if valida_id and id_turma != 0:
+                atualizar_aluno(entrar_id.get(), "fk_id_turma", id_turma)
+                ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO", width=250, font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
+                app.update()
+                sleep(1.5)
+                app.after(0000, menu_principal_admin)
+                return
+            
         if not valida_id:
             ctk.CTkLabel(frame_principal,text="MATRICULA DO ALUNO NÃO INSERIDA",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
             app.update()
             sleep(1.5)
             app.after(0000, tela_atualizar_aluno)
             return
-        elif id_turma != 0:
-            atualizar_aluno(entrar_id.get(), "fk_id_turma", id_turma)
-            ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO", width=250, font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
-            app.update()
-            sleep(1.5)
-            app.after(0000, menu_principal_admin)
-
+        
         else:
             if not item:
                 tela_atualizar_aluno()
@@ -868,11 +886,9 @@ def tela_atualizar_professor():
 
     def executar_atualizacao(id, turma):
         global id_turma
-        global id_professor
 
-        id_professor = id
         id_turma = turma
-        atualizar()
+        atualizar(id)
 
 
     def muda_opcao(opcao):
@@ -884,28 +900,29 @@ def tela_atualizar_professor():
         botao_turma = {}
         limpar_frame()
         turmas = ler_turmas_ativas()
-        ctk.CTkLabel(frame_principal,text="SELECIONE A TURMA DO ALUNO",width=300, font=("Arial",50,"bold")).grid(row=0, column=0, columnspan=3, pady=(40, 20), sticky="n")
+        ctk.CTkLabel(frame_principal,text="SELECIONE A TURMA",width=300, font=("Arial",50,"bold")).grid(row=0, column=0, columnspan=3, pady=(40, 20), sticky="n")
+        entrar_id=ctk.CTkEntry(frame_principal,placeholder_text="ID do Professor",width=300); entrar_id.grid(row=1, column=0, columnspan=3, pady=10)
 
         if not turmas:
-            ctk.CTkLabel(frame_principal,text="NÃO HÁ TURMAS CADASTRADAS",width=250, text_color="red", font=("Arial",35,"bold")).grid(row=1, column=1, pady=200) 
+            ctk.CTkLabel(frame_principal,text="NÃO HÁ TURMAS CADASTRADAS",width=250, text_color="red", font=("Arial",35,"bold")).grid(row=2, column=0, columnspan=3, pady=200) 
             app.update()
             
             sleep(1.5)
-            app.after(0, tela_atualizar_aluno)
+            app.after(0, tela_atualizar_professor)
             return 
         else:
             for turma in turmas:
                 if turma[0] < 6:
-                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=lambda: executar_atualizacao(turma[0])).grid(row=turma[0], column=0, padx=100, pady=50, stick="nw")
+                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=lambda t=turma[0]: executar_atualizacao(entrar_id, t)).grid(row=turma[0] + 1, column=0, padx=100, pady=50, stick="nw")
                 elif turma[0] < 11:
-                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=lambda: executar_atualizacao(turma[0])).grid(row=turma[0] - 5, column=1, pady=50)
+                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=lambda t=turma[0]: executar_atualizacao(entrar_id, t)).grid(row=turma[0] - 4, column=1, pady=50)
                 elif turma[0] < 16:
-                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=lambda: executar_atualizacao(turma[0])).grid(row=turma[0] - 10, column=2, padx=100, pady=50, stick="ne")
+                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=lambda t=turma[0]: executar_atualizacao(entrar_id, t)).grid(row=turma[0] - 9, column=2, padx=100, pady=50, stick="ne")
                 else:
-                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=lambda: executar_atualizacao(turma[0])).grid(row=turma[0] - 15, column=3, padx=100, pady=50, stick="ne")
+                    botao_turma[turma[0]] = ctk.CTkButton(frame_principal, text=turma[1], width=350, height=40, font=("Arial", 25), command=lambda t=turma[0]: executar_atualizacao(entrar_id, t)).grid(row=turma[0] - 14, column=3, padx=100, pady=50, stick="ne")
 
 
-        ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=tela_atualizar_aluno).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
+        ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=tela_atualizar_professor).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
         ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
 
     def opcao_troca():
@@ -916,31 +933,59 @@ def tela_atualizar_professor():
         ctk.CTkButton(frame_principal, text="Adicionar Turma Ao Professor", width=350, height=40, font=("Arial", 25), command=tela_adiciona_turma).grid(row=4, column=1, pady=(40, 20), sticky="n")
         
     opcao_troca()
-    ctk.CTkLabel(frame_principal,text="ATUALIZAR ALUNO",font=("Arial",45,"bold")).grid(row=0, column=0, columnspan=3, pady=(40, 20), sticky="n")
+    ctk.CTkLabel(frame_principal,text="ATUALIZAR PROFESSOR",font=("Arial",45,"bold")).grid(row=0, column=0, columnspan=3, pady=(40, 20), sticky="n")
     ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=menu_principal_admin).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
     ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
-    entrar_id=ctk.CTkEntry(frame_principal,placeholder_text="ID do Professor",width=300); entrar_id.grid(row=1, column=1, pady=10)
-    entrar_item=ctk.CTkEntry(frame_principal,placeholder_text=f"Nova alteração", height=30, width=500); entrar_item.grid(row=5, column=1, pady=30)
+    entrar_id=ctk.CTkEntry(frame_principal,placeholder_text="ID do Professor",width=300); entrar_id.grid(row=1, column=0, columnspan=3, pady=10)
+    entrar_item=ctk.CTkEntry(frame_principal,placeholder_text=f"Nova alteração", height=30, width=500); entrar_item.grid(row=5, column=0, columnspan=3, pady=30)
 
 
 
-    def atualizar():
+    def atualizar(id = ''):
         professores = ler_professores()
-        valida_id = validar_id_professor(entrar_id.get())
+        valida_id = False
+        
         if not professores:
             ctk.CTkLabel(frame_principal,text="NÃO HÁ PROFESSORES CADASTRADOS",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
             app.update()
             sleep(1.5)
             app.after(0000, menu_principal_admin)
-
-        if id_turma != 0:
-            vincular_professor_turma(entrar_id.get(), "fk_id_turma")
-            ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO", width=250, font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
-
-        elif not valida_id:
+        
+        if not id == '':
+            if id.get().strip():
+                valida_id = validar_id_professor(id.get())
+                if valida_id and id_turma != 0:
+                    materia = ler_materia_professor(id.get())
+                    valida_turma = validar_turma_materias(id_turma, materia[0])
+                    if valida_turma:
+                        vincular_professor_turma(id.get(), "fk_id_turma", id_turma)
+                        ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO", width=250, font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
+                    else:
+                        ctk.CTkLabel(frame_principal,text="TURMA NÃO POSSUI A MATÉRIA DO PROFESSOR", width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
+                    
+                    app.update()
+                    sleep(1.5)
+                    app.after(0000, menu_principal_admin)
+                    return
+            
+        elif entrar_id.get().strip():
+            valida_id = validar_id_professor(entrar_id.get())
+            if valida_id and id_turma != 0:
+                vincular_professor_turma(entrar_id.get(), "fk_id_turma", id_turma)
+                ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO", width=250, font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
+                app.update()
+                sleep(1.5)
+                app.after(0000, menu_principal_admin)
+                return
+            
+        if not valida_id:
             tela_atualizar_aluno()
-            ctk.CTkLabel(frame_principal,text="ID DO PROFESSOR NÃO INSERIDO",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
+            ctk.CTkLabel(frame_principal,text="ID DO PROFESSOR NÃO VÁLIDO",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
+            app.update()
+            sleep(1.5)
+            app.after(0000, menu_principal_admin)
             return
+        
         else:
             if not item:
                 tela_atualizar_aluno()
@@ -964,28 +1009,28 @@ def tela_atualizar_professor():
                     if valida:
                         atualiza=atualizar_professor(entrar_id.get(), "idade_professor", entrar_item.get())
                         if atualiza:
-                            ctk.CTkLabel(frame_principal,text=valida[1], width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
+                            ctk.CTkLabel(frame_principal,text=valida[1], width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
                         else:
-                            ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO", width=250, font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
+                            ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO", width=250, font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
                     else:
-                        ctk.CTkLabel(frame_principal,text="Idade Inválido", width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
+                        ctk.CTkLabel(frame_principal,text="Idade Inválido", width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
 
 
                 case "e-mail":
                     atualiza=atualizar_professor(entrar_id.get(), "email_professor", entrar_item.get())
                     if atualiza:
-                        ctk.CTkLabel(frame_principal,text=valida[1], width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
+                        ctk.CTkLabel(frame_principal,text=valida[1], width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
                     else:
-                        ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO", width=250, font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
+                        ctk.CTkLabel(frame_principal,text="CADASTRO ATUALIZADO", width=250, font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
 
 
                 case default:
-                    ctk.CTkLabel(frame_principal,text="Erro ao Realizar Cadastro, por favor preencha os dados corretamente", width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=1, pady=50)
+                    ctk.CTkLabel(frame_principal,text="Erro ao Realizar Cadastro, por favor preencha os dados corretamente", width=250, text_color="red", font=("Arial",35,"bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
         
 
         app.after(1500, menu_principal_admin)
 
-    ctk.CTkButton(frame_principal,text="Atualizar Professor",height=50, width=450,command=atualizar).grid(row=6, column=1, pady=40)
+    ctk.CTkButton(frame_principal,text="Atualizar Professor",height=50, width=450,command=atualizar).grid(row=6, column=0, columnspan=3, pady=40)
 
 
 def tela_desativar_turma():
@@ -1283,17 +1328,19 @@ def tela_desativar_avaliacao():
 
 def tela_ler_alunos_do_professor():
     limpar_frame()
-    ctk.CTkLabel(frame_principal,text="ALUNOS DO PROFESSOR",font=("Arial",40,"bold")).pack(pady=20)
-    ctk.CTkButton(frame_principal,text="←",width=50,command=menu_principal_professor).place(x=20, y=20)
-    ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1840,y=20)
+    ctk.CTkLabel(frame_principal,text="ALUNOS DO PROFESSOR",font=("Arial",40,"bold")).grid(row=0,column=1,pady=20)
+    ctk.CTkButton(frame_principal,text="←",width=50,command=menu_principal_professor).grid(row=0,column=0,sticky="w",padx=20)   
+    ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0,column=2,sticky="e",padx=20)
 
     frame_botoes = ctk.CTkFrame(frame_principal)
     frame_botoes.pack(pady=10)
 
-    textbox = ctk.CTkTextbox(frame_principal, width=900, height=500)
-    textbox.pack(pady=20)
-
     def mostrar_alunos_turma(id_turma, nome_turma):
+        limpar_frame()
+        ctk.CTkButton(frame_principal,text="←",width=50,command=menu_principal_professor).place(x=20, y=20)
+        ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1840,y=20)
+        textbox = ctk.CTkTextbox(frame_principal, width=900, height=500)
+        textbox.pack(pady=20)
         textbox.delete("1.0", "end")
         alunos = ler_alunos_turma(id_turma)
         textbox.insert("end", f"--- TURMA: {nome_turma} ---\n\n")
@@ -1306,6 +1353,11 @@ def tela_ler_alunos_do_professor():
                 textbox.insert("end", f"MATRÍCULA: {aluno[0]} | NOME: {aluno[1]}\nRESPONSÁVEL: {aluno[5]}\nEMAIL DO RESPONSÁVEL: {aluno[6]}\nMÉDIA: {media[0]}\n==========\n")
 
     def mostrar_todas_turmas():
+        limpar_frame()
+        ctk.CTkButton(frame_principal,text="←",width=50,command=menu_principal_professor).place(x=20, y=20)
+        ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).place(x=1840,y=20)
+        textbox = ctk.CTkTextbox(frame_principal, width=900, height=500)
+        textbox.pack(pady=20)
         textbox.delete("1.0", "end")
         turmas = ler_turmas_professor(id_login[0])
         if not turmas:
@@ -1325,12 +1377,12 @@ def tela_ler_alunos_do_professor():
 
     turmas_professor = ler_turmas_professor(id_login[0])
 
-    ctk.CTkButton(frame_botoes, text="Todas as Turmas", width=200, height=40,fg_color=("#2563EB","#475569"), hover_color=("#1D4ED8","#334155"),command=mostrar_todas_turmas).pack(side="left", padx=10, pady=10)
 
     if not turmas_professor:
         ctk.CTkLabel(frame_principal, text="NÃO HÁ TURMAS VINCULADAS A ESTE PROFESSOR",text_color="red", font=("Arial",25,"bold")).pack(pady=10)
     else:
         for turma in turmas_professor:
+            ctk.CTkButton(frame_botoes, text="Todas as Turmas", width=200, height=40,fg_color=("#2563EB","#475569"), hover_color=("#1D4ED8","#334155"),command=mostrar_todas_turmas).pack(side="center", padx=10, pady=10)
             ctk.CTkButton(frame_botoes, text=turma[1], width=200, height=40,fg_color=("#475569","#2563EB"), hover_color=("#334155","#1D4ED8"),command=lambda t=turma[0], n=turma[1]: mostrar_alunos_turma(t, n)).pack(side="left", padx=10, pady=10)
 
 
