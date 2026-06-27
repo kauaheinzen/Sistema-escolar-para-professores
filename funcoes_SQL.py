@@ -1,8 +1,6 @@
 import mysql.connector
 from mysql.connector import Error
 
-# faça com que o def (criar_admin_iniciar) execute ao iniciar o programa
-
 def conectar():
     '''Faz a conexão entre o Python e o MySQL'''
     try:
@@ -240,6 +238,8 @@ def desativar_reativar_materia(id, acao):
         cursor.execute(sql, valores)
         
         conn.commit()
+        desativar_reativar_turma_materia(acao, materia=id)
+        desativar_reativar_aluno_materia(acao, materia=id)
     
     except:
         conn.rollback()
@@ -269,6 +269,8 @@ def desativar_reativar_turma_e_alunos(id, acao):
             cursor.execute(sql_aluno, valores)
     
         conn.commit()
+        desativar_reativar_turma_materia(acao, turma=id)
+        desativar_reativar_professor_turma(acao, turma=id)
         return False
 
     except Exception as e:
@@ -293,6 +295,7 @@ def desativar_reativar_professor(id, acao):
         cursor.execute(sql, valores)
         
         conn.commit()
+        desativar_reativar_professor_turma(acao, professor=id)
     
     except:
         conn.rollback()
@@ -314,6 +317,7 @@ def desativar_reativar_aluno(id, acao):
         cursor.execute(sql, valores)
         
         conn.commit()
+        desativar_reativar_aluno_materia(acao, aluno=id)
     
     except:
         conn.rollback()
@@ -435,13 +439,47 @@ def ler_alunos():
     return alunos
 
 
+def ler_avaliacoes(materia):
+    '''mostra todas as avaliações'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = 'SELECT * FROM avaliacoes WHERE fk_id_materia = %s'
+    cursor.execute(sql, (materia,))
+    
+    avaliacoes = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return avaliacoes
+
+
 def buscar_alunos(nome):
     '''busca todos alunos'''
     conn = conectar()
     cursor = conn.cursor()
 
+    nome_pesquisa = f"%{nome}%"
+
     sql = "SELECT * FROM alunos WHERE nome_aluno LIKE %s"
-    cursor.execute(sql, (nome,))
+    cursor.execute(sql, (nome_pesquisa,))
+    
+    alunos = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return alunos
+
+
+def buscar_alunos_professor(nome, turma):
+    '''busca todos alunos'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    nome_pesquisa = f"%{nome}%"
+
+    sql = "SELECT * FROM alunos WHERE nome_aluno LIKE %s AND fk_id_turma = %s"
+    cursor.execute(sql, (nome_pesquisa, turma))
     
     alunos = cursor.fetchall()
 
@@ -552,7 +590,7 @@ def ler_turmas_professor(id_professor):
         FROM turmas t
         INNER JOIN professor_turma pt
         ON t.id_turma = pt.fk_id_turma
-        WHERE pt.fk_id_professor = %s
+        WHERE pt.fk_id_professor = %s AND pt.ativo = 1
         '''
 
         cursor.execute(sql, (id_professor,))
@@ -577,7 +615,7 @@ def ler_alunos_turma(id_turma):
     conn = conectar()
     cursor = conn.cursor()
 
-    sql = 'SELECT * FROM alunos WHERE fk_id_turma = %s'
+    sql = 'SELECT * FROM alunos WHERE fk_id_turma = %s AND ativo = 1'
     cursor.execute(sql, (id_turma,))
 
     alunos = cursor.fetchall()
@@ -613,7 +651,7 @@ def ler_materia_professor(id):
     cursor = conn.cursor()
 
     sql = 'SELECT fk_id_materia FROM professores WHERE id_professor = %s'
-    cursor.execute(sql, id)
+    cursor.execute(sql, (id,))
 
     materia = cursor.fetchone()
 
@@ -807,3 +845,93 @@ def ler_materias_ativadas_desativadas(acao):
     cursor.close()
     conn.close()
     return materias
+
+
+def desativar_reativar_turma_materia(acao, turma='', materia=''):
+    '''desativa ou reativa uma matéria em uma turma'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        if turma:
+            sql = 'UPDATE turma_materias SET ativo = %s WHERE fk_id_turma = %s AND fk_id_materia = %s'
+            valores = (acao, turma) 
+            cursor.execute(sql, valores)
+        elif materia:
+            sql = 'UPDATE turma_materias SET ativo = %s WHERE fk_id_materia = %s'
+            valores = (acao, materia)
+            cursor.execute(sql, valores)
+
+        conn.commit()
+    
+    except:
+        conn.rollback()
+    
+    finally:
+        cursor.close()
+        conn.close()
+
+
+def desativar_reativar_professor_turma(acao, turma='', professor=''):
+    '''desativa ou reativa um professor em uma turma'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        if turma:
+            sql = 'UPDATE professor_turma SET ativo = %s WHERE fk_id_turma = %s'
+            valores = (acao, turma)
+            cursor.execute(sql, valores)
+        elif professor:
+            sql = 'UPDATE professor_turma SET ativo = %s WHERE fk_id_professor = %s'
+            valores = (acao, professor)
+            cursor.execute(sql, valores)
+
+        conn.commit()
+    
+    except:
+        conn.rollback()
+    
+    finally:
+        cursor.close()
+        conn.close()
+
+
+def desativar_reativar_aluno_materia(acao, aluno='', materia=''):
+    '''desativa ou reativa um aluno em uma matéria'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        if aluno:
+            sql = 'UPDATE aluno_materias SET ativo = %s WHERE fk_id_aluno = %s'
+            valores = (acao, aluno)
+            cursor.execute(sql, valores)
+        elif materia:
+            sql = 'UPDATE aluno_materias SET ativo = %s WHERE fk_id_materia = %s'
+            valores = (acao, materia)
+            cursor.execute(sql, valores)
+
+        conn.commit()
+    
+    except:
+        conn.rollback()
+    
+    finally:
+        cursor.close()
+        conn.close()
+
+
+def ler_avaliacoes_ativadas_desativadas(materia, acao):
+    '''mostra avaliacoes ativadas ou desativadas'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = 'SELECT * FROM avaliacoes WHERE ativo = %s AND fk_id_materia = %s'
+    cursor.execute(sql, (acao, materia))
+    
+    avaliacoes = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return avaliacoes

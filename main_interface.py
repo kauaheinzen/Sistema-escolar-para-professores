@@ -668,15 +668,19 @@ def tela_desativar_materia():
         global acao
         acao = 0
 
-    def mostrar_mensagem():
-        if acao == 0 and entrar_id_desativar.get():
-            ctk.CTkLabel(frame_principal, text="MATÉRIA DESATIVADA", font=("Arial",45,"bold")).place(x=720, y=420)
-        elif acao == 1 and entrar_id_desativar.get():
-            ctk.CTkLabel(frame_principal, text="MATÉRIA REATIVADA", font=("Arial",45,"bold")).place(x=720, y=420)
+    def valida_dados(entrar_id_desativar, acao):
+        if entrar_id_desativar.get():
+            valida_id = validar_id_materia(entrar_id_desativar.get())
+            if valida_id:
+                if acao == 0 and entrar_id_desativar.get():
+                    ctk.CTkLabel(frame_principal, text="MATÉRIA DESATIVADA", font=("Arial",45,"bold")).place(x=750, y=420)
+                elif acao == 1 and entrar_id_desativar.get():
+                    ctk.CTkLabel(frame_principal, text="MATÉRIA REATIVADA", font=("Arial",45,"bold")).place(x=750, y=420)
+            else:
+                ctk.CTkLabel(frame_principal, text="ID INVÁLIDO", font=("Arial",45,"bold")).place(x=800, y=420)
         else:
-            ctk.CTkLabel(frame_principal, text="ID NÃO INSERIDO", font=("Arial",45,"bold")).place(x=800, y=420)
+            ctk.CTkLabel(frame_principal, text="ID INVÁLIDO", font=("Arial",45,"bold")).place(x=800, y=420)
 
-        
         app.after(1500, menu_principal_admin)
 
 
@@ -688,7 +692,7 @@ def tela_desativar_materia():
 
     entrar_id_desativar=ctk.CTkEntry(frame_principal,placeholder_text="ID da matéria",width=300); entrar_id_desativar.place(x=820, y=280)
 
-    ctk.CTkButton(frame_principal, text="Ativar/Desativar Matéria", width=250, fg_color='red', command=lambda: (desativar_reativar_materia(entrar_id_desativar.get(), acao), app.after(300, mostrar_mensagem))).place(x=850, y=350)
+    ctk.CTkButton(frame_principal, text="Ativar/Desativar Matéria", width=250, fg_color='red', command=lambda: valida_dados(entrar_id_desativar, acao)).place(x=850, y=350)
 
 
 def tela_atualizar_aluno():
@@ -996,14 +1000,20 @@ def tela_desativar_turma():
         global acao
         acao = 0
     
-    def mostrar_mensagem():
-        if acao == 0 and entrar_id_desativar.get():
-            ctk.CTkLabel(frame_principal, text="TURMA E ALUNOS DESATIVADOS", font=("Arial",45,"bold")).place(x=600, y=420)
-        elif acao == 1 and entrar_id_desativar.get():
-            ctk.CTkLabel(frame_principal, text="TURMA E ALUNOS REATIVADOS", font=("Arial",45,"bold")).place(x=600, y=420)
+    def valida_dados(entrar_id_desativar, acao):
+        if entrar_id_desativar.get():
+            valida_id = validar_id_turma(entrar_id_desativar.get())
+            if valida_id:
+                desativar_reativar_turma_e_alunos(entrar_id_desativar.get(), acao)
+                if acao == 0 and entrar_id_desativar.get():
+                    ctk.CTkLabel(frame_principal, text="TURMA DESATIVADA", font=("Arial",45,"bold")).place(x=750, y=420)
+                elif acao == 1 and entrar_id_desativar.get():
+                    ctk.CTkLabel(frame_principal, text="TURMA REATIVADA", font=("Arial",45,"bold")).place(x=750, y=420)
+            else:
+                ctk.CTkLabel(frame_principal, text="ID INVÁLIDO", font=("Arial",45,"bold")).place(x=800, y=420)
         else:
-            ctk.CTkLabel(frame_principal, text="ID NÃO INSERIDO", font=("Arial",45,"bold")).place(x=800, y=420)
-        
+            ctk.CTkLabel(frame_principal, text="ID INVÁLIDO", font=("Arial",45,"bold")).place(x=800, y=420)
+
         app.after(1500, menu_principal_admin)
 
         
@@ -1015,7 +1025,7 @@ def tela_desativar_turma():
 
     entrar_id_desativar=ctk.CTkEntry(frame_principal,placeholder_text="ID Da Turma",width=300); entrar_id_desativar.place(x=820, y=280)
 
-    ctk.CTkButton(frame_principal, text="Ativar/Desativar Turma", width=250, fg_color='red', command=lambda: (desativar_reativar_turma_e_alunos(entrar_id_desativar.get(), acao), app.after(300, mostrar_mensagem))).place(x=850, y=350)
+    ctk.CTkButton(frame_principal, text="Ativar/Desativar Turma", width=250, fg_color='red', command=lambda: valida_dados(entrar_id_desativar, acao)).place(x=850, y=350)
 
 
 def tela_desativar_aluno():
@@ -1030,14 +1040,20 @@ def tela_desativar_aluno():
         global acao
         acao = 0
 
-    def mostrar_mensagem():
-        if acao == 0 and entrar_id_desativar.get():
-            ctk.CTkLabel(frame_principal, text="ALUNO DESATIVADO", font=("Arial",45,"bold")).place(x=750, y=420)
-        elif acao == 1 and entrar_id_desativar.get():
-            ctk.CTkLabel(frame_principal, text="ALUNO REATIVADO", font=("Arial",45,"bold")).place(x=750, y=420)
+    def valida_dados(entrar_id_desativar, acao):
+        if entrar_id_desativar.get():
+            valida_id = validar_id_aluno(entrar_id_desativar.get())
+            if valida_id:
+                desativar_reativar_aluno(entrar_id_desativar.get(), acao)
+                if acao == 0 and entrar_id_desativar.get():
+                    ctk.CTkLabel(frame_principal, text="ALUNO DESATIVADO", font=("Arial",45,"bold")).place(x=750, y=420)
+                elif acao == 1 and entrar_id_desativar.get():
+                    ctk.CTkLabel(frame_principal, text="ALUNO REATIVADO", font=("Arial",45,"bold")).place(x=750, y=420)
+            else:
+                ctk.CTkLabel(frame_principal, text="ID INVÁLIDO", font=("Arial",45,"bold")).place(x=800, y=420)
         else:
-            ctk.CTkLabel(frame_principal, text="ID NÃO INSERIDO", font=("Arial",45,"bold")).place(x=800, y=420)
-        
+            ctk.CTkLabel(frame_principal, text="ID INVÁLIDO", font=("Arial",45,"bold")).place(x=800, y=420)
+
         app.after(1500, menu_principal_admin)
 
 
@@ -1049,7 +1065,7 @@ def tela_desativar_aluno():
 
     entrar_id_desativar=ctk.CTkEntry(frame_principal,placeholder_text="ID do aluno",width=300); entrar_id_desativar.place(x=820, y=280)
 
-    ctk.CTkButton(frame_principal, text="Ativar/Desativar Aluno", width=250, fg_color='red', command=lambda: (desativar_reativar_aluno(entrar_id_desativar.get(), acao), app.after(300, mostrar_mensagem))).place(x=850, y=350)
+    ctk.CTkButton(frame_principal, text="Ativar/Desativar Aluno", width=250, fg_color='red', command=lambda: valida_dados(entrar_id_desativar, acao)).place(x=850, y=350)
 
 
 def tela_desativar_professor():
@@ -1064,15 +1080,20 @@ def tela_desativar_professor():
         global acao
         acao = 0
     
-    def mostrar_mensagem():
-        if acao == 0 and entrar_id_desativar.get():
-            ctk.CTkLabel(frame_principal, text="PROFESSOR DESATIVADO", font=("Arial",45,"bold")).place(x=720, y=420)
-        elif acao == 1 and entrar_id_desativar.get():
-            ctk.CTkLabel(frame_principal, text="PROFESSOR REATIVADO", font=("Arial",45,"bold")).place(x=720, y=420)
+    def valida_dados(entrar_id_desativar, acao):
+        if entrar_id_desativar.get():
+            valida_id = validar_id_professor(entrar_id_desativar.get())
+            if valida_id:
+                desativar_reativar_professor(entrar_id_desativar.get(), acao)
+                if acao == 0 and entrar_id_desativar.get():
+                    ctk.CTkLabel(frame_principal, text="PROFESSOR DESATIVADO", font=("Arial",45,"bold")).place(x=750, y=420)
+                elif acao == 1 and entrar_id_desativar.get():
+                    ctk.CTkLabel(frame_principal, text="PROFESSOR REATIVADO", font=("Arial",45,"bold")).place(x=750, y=420)
+            else:
+                ctk.CTkLabel(frame_principal, text="ID INVÁLIDO", font=("Arial",45,"bold")).place(x=800, y=420)
         else:
-            ctk.CTkLabel(frame_principal, text="ID NÃO INSERIDO", font=("Arial",45,"bold")).place(x=800, y=420)
+            ctk.CTkLabel(frame_principal, text="ID INVÁLIDO", font=("Arial",45,"bold")).place(x=800, y=420)
 
-        
         app.after(1500, menu_principal_admin)
 
 
@@ -1083,7 +1104,7 @@ def tela_desativar_professor():
     ctk.CTkButton(frame_principal, text="Desativar Professor", height=50, width=200, command=desativa).place(x=980, y=180)
 
     entrar_id_desativar=ctk.CTkEntry(frame_principal,placeholder_text="ID Do Professor",width=300); entrar_id_desativar.place(x=820, y=280)
-    ctk.CTkButton(frame_principal, text="Ativar/Desativar Professor", width=250, fg_color='red', command=lambda: (desativar_reativar_professor(entrar_id_desativar.get(), acao), app.after(300, mostrar_mensagem))).place(x=850, y=350)
+    ctk.CTkButton(frame_principal, text="Ativar/Desativar Professor", width=250, fg_color='red', command=lambda: valida_dados(entrar_id_desativar, acao)).place(x=850, y=350)
 
 
 def tela_buscar_aluno():
@@ -1116,13 +1137,14 @@ def menu_principal_professor():
 
     ctk.CTkButton(frame_principal,text="Adicionar Avaliação", font=("arial", 30),width=350,height=65, fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_adicionar_avaliacao).place(x=780,y=180)
  
-    ctk.CTkButton(frame_principal,text="Desativar/Ativar avaliação", font=("arial", 30),width=350,height=65, fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_listar_alunos).place(x=780,y=270)
+    ctk.CTkButton(frame_principal,text="Listar Avaliações", font=("arial", 30),width=350,height=65, fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_listar_avaliacoes).place(x=780,y=270)
 
+    ctk.CTkButton(frame_principal,text="Desativar/Ativar avaliação", font=("arial", 30),width=350,height=65, fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_desativar_avaliacao).place(x=780,y=360)
     
-    ctk.CTkButton(frame_principal,text="Listar Aluno", font=("arial", 30),width=350,height=65, fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_ler_alunos_do_professor).place(x=780,y=360)
+    ctk.CTkButton(frame_principal,text="Listar Aluno", font=("arial", 30),width=350,height=65, fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_ler_alunos_do_professor).place(x=780,y=450)
     
     
-    ctk.CTkButton(frame_principal,text="Buscar Aluno", font=("arial", 30),width=350,height=65, fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_desativar_aluno).place(x=780,y=450)
+    ctk.CTkButton(frame_principal,text="Buscar Aluno", font=("arial", 30),width=350,height=65, fg_color=("#475569","#2563EB"),hover_color=("#334155","#1D4ED8"),command=tela_buscar_aluno_professor).place(x=780,y=540)
     
 
     ctk.CTkButton(frame_principal,text="←",width=50,height=30,command=tela_login).place(x=20,y=20)
@@ -1184,6 +1206,81 @@ def tela_adicionar_avaliacao():
     ctk.CTkButton(frame_principal,text="ADICIONAR AVALIAÇÃO",width=250,command=lambda: validar_dados(entrar_aluno, entrar_nome, entrar_data, entrar_nota)).grid(row=5, column=1, pady=20)
 
 
+def tela_listar_avaliacoes():
+    limpar_frame()
+    ctk.CTkLabel(frame_principal,text="LISTA DE AVALIAÇÕES",font=("Arial",45,"bold")).pack(pady=20)
+    ctk.CTkButton(frame_principal,text="←",width=50,command=menu_principal_admin).place(x=20,y=20)
+    ctk.CTkButton(frame_principal,text="☀️",width=50,command=mudar_tema).place(x=1840,y=20)
+
+    textbox=ctk.CTkTextbox(frame_principal,width=700,height=350); textbox.pack(pady=20)
+    
+    materia = ler_materia_professor(id_login[0])
+    avaliacoes = ler_avaliacoes(materia[0])
+
+    def mostrar_todas_avaliacoes():
+        textbox.delete("1.0", "end")
+        for avaliacao in avaliacoes:
+            textbox.insert("end",f"ID: {avaliacao[0]} | NOME: {avaliacao[3]} | DATA: {avaliacao[1]} | MATRÍCULA DO ALUNO: {avaliacao[2]} | NOTA: {avaliacao[4]}\n=========\n")
+    
+    def mostrar_avaliacoes_ativas():
+        textbox.delete("1.0", "end")
+        avaliacoes_ativas = ler_avaliacoes_ativadas_desativadas(materia[0], 1)
+        for avaliacao in avaliacoes_ativas:
+            textbox.insert("end",f"ID: {avaliacao[0]} | NOME: {avaliacao[3]} | DATA: {avaliacao[1]} | MATRÍCULA DO ALUNO: {avaliacao[2]} | NOTA: {avaliacao[4]}\n=========\n")
+    
+    def mostrar_avaliacoes_inativas():
+        textbox.delete("1.0", "end")
+        avaliacoes_inativas = ler_avaliacoes_ativadas_desativadas(materia[0], 0)
+        for avaliacao in avaliacoes_inativas:
+            textbox.insert("end",f"ID: {avaliacao[0]} | NOME: {avaliacao[3]} | DATA: {avaliacao[1]} | MATRÍCULA DO ALUNO: {avaliacao[2]} | NOTA: {avaliacao[4]}\n=========\n")
+    
+    if not avaliacoes:
+        ctk.CTkLabel(frame_principal,text="NÃO HÁ AVALIAÇÕES ADICIONADAS",text_color="red",font=("Arial",45,"bold")).place(x=600,y=700)
+        app.after(1500,menu_principal_admin)
+
+    else:
+        ctk.CTkButton(frame_principal, text="Todos as Avaliações", width=200, height=40,fg_color=("#2563EB","#475569"), hover_color=("#1D4ED8","#334155"),command=lambda: mostrar_todas_avaliacoes()).pack(side="left", padx=10, pady=10)
+        ctk.CTkButton(frame_principal, text="Avaliações Ativas", width=200, height=40,fg_color=("#2563EB","#475569"), hover_color=("#1D4ED8","#334155"),command=lambda: mostrar_avaliacoes_ativas()).pack(side="left", padx=10, pady=10)
+        ctk.CTkButton(frame_principal, text="Avaliações Inativas", width=200, height=40,fg_color=("#2563EB","#475569"), hover_color=("#1D4ED8","#334155"),command=lambda: mostrar_avaliacoes_inativas()).pack(side="left", padx=10, pady=10)
+
+
+def tela_desativar_avaliacao():
+    limpar_frame()
+    def ativa():
+        global acao
+        acao = 1
+
+    def desativa():
+        global acao
+        acao = 0
+
+    def valida_dados(entrar_id_desativar, acao):
+        if entrar_id_desativar.get():
+            valida_id = validar_id_avaliacao(entrar_id_desativar.get())
+            if valida_id:
+                if acao == 0 and entrar_id_desativar.get():
+                    ctk.CTkLabel(frame_principal, text="AVALIÇÃO DESATIVADA", font=("Arial",45,"bold")).place(x=750, y=420)
+                elif acao == 1 and entrar_id_desativar.get():
+                    ctk.CTkLabel(frame_principal, text="AVALIÇÃO REATIVADA", font=("Arial",45,"bold")).place(x=750, y=420)
+            else:
+                ctk.CTkLabel(frame_principal, text="ID INVÁLIDO", font=("Arial",45,"bold")).place(x=800, y=420)
+        else:
+            ctk.CTkLabel(frame_principal, text="ID INVÁLIDO", font=("Arial",45,"bold")).place(x=800, y=420)
+
+        app.after(1500, menu_principal_admin)
+
+
+    ctk.CTkLabel(frame_principal, text="Desativar AVALIAÇÃO", font=("Arial",45,"bold")).place(x=780, y=40)
+    ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=menu_principal_admin).place(x=20, y=20)
+    ctk.CTkButton(frame_principal, text="☀️", width=50, height=30, command=mudar_tema).place(x=1850, y=20)
+    ctk.CTkButton(frame_principal, text="Ativar Avaliação", height=50, width=200, command=ativa).place(x=760, y=180)
+    ctk.CTkButton(frame_principal, text="Desativar Avaliação", height=50, width=200, command=desativa).place(x=980, y=180)
+
+    entrar_id_desativar=ctk.CTkEntry(frame_principal,placeholder_text="ID da avaliação",width=300); entrar_id_desativar.place(x=820, y=280)
+
+    ctk.CTkButton(frame_principal, text="Ativar/Desativar Avaliação", width=250, fg_color='red', command=lambda: valida_dados(entrar_id_desativar, acao)).place(x=850, y=350)
+
+
 def tela_ler_alunos_do_professor():
     limpar_frame()
     ctk.CTkLabel(frame_principal,text="ALUNOS DO PROFESSOR",font=("Arial",40,"bold")).pack(pady=20)
@@ -1221,7 +1318,9 @@ def tela_ler_alunos_do_professor():
                 textbox.insert("end", "NÃO HÁ ALUNOS NESTA TURMA\n\n")
             else:
                 for aluno in alunos:
-                    textbox.insert("end", f"MATRÍCULA: {aluno[0]} | NOME: {aluno[1]}\nIDADE: {aluno[2]}\nEMAIL: {aluno[3]}\nRESPONSÁVEL: {aluno[5]}\nEMAIL DO RESPONSÁVEL: {aluno[6]}\n==========\n")
+                    materia = ler_materia_professor(id_login)
+                    media = ler_media_aluno(aluno[0], materia[0])
+                    textbox.insert("end", f"MATRÍCULA: {aluno[0]} | NOME: {aluno[1]}\nRESPONSÁVEL: {aluno[5]}\nEMAIL DO RESPONSÁVEL: {aluno[6]}\nMÉDIA: {media[0]}\n==========\n")
             textbox.insert("end", "\n")
 
     turmas_professor = ler_turmas_professor(id_login[0])
@@ -1235,9 +1334,37 @@ def tela_ler_alunos_do_professor():
             ctk.CTkButton(frame_botoes, text=turma[1], width=200, height=40,fg_color=("#475569","#2563EB"), hover_color=("#334155","#1D4ED8"),command=lambda t=turma[0], n=turma[1]: mostrar_alunos_turma(t, n)).pack(side="left", padx=10, pady=10)
 
 
+def tela_buscar_aluno_professor():
+    limpar_frame()
+    ctk.CTkLabel(frame_principal,text="BUSCAR ALUNO",font=("Arial",30,"bold")).grid(row=0,column=1,pady=20)
+    ctk.CTkButton(frame_principal,text="←",width=50,command=menu_principal_admin).grid(row=0,column=0,sticky="w",padx=20)
+    ctk.CTkButton(frame_principal,text="☀️",width=50,command=mudar_tema).grid(row=0,column=2,sticky="e",padx=20)
 
+    entrar_busca=ctk.CTkEntry(frame_principal,placeholder_text="Digite o nome",width=300); entrar_busca.grid(row=1,column=1,pady=10)
+    textbox=ctk.CTkTextbox(frame_principal,width=700,height=300); textbox.grid(row=2,column=1,pady=20)
 
+    def buscar(nome):
+        pesquisados = []
+        alunos = ler_alunos()
+        if not alunos:
+            ctk.CTkLabel(frame_principal,text="NÃO HÁ ALUNOS CADASTRADOS",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=4,column=1,pady=40) 
+            app.after(1500, menu_principal_admin)    
+        else:
+            turmas = ler_turmas_professor(id_login[0])
+            for turma in turmas:
+                if not turma[0]:
+                    ctk.CTkLabel(frame_principal,text="NÃO HÁ TURMAS VINCULADAS A ESTE PROFESSOR",width=250, text_color="red", font=("Arial",45,"bold")).grid(row=4,column=1,pady=40) 
+                    app.after(1500, menu_principal_admin)    
+                    return
+                pesquisados.append(buscar_alunos_professor(nome, turma[0]))
+            textbox.delete("1.0", "end")
+            for alunos in pesquisados:
+                for aluno in alunos:
+                    materia = ler_materia_professor(id_login[0])
+                    media = ler_media_aluno(aluno[0], materia[0])
+                    textbox.insert("end", f"MATRÍCULA: {aluno[0]} | NOME: {aluno[1]}\nRESPONSÁVEL: {aluno[5]}\nEMAIL DO RESPONSÁVEL: {aluno[6]}\nMÉDIA: {media[0]}\n==========\n")
 
+    ctk.CTkButton(frame_principal,text="Buscar",width=250,command=lambda: buscar(entrar_busca.get())).grid(row=3,column=1,pady=20)
 
 
 tela_login()

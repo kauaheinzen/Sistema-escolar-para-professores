@@ -271,3 +271,51 @@ def validar_limite_alunos_turma(turma):
     finally:
         cursor.close()
         conn.close()
+
+
+def validar_id_avaliacao(id):
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        sql = 'SELECT 1 FROM avaliacoes WHERE id_avaliacao = %s'
+        cursor.execute(sql, (id,))
+
+        return cursor.fetchone() is not None
+
+
+    finally:
+        cursor.close()
+        conn.close()
+
+
+def validar_id_turma(id):
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        sql = 'SELECT 1 FROM turmas WHERE id_turma = %s'
+        cursor.execute(sql, (id,))
+
+        return cursor.fetchone() is not None
+
+
+    finally:
+        cursor.close()
+        conn.close()
+
+
+def validar_id_materia(id):
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        sql = 'SELECT 1 FROM materias WHERE id_materia = %s'
+        cursor.execute(sql, (id,))
+
+        return cursor.fetchone() is not None
+
+
+    finally:
+        cursor.close()
+        conn.close()
