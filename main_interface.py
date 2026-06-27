@@ -154,6 +154,8 @@ def tela_cadastrar_materia():
         ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=menu_principal_admin).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
         ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
 
+
+        entrar_materia.bind("<Return>", lambda event: executar_cadastro(entrar_materia.get()))
     
     tela_cadastro_materia()
         
@@ -207,8 +209,15 @@ def tela_cadastrar_aluno():
         ctk.CTkButton(frame_principal,text="Cadastrar",width=250, height=50,command=lambda: cadastra_aluno(entrar_nome, entrar_idade, entrar_email, entrar_nome_resp, entrar_email_resp)).grid(row=7, column=1, pady=10)
         ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=menu_principal_admin).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
         ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
-
-
+       
+        entrar_nome.bind("<Return>", lambda event: entrar_idade.focus())       
+        entrar_idade.bind("<Return>", lambda event: entrar_email.focus())       
+        entrar_email.bind("<Return>", lambda event: entrar_nome_resp.focus())
+        entrar_nome_resp.bind("<Return>", lambda event: entrar_email_resp.focus())
+        entrar_email_resp.bind("<Return>", lambda event: cadastra_aluno(entrar_nome, entrar_idade, entrar_email, entrar_nome_resp, entrar_email_resp))
+    
+    
+    
     def executar_cadastro(turma):
         mudar_id(turma)
         cadastro_aluno()
@@ -357,6 +366,13 @@ def tela_cadastrar_professor():
         entrar_senha = ctk.CTkEntry(frame_principal, placeholder_text="Crie uma Senha", height=30, width=300); entrar_senha.grid(row=5, column=1, pady=10)
         ctk.CTkButton(frame_principal, text="CADASTRAR PROFESSOR", width=50, height=30, command=lambda: enviar_dados(entrar_nome, entrar_idade, entrar_email, entrar_usuario, entrar_senha)).grid(row=6, column=1, pady=50)
             
+ 
+        entrar_nome.bind("<Return>", lambda event: entrar_idade.focus())       
+        entrar_idade.bind("<Return>", lambda event: entrar_email.focus())       
+        entrar_email.bind("<Return>", lambda event: entrar_usuario.focus())
+        entrar_usuario.bind("<Return>", lambda event: entrar_senha.focus())
+        entrar_senha.bind("<Return>", lambda event: enviar_dados(entrar_nome, entrar_idade, entrar_email, entrar_usuario, entrar_senha))
+
 
         ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=menu_principal_admin).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
         ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
@@ -493,7 +509,9 @@ def tela_cadastrar_turmas():
         ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=menu_principal_admin).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
         ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
 
-    
+     
+        entrar_nome.bind("<Return>", lambda event: tela_escolher_materias(entrar_nome.get()))
+
     tela_cadastro_materia()
 
 
@@ -759,7 +777,8 @@ def tela_atualizar_aluno():
     entrar_id=ctk.CTkEntry(frame_principal,placeholder_text="MATRÍCULA DO ALUNO",width=300); entrar_id.grid(row=1, column=1, pady=10)
     entrar_item=ctk.CTkEntry(frame_principal,placeholder_text=f"Nova alteração", height=30, width=500); entrar_item.grid(row=5, column=1, pady=30)
     
-
+    entrar_id.bind("<Return>", lambda event: entrar_item.focus())
+    entrar_item.bind("<Return>", lambda event: atualizar())
 
     def atualizar(id = ''):
         alunos = ler_alunos()
@@ -939,7 +958,8 @@ def tela_atualizar_professor():
     entrar_id=ctk.CTkEntry(frame_principal,placeholder_text="ID do Professor",width=300); entrar_id.grid(row=1, column=0, columnspan=3, pady=10)
     entrar_item=ctk.CTkEntry(frame_principal,placeholder_text=f"Nova alteração", height=30, width=500); entrar_item.grid(row=5, column=0, columnspan=3, pady=30)
 
-
+    entrar_id.bind("<Return>", lambda event: entrar_item.focus())
+    entrar_item.bind("<Return>", lambda event: atualizar())
 
     def atualizar(id = ''):
         professores = ler_professores()
@@ -1249,12 +1269,16 @@ def tela_adicionar_avaliacao():
     entrar_nota=ctk.CTkEntry(frame_principal,placeholder_text="Digite a nota do aluno",width=300); entrar_nota.grid(row=4,column=1,pady=10)
 
     ctk.CTkButton(frame_principal,text="ADICIONAR AVALIAÇÃO",width=250,command=lambda: validar_dados(entrar_aluno, entrar_nome, entrar_data, entrar_nota)).grid(row=5, column=1, pady=20)
-
+        
+    entrar_aluno.bind("<Return>", lambda event: entrar_nome.focus())       
+    entrar_nome.bind("<Return>", lambda event: entrar_data.focus())       
+    entrar_data.bind("<Return>", lambda event: entrar_nota.focus())
+    entrar_nota.bind("<Return>", lambda event: validar_dados(entrar_aluno, entrar_nome, entrar_data, entrar_nota))
 
 def tela_listar_avaliacoes():
     limpar_frame()
     ctk.CTkLabel(frame_principal,text="LISTA DE AVALIAÇÕES",font=("Arial",45,"bold")).pack(pady=20)
-    ctk.CTkButton(frame_principal,text="←",width=50,command=menu_principal_admin).place(x=20,y=20)
+    ctk.CTkButton(frame_principal,text="←",width=50,command=menu_principal_professor).place(x=20,y=20)
     ctk.CTkButton(frame_principal,text="☀️",width=50,command=mudar_tema).place(x=1840,y=20)
 
     textbox=ctk.CTkTextbox(frame_principal,width=700,height=350); textbox.pack(pady=20)
@@ -1281,7 +1305,7 @@ def tela_listar_avaliacoes():
     
     if not avaliacoes:
         ctk.CTkLabel(frame_principal,text="NÃO HÁ AVALIAÇÕES ADICIONADAS",text_color="red",font=("Arial",45,"bold")).place(x=600,y=700)
-        app.after(1500,menu_principal_admin)
+        app.after(1500,menu_principal_professor)
 
     else:
         ctk.CTkButton(frame_principal, text="Todos as Avaliações", width=200, height=40,fg_color=("#2563EB","#475569"), hover_color=("#1D4ED8","#334155"),command=lambda: mostrar_todas_avaliacoes()).pack(side="left", padx=10, pady=10)
@@ -1316,7 +1340,7 @@ def tela_desativar_avaliacao():
 
 
     ctk.CTkLabel(frame_principal, text="Desativar AVALIAÇÃO", font=("Arial",45,"bold")).place(x=780, y=40)
-    ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=menu_principal_admin).place(x=20, y=20)
+    ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=menu_principal_professor).place(x=20, y=20)
     ctk.CTkButton(frame_principal, text="☀️", width=50, height=30, command=mudar_tema).place(x=1850, y=20)
     ctk.CTkButton(frame_principal, text="Ativar Avaliação", height=50, width=200, command=ativa).place(x=760, y=180)
     ctk.CTkButton(frame_principal, text="Desativar Avaliação", height=50, width=200, command=desativa).place(x=980, y=180)
@@ -1389,7 +1413,7 @@ def tela_ler_alunos_do_professor():
 def tela_buscar_aluno_professor():
     limpar_frame()
     ctk.CTkLabel(frame_principal,text="BUSCAR ALUNO",font=("Arial",30,"bold")).grid(row=0,column=1,pady=20)
-    ctk.CTkButton(frame_principal,text="←",width=50,command=menu_principal_admin).grid(row=0,column=0,sticky="w",padx=20)
+    ctk.CTkButton(frame_principal,text="←",width=50,command=menu_principal_professor).grid(row=0,column=0,sticky="w",padx=20)
     ctk.CTkButton(frame_principal,text="☀️",width=50,command=mudar_tema).grid(row=0,column=2,sticky="e",padx=20)
 
     entrar_busca=ctk.CTkEntry(frame_principal,placeholder_text="Digite o nome",width=300); entrar_busca.grid(row=1,column=1,pady=10)
