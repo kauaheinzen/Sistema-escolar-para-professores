@@ -700,11 +700,17 @@ def ler_materia_professor(id):
     '''retorna o id da materia de um professor'''
     conn = conectar()
     cursor = conn.cursor()
+    try:
+        sql = 'SELECT fk_id_materia FROM professores WHERE id_professor = %s'
+        cursor.execute(sql, (id,))
 
-    sql = 'SELECT fk_id_materia FROM professores WHERE id_professor = %s'
-    cursor.execute(sql, (id,))
+        materia = cursor.fetchone()
+    
+    except:
+        sql = 'SELECT fk_id_materia FROM professores WHERE id_professor = %s'
+        cursor.execute(sql, id)
 
-    materia = cursor.fetchone()
+        materia = cursor.fetchone()
 
     cursor.close()
     conn.close()
