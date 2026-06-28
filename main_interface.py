@@ -3,7 +3,7 @@ from tkinter import messagebox
 from time import sleep
 from funcoes_SQL import *
 from validacoes import *
-
+import validacoes as val_direto
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("dark-blue")
