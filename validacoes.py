@@ -150,20 +150,20 @@ def validar_id_professor(id):
     '''valida id de alguma conta de professor'''
     conn = conectar()
     cursor = conn.cursor()
-    sql = 'SELECT id_professor FROM professores'
 
-    cursor.execute(sql,)
-    resultado = cursor.fetchall()
+    try:
+        id_inteiro = int(str(id).strip())
+        
+        sql = 'SELECT 1 FROM professores WHERE id_professor = %s'
+        cursor.execute(sql, (id_inteiro,))
+        resultado = cursor.fetchone()
 
-    for professor in resultado:
-        if id == professor:
-            cursor.close()
-            conn.close()
-            return True
-    
-    cursor.close()
-    conn.close()
-    return False
+        return resultado is not None
+    except (ValueError, TypeError) as e:
+        return False
+    finally:
+        cursor.close()
+        conn.close()
 
 
 def validar_nota(nota):
