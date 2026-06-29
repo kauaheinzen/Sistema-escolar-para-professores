@@ -6,9 +6,9 @@ def validar_nome(nome):
     '''Valida nomes de alunos, professores e de avaliações'''
     if not nome.strip():
         return False
-    for n in nome:
-        if n.isdigit():
-            return False
+    padrao = r"^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$"
+    if not re.match(padrao, nome):
+        return False
     return True
 
 def validar_idade(idade):

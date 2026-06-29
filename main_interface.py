@@ -262,19 +262,19 @@ def tela_cadastrar_professor():
         if turmas:
             cadastro = cadastrar_professores(nome, idade, email, usuario, senha, materia)
             if not cadastro:
-                ctk.CTkLabel(frame_principal, text="PROFESSOR CADASTRADO", font=("Arial",30,"bold")).grid(row=8, column=0, columnspan=3, pady=(40, 20), sticky="n")
+                ctk.CTkLabel(frame_principal, text="PROFESSOR CADASTRADO", font=("Arial",30,"bold")).grid(row=8, column=0, columnspan=3, pady=40, sticky="ew")
                 id_professor_adicionado = ler_id_professor(nome)
                 for turma in turmas:
                     id_turma = ler_id_turma(turma)
                     vincular_professor_turma(id_professor_adicionado[0], id_turma[0])
             else:
-                ctk.CTkLabel(frame_principal, text=cadastro.upper(), text_color="red", font=("Arial",30,"bold")).grid(row=8, column=0, columnspan=3, pady=(40, 20), sticky="n")
+                ctk.CTkLabel(frame_principal, text=cadastro.upper(), text_color="red", font=("Arial",30,"bold")).grid(row=8, column=0, columnspan=3, pady=40, sticky="ew")
                 print(cadastro)
 
             app.update()
             app.after(1500, menu_principal_admin)
         else:
-            ctk.CTkLabel(frame_principal, text="NÃO FOI SELECIONADA NENHUMA TURMA", font=("Arial",30,"bold")).grid(row=8, column=0, columnspan=3, pady=(40, 20))
+            ctk.CTkLabel(frame_principal, text="NÃO FOI SELECIONADA NENHUMA TURMA", font=("Arial",30,"bold")).grid(row=8, column=0, columnspan=3, pady=40, sticky="ew")
             app.update()
             app.after(1500, tela_turmas_cadastro(nome, idade, email, usuario, senha, materia))
               
@@ -286,7 +286,7 @@ def tela_cadastrar_professor():
         if valida_nome and valida_idade and email and usuario and senha:
             return True
         else:
-            ctk.CTkLabel(frame_principal, text="NOME E/OU IDADE INVÁLIDA", text_color="red", font=("Arial",30,"bold")).grid(row=8, column=0, columnspan=3, pady=(40, 20))
+            ctk.CTkLabel(frame_principal, text="NOME E/OU IDADE INVÁLIDA", text_color="red", font=("Arial",30,"bold")).grid(row=8, column=1, pady=(40, 20))
             return False
 
     def adicionar_turmas(turma):
@@ -312,7 +312,7 @@ def tela_cadastrar_professor():
     def tela_escolher_materia(nome, idade, email, usuario, senha):
         botao_materia = {}
         limpar_frame()
-        ctk.CTkLabel(frame_principal,text="SELECIONE A MATÉRIA DO PROFESSOR",width=300, font=("Arial",50,"bold")).grid(row=0, column=0, columnspan=3, pady=(40, 20), sticky="n")
+        ctk.CTkLabel(frame_principal,text="SELECIONE A MATÉRIA DO PROFESSOR",width=300, font=("Arial",50,"bold")).grid(row=0, column=0, columnspan=3, pady=40, sticky="ew")
         materias = ler_materias_ativas()
         if not materias:
             ctk.CTkLabel(frame_principal, text="NÃO HÁ MATÉRIAS CADASTRADAS", fg_color="red", font=("Arial",30,"bold")).grid(row=1, column=1, pady=30)
@@ -382,7 +382,7 @@ def tela_cadastrar_professor():
         botao_turma = {}
         limpar_frame()
         turmas = ler_turmas_materias(materia)
-        ctk.CTkLabel(frame_principal,text="SELECIONE AS TURMAS DO PROFESSOR",width=300, font=("Arial",50,"bold")).grid(row=0, column=0, columnspan=3, pady=(40, 20), sticky="n")
+        ctk.CTkLabel(frame_principal,text="SELECIONE AS TURMAS DO PROFESSOR",width=300, font=("Arial",50,"bold")).grid(row=0, column=0, columnspan=3, pady=40, sticky="ew")
 
         if not turmas:
             ctk.CTkLabel(frame_principal,text="NÃO HÁ TURMAS CADASTRADAS",width=250, text_color="red", font=("Arial",35,"bold")).grid(row=1, column=1, pady=200) 
@@ -404,7 +404,7 @@ def tela_cadastrar_professor():
 
 
         ctk.CTkButton(frame_principal, text="ADICIONAR TURMAS E FINALIZAR", width=50, height=30, command=lambda: executar_cadastro(nome, idade, email, usuario, senha, materia)).grid(row=6, column=0, columnspan=3, pady=(40, 20), sticky="n")
-        ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=menu_principal_admin).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
+        ctk.CTkButton(frame_principal, text="←", width=50, height=30, command=tela_escolher_materia).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
         ctk.CTkButton(frame_principal, text="☀️", width=50, command=mudar_tema).grid(row=0, column=5, padx=20, pady=20, sticky="nw")
 
 
@@ -593,7 +593,7 @@ def tela_listar_professores():
             textbox.insert("end", f"ID: {professor[0]} | NOME: {professor[1]}\nIDADE: {professor[2]}\nEMAIL: {professor[3]}\nUSUÁRIO: {professor[4][:2] + '*' * usuario}\nSENHA: {"*" * len(professor[5])}\nATIVO [1-SIM, 0-NÃO]: {professor[6]}\nMATÉRIA: {materia[0]}\n==========\n")
     
     if not professores:
-        ctk.CTkLabel(frame_principal, text="NÃO HÁ PROFESSORES CADASTRADOS", width=250, text_color="red", font=("Arial", 45, "bold")).place(x=600, y=700) 
+        ctk.CTkLabel(frame_principal, text="NÃO HÁ PROFESSORES CADASTRADOS", width=250, text_color="red", font=("Arial", 45, "bold")).place(x=500, y=700) 
         app.after(1500, menu_principal_admin)
     else:
         botoes_frame = ctk.CTkFrame(frame_principal, fg_color="transparent")
