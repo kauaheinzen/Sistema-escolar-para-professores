@@ -208,6 +208,13 @@ def atualizar_aluno(id_aluno, coluna, valor):
         if coluna in ["idade_aluno", "fk_id_turma"]:
             valor = int(valor)
             id_aluno = int(id_aluno)
+            if coluna == "fk_id_turma":
+                sql_turma = "DELETE FROM aluno_materias WHERE fk_id_aluno = %s"
+                cursor.execute(sql_turma, (id_aluno,))
+                materias = ler_materias_turma(valor)
+                for materia in materias:
+                    sql_materia = "INSERT INTO aluno_materias (fk_id_aluno, fk_id_materia) VALUES (%s, %s)"
+                    cursor.execute(sql_materia, (id_aluno, materia[0]))
 
         sql = f"UPDATE alunos SET {coluna} = %s WHERE id_aluno = %s"
         cursor.execute(sql, (valor, id_aluno))
