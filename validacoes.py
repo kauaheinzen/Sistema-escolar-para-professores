@@ -12,7 +12,7 @@ def validar_nome(nome):
     return True
 
 def validar_idade(idade):
-    '''Valida idade de alunos e professores'''
+    '''Valida idade de alunos'''
     try:
         idade = int(idade)
     except:
@@ -20,6 +20,18 @@ def validar_idade(idade):
     if idade < 13 or idade > 150:
         return False
     return True
+
+
+def validar_idade_professor(idade):
+    '''Valida idade de professores'''
+    try:
+        idade = int(idade)
+    except:
+        return False
+    if idade < 18 or idade > 150:
+        return False
+    return True
+
 
 def validar_data(data, turma_abertura):
     '''Valida se a data é maior que a de hoje ou se é menor que a data de abertura da turma'''

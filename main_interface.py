@@ -281,7 +281,7 @@ def tela_cadastrar_professor():
     
     def validar_cadastro(nome, idade, email, usuario, senha):
         valida_nome = validar_nome(nome)
-        valida_idade = validar_idade(idade)
+        valida_idade = validar_idade_professor(idade)
 
         if valida_nome and valida_idade and email and usuario and senha:
             return True
@@ -1040,7 +1040,7 @@ def tela_atualizar_professor():
                         ctk.CTkLabel(frame_principal, text="Erro ao atualizar no banco", text_color="red", font=("Arial", 35, "bold")).grid(row=7, column=0, columnspan=3, pady=(40, 20), sticky="n")
 
                 case "idade":
-                    valida = validar_idade(entrar_item.get())
+                    valida = validar_idade_professor(entrar_item.get())
                     if valida:
                         atualiza = atualizar_professor(entrar_id.get(), "idade_professor", entrar_item.get())
                         if not atualiza:
