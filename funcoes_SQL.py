@@ -453,6 +453,22 @@ def vincular_professor_turma(professor, turma):
     conn.close()
     return True
 
+
+def ler_turmas():
+    '''mostra todos as turmas'''
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = 'SELECT * FROM turmas'
+    cursor.execute(sql,)
+    
+    turmas = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return turmas
+
+
 def ler_materias():
     '''mostra todas as matérias'''
     conn = conectar()
