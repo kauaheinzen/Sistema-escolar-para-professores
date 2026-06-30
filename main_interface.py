@@ -975,11 +975,16 @@ def tela_atualizar_professor():
         ctk.CTkButton(frame_principal,text="←",width=50,command=tela_atualizar_professor).grid(row=0, column=0, padx=20, pady=20, sticky="nw")
         ctk.CTkButton(frame_principal,text="☀️",width=50,command=mudar_tema).grid(row=0, column=2, padx=20, pady=20, sticky="ne")
 
-        turmas = ler_turmas_ativas()
+        materia = ler_materia_professor(id_prof)
+        turmas = ler_turmas_materias(materia[0])
+
+        if not turmas:
+            ctk.CTkLabel(frame_principal,text="NÃO HÁ TURMAS CADASTRADAS PARA ESSA MATÉRIA",text_color="red",font=("Arial", 22, "bold")).grid(row=8, column=0, columnspan=3, pady=10)
+            return
 
         botao_turma = {}
 
-        for turma in ler_turmas_ativas():
+        for turma in ler_turmas_materias(materia[0]):
             if turma[0] < 6:
                 botao_turma[turma[0]] = ctk.CTkButton(frame_principal,text=turma[1],width=350,height=40,font=("Arial", 25),command=lambda m=turma[0]: executar_vinculo_turma(m))
                 botao_turma[turma[0]].grid(row=turma[0] + 1,column=0,padx=100,pady=50,sticky="nw")

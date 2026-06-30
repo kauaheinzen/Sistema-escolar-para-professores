@@ -3,7 +3,7 @@ Trabalho de escola feito por 3 alunos do primeiro ano do ensino médio + técnic
 ## Autores
  
 - Filipe Rocha
-- Kauã Heizen
+- Kauã Heinzen
 - Pedro Soares
  
 ---
