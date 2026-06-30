@@ -1,0 +1,98 @@
+CREATE DATABASE IF NOT EXISTS escola;
+USE escola;
+CREATE TABLE IF NOT EXISTS materias(
+id_materia INT AUTO_INCREMENT PRIMARY KEY,
+    nome_materia VARCHAR(100) NOT NULL,
+    ativo BOOLEAN NULL DEFAULT 1
+);
+CREATE TABLE IF NOT EXISTS turmas(
+id_turma INT AUTO_INCREMENT PRIMARY KEY,
+    nome_turma VARCHAR(100) NOT NULL,
+    data_abertura DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    ativo BOOLEAN NULL DEFAULT 1
+);
+CREATE TABLE IF NOT EXISTS turma_materias(
+    fk_id_turma INT NOT NULL,
+    fk_id_materia INT NOT NULL,
+    PRIMARY KEY (fk_id_turma, fk_id_materia),
+    FOREIGN KEY (fk_id_turma) REFERENCES turmas(id_turma),
+    FOREIGN KEY (fk_id_materia) REFERENCES materias(id_materia),
+    ativo BOOLEAN NULL DEFAULT 1
+);
+CREATE TABLE IF NOT EXISTS professores(
+id_professor INT AUTO_INCREMENT PRIMARY KEY,
+    nome_professor VARCHAR(100) NOT NULL,
+    idade_professor INT NOT NULL,
+    email_professor VARCHAR(200) NOT NULL,
+    nome_usuario VARCHAR(100) NOT NULL,
+    senha VARCHAR(50) NOT NULL,
+    ativo BOOLEAN NULL DEFAULT 1,
+    fk_id_materia INT NOT NULL,
+    FOREIGN KEY (fk_id_materia) REFERENCES materias(id_materia)
+);
+CREATE TABLE IF NOT EXISTS professor_turma(
+fk_id_professor INT NOT NULL,
+    fk_id_turma INT NOT NULL,
+    PRIMARY KEY (fk_id_professor, fk_id_turma),
+    FOREIGN KEY (fk_id_professor) REFERENCES professores(id_professor),
+    FOREIGN KEY (fk_id_turma) REFERENCES turmas(id_turma),
+    ativo BOOLEAN NULL DEFAULT 1
+);
+CREATE TABLE IF NOT EXISTS alunos(
+id_aluno INT AUTO_INCREMENT PRIMARY KEY,
+    nome_aluno VARCHAR(100) NOT NULL,
+    idade_aluno INT NOT NULL,
+    email_aluno VARCHAR(150),
+    fk_id_turma INT NOT NULL,
+    nome_responsavel VARCHAR(100) NULL,
+    email_responsavel VARCHAR(150) NULL,
+    ativo BOOLEAN NULL DEFAULT 1,
+    FOREIGN KEY (fk_id_turma) REFERENCES turmas(id_turma)
+);
+CREATE TABLE IF NOT EXISTS aluno_materias(
+    fk_id_aluno INT NOT NULL,
+    fk_id_materia INT NOT NULL,
+    media_atual DECIMAL DEFAULT 0.0,
+    PRIMARY KEY (fk_id_aluno, fk_id_materia),
+    FOREIGN KEY (fk_id_aluno) REFERENCES alunos(id_aluno),
+    FOREIGN KEY (fk_id_materia) REFERENCES materias(id_materia),
+    ativo BOOLEAN NULL DEFAULT 1
+);
+CREATE TABLE IF NOT EXISTS avaliacoes(
+id_avaliacao INT AUTO_INCREMENT PRIMARY KEY,
+    data_avaliacao DATE NOT NULL,
+    fk_id_aluno INT NOT NULL,
+    nome_avaliacao VARCHAR(200) NOT NULL,
+    nota float NOT NULL,
+    fk_id_materia INT NOT NULL,
+    ativo BOOLEAN NULL DEFAULT 1,
+    FOREIGN KEY (fk_id_aluno) REFERENCES alunos(id_aluno),
+    FOREIGN KEY (fk_id_materia) REFERENCES materias(id_materia)
+);
+CREATE TABLE IF NOT EXISTS admin_database(
+nome_usuario VARCHAR(100) DEFAULT 'admin.escola',
+    senha VARCHAR(100) DEFAULT '123'
+);
+DELIMITER $$
+DROP TRIGGER IF EXISTS apos_inserir_avaliacao$$
+CREATE TRIGGER apos_inserir_avaliacao
+AFTER INSERT ON avaliacoes
+FOR EACH ROW
+BEGIN
+    UPDATE aluno_materias
+    SET media_atual = (SELECT COALESCE(AVG(nota), 0) FROM avaliacoes WHERE fk_id_aluno = NEW.fk_id_aluno AND fk_id_materia = NEW.fk_id_materia)
+    WHERE fk_id_aluno = NEW.fk_id_aluno AND fk_id_materia = NEW.fk_id_materia;
+END$$
+DROP TRIGGER IF EXISTS apos_deletar_avaliacao$$
+CREATE TRIGGER apos_deletar_avaliacao
+AFTER UPDATE ON avaliacoes
+FOR EACH ROW
+BEGIN
+IF OLD.ativo <> NEW.ativo THEN
+UPDATE aluno_materias
+SET media_atual = (SELECT COALESCE(AVG(nota), 0) FROM avaliacoes WHERE fk_id_aluno = OLD.fk_id_aluno AND fk_id_materia = NEW.fk_id_materia)
+WHERE fk_id_aluno = OLD.fk_id_aluno AND fk_id_materia = NEW.fk_id_materia;
+END IF;
+END$$
+
+DELIMITER ;
