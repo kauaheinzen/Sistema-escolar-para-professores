@@ -423,34 +423,35 @@ def vincular_turma_materia(turma, materia):
 
 
 def vincular_professor_turma(professor, turma):
-    '''vincula um professor em uma turma'''
     conn = conectar()
     cursor = conn.cursor()
 
-        
-    sql = 'INSERT INTO professor_turma (fk_id_professor, fk_id_turma) VALUES (%s, %s)'
-    valores = (professor, turma)
-    cursor.execute(sql, valores)
-    
+    sql = """
+    SELECT 1
+    FROM professor_turma
+    WHERE fk_id_professor = %s
+      AND fk_id_turma = %s
+    """
+
+    cursor.execute(sql, (professor, turma))
+
+    if cursor.fetchone():
+        cursor.close()
+        conn.close()
+        return False
+
+    sql = """
+    INSERT INTO professor_turma
+    (fk_id_professor, fk_id_turma)
+    VALUES (%s,%s)
+    """
+
+    cursor.execute(sql, (professor, turma))
     conn.commit()
-    cursor.close()
-    conn.close()
-
-
-def ler_turmas():
-    '''mostra todos as turmas'''
-    conn = conectar()
-    cursor = conn.cursor()
-
-    sql = 'SELECT * FROM turmas'
-    cursor.execute(sql,)
-    
-    turmas = cursor.fetchall()
 
     cursor.close()
     conn.close()
-    return turmas
-
+    return True
 
 def ler_materias():
     '''mostra todas as matérias'''
