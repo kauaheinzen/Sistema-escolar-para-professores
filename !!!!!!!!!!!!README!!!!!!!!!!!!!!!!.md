@@ -1,5 +1,13 @@
 # Sistema-escolar-para-professores
 Trabalho de escola feito por 3 alunos do primeiro ano do ensino médio + técnico SENAC
+## Autores
+ 
+- Filipe Rocha
+- Kauã Heizen
+- Pedro Soares
+ 
+---
+
 
 
 # Manual de Instalação e Execução do Sistema Escolar
