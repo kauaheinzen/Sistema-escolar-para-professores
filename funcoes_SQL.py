@@ -209,12 +209,26 @@ def atualizar_aluno(id_aluno, coluna, valor):
             valor = int(valor)
             id_aluno = int(id_aluno)
             if coluna == "fk_id_turma":
-                sql_turma = "DELETE FROM aluno_materias WHERE fk_id_aluno = %s"
-                cursor.execute(sql_turma, (id_aluno,))
+                sql_materias = "SELECT fk_id_materia FROM aluno_materias WHERE fk_id_aluno = %s"
+                cursor.execute(sql_materias, (id_aluno,))
+                materias_aluno = cursor.fetchall()
+
+                sql_materias_turma = "SELECT fk_id_materia FROM turma_materias WHERE fk_id_turma = %s"
+                cursor.execute(sql_materias_turma, (valor,))
+                materias_turma = cursor.fetchall()
+
+                for materia in materias_aluno:
+                    if materia not in materias_turma:
+                        sql_turma = "UPDATE aluno_materias SET ativo = 0 WHERE fk_id_aluno = %s AND fk_id_materia = %s"
+                        cursor.execute(sql_turma, (id_aluno, materia[0]))
                 materias = ler_materias_turma(valor)
                 for materia in materias:
-                    sql_materia = "INSERT INTO aluno_materias (fk_id_aluno, fk_id_materia) VALUES (%s, %s)"
-                    cursor.execute(sql_materia, (id_aluno, materia[0]))
+                    sql_checar = "SELECT 1 FROM aluno_materias WHERE fk_id_aluno = %s AND fk_id_materia = %s"
+                    cursor.execute(sql_checar, (id_aluno, materia[0]))
+                    resultado = cursor.fetchone()
+                    if resultado is None:
+                        sql_materia = "INSERT INTO aluno_materias (fk_id_aluno, fk_id_materia) VALUES (%s, %s)"
+                        cursor.execute(sql_materia, (id_aluno, materia[0]))
 
         sql = f"UPDATE alunos SET {coluna} = %s WHERE id_aluno = %s"
         cursor.execute(sql, (valor, id_aluno))
