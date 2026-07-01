@@ -56,3 +56,4 @@ python main_interface.py
 Ou simplesmente clique no botão **Run Python** do VS Code.
 
 Pronto! O Sistema Escolar estará em funcionamento.
+**8.** Login: admin.escola / Senha: 123:
